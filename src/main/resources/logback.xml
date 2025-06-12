@@ -8,11 +8,7 @@
     <contextName>edu-cloud</contextName>
     <!--日志文件所在目录，如果是tomcat，如下写法日志文件会在则为${TOMCAT_HOME}/bin/logs/目录下-->
     <!--<property name="LOG_HOME" value="logs"/>-->
-<<<<<<< HEAD
     <property name="LOG_HOME" value="./log/logFolder"/>
-=======
-    <property name="LOG_HOME" value="./data/log/logFolder"/>
->>>>>>> e282814 (项目名：爬虫任务；)
     <!--控制台-->
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
