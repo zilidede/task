@@ -2,6 +2,9 @@ package com.zl.utils.other;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 /**
@@ -73,6 +76,20 @@ public class DateUtils {
 
     public static Date getNowDate() throws ParseException {
         return nowDate;
+    }
+    public static long calculateMonthsBetween(String startTime,String endTime) {
+        //通过日期计算月份；
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d");
+        LocalDate startDate = LocalDate.parse(startTime, formatter);
+        LocalDate endDate = LocalDate.parse(endTime, formatter);
+
+        // 方法1：直接计算整月差（忽略天数）
+        long monthsBetween =  ChronoUnit.MONTHS.between(startDate, endDate);;
+        // 特殊处理：当月差为0但跨月的情况
+        if (monthsBetween == 0 && !startDate.getMonth().equals(endDate.getMonth())) {
+            return 1;
+        }
+       return monthsBetween; //
     }
 
     public static Integer calculateDaysFromYearMonth(Integer year, Integer month) {

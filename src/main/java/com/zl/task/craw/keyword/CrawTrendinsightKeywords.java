@@ -26,18 +26,18 @@ import java.util.List;
  * @version: 1.0
  * @todo:
  */
-public class CrawTrendinsightKeywordsX extends CrawServiceXImpl {
+public class CrawTrendinsightKeywords extends CrawServiceXImpl {
     private List<String> keywords;
     private final String srcDir;
 
-    CrawTrendinsightKeywordsX() throws Exception {
+    CrawTrendinsightKeywords() throws Exception {
         Ini4jUtils.loadIni("./data/config/config.ini");
         Ini4jUtils.setSectionValue("trendinsight");
         srcDir = Ini4jUtils.readIni("srcDir");
     }
 
     public static void main(String[] args) throws Exception {
-        CrawTrendinsightKeywordsX craw = new CrawTrendinsightKeywordsX();
+        CrawTrendinsightKeywords craw = new CrawTrendinsightKeywords();
         craw.setTab(DefaultTaskResourceCrawTabList.getTabList().get(0));
 
         craw.run(new TaskVO(1, "爬取巨量算数关键字"));
@@ -84,8 +84,9 @@ public class CrawTrendinsightKeywordsX extends CrawServiceXImpl {
 
         //爬取单一关键词
         String url = String.format("https://trendinsight.oceanengine.com/arithmetic-index/analysis?keyword=%s&appName=aweme", keyword);
-
         openUrl(url, 10.00);
+        //选择时间差；
+        selectTime(startTime, endTime);
         String xpath = "//*[@class=\"byted-tab-bar-item byted-tab-bar-item-type-card\"]";
         List<ChromiumElement> elements = getTab().eles(By.xpath(xpath));
         for (int i = 0; i < 2; i++) {

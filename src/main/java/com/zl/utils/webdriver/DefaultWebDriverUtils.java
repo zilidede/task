@@ -5,11 +5,24 @@ import com.zl.utils.run.NonBlockingBatExecution;
 import com.zl.utils.run.RuntimeUtils;
 
 public class DefaultWebDriverUtils {
+    private static Integer port=9222;
+    DefaultWebDriverUtils(){
+
+    }
+
+    public static void setPort(Integer port) {
+        DefaultWebDriverUtils.port = port;
+    }
+
+    public static Integer getPort() {
+        return port;
+    }
+
     private static WebDriverUtils singleton;
 
     static {
         try {
-            singleton = new WebDriverUtils(ConfigIni.DRIVE_PATH, 9223);
+            singleton = new WebDriverUtils(ConfigIni.DRIVE_PATH, port);
             singleton.init();
         } catch (Exception e) {
             e.printStackTrace();
@@ -21,7 +34,7 @@ public class DefaultWebDriverUtils {
         return singleton;
     }
 
-    public static void reSetWebDriverUtils() throws InterruptedException {
+    public static void reSetWebDriverUtils(Integer  port) throws InterruptedException {
         //
         RuntimeUtils.killProcessByName("chrome");
         Thread.sleep(1000 * 5);
@@ -30,7 +43,7 @@ public class DefaultWebDriverUtils {
         NonBlockingBatExecution.exe("C:\\Users\\zili\\Desktop\\启动浏览器\\运行chrome - 9223use.bat"); // 启动浏览器bat
         Thread.sleep(1000 * 10);
         try {
-            singleton = new WebDriverUtils(ConfigIni.DRIVE_PATH, 9223);
+            singleton = new WebDriverUtils(ConfigIni.DRIVE_PATH, port);
             singleton.init();
         } catch (Exception e) {
             e.printStackTrace();
