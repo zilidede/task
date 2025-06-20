@@ -146,7 +146,6 @@ public class CrawCityWeather extends CrawBaseDouYinList {
         List<ChromiumElement> elements = getTab().eles(By.xpath(xpath));
         //国内/国外
         /*
-
          */
         elements.get(1).click().click(); //打开省市选择框
         Thread.sleep(1000);

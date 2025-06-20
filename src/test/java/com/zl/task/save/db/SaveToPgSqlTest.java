@@ -11,7 +11,8 @@ public class SaveToPgSqlTest {
 
     @Test
     public void cycleSave() throws Exception {
-        SaveToPgSql.cycleSave(6);
+
+        SaveToPgSql.cycleSave(3);
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.zl.task.save;
 
 import com.zl.task.craw.keyword.SaveOceanEngineKeyWords;
+import com.zl.task.save.db.SaveToPgSql;
 import com.zl.task.save.parser.order.SaveDouYinOrder;
 import com.zl.task.save.syn.SynTaskData;
 import com.zl.utils.io.DiskIoUtils;
@@ -30,24 +31,8 @@ public class Saver {
      */
     public static void save() throws Exception {
         syn(); // 同步数据
+        SaveToPgSql.cycleSave(3);// 循环保存pqsql
 
-        // 保存近90天数据，起始日期为昨天
-        Ini4jUtils.setSectionValue("live");
-        String dir = Ini4jUtils.readIni("dayDir");
-        // 获取当前日期
-        LocalDate currentDate = LocalDate.now();
-        // 创建日期格式化对象
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        // 循环输出最近90天的日期
-        for (int i = 0; i < 6; i++) {
-            // 计算过去的第i天
-            LocalDate pastDate = currentDate.minusDays(i);
-            // 格式化日期
-            String formattedDate = pastDate.format(formatter);
-            // 保存
-            save(dir, formattedDate);
-        }
-        // saveOrder(); // 保存为导入订单
     }
 
     /**

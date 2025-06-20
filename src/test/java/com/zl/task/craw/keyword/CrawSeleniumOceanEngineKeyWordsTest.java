@@ -20,6 +20,7 @@ public class CrawSeleniumOceanEngineKeyWordsTest {
     public void run() throws Exception {
         TaskVO taskvo = new TaskVO(1, "云图搜索词");
         taskvo.setTaskDesc("服饰内衣/*/*");
+        crawler.setFlag( true);
         crawler.run(taskvo);
     }
 
