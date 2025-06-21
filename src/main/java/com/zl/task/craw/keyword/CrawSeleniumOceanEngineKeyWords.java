@@ -133,8 +133,14 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
         this.tab = tab;
     }
 
+
     @Override
     public void ExecutorTaskService(TaskResource taskResource) {
+
+    }
+
+    @Override
+    public void ExecutorTaskService(Object object) {
 
     }
 
@@ -254,11 +260,15 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
                     return -1;
                 //获取搜索词详情
                 if (flag) {
-                    if (downloadKeyWordDetails() < 0)
+                    if (downloadKeyWordDetails() < 0) {
                         LoggerUtils.logger.warn(s + "类目获取搜索词详情失败，休眠3分钟");
-                    Thread.sleep(1000 * 60 * 3);
-                    //退出程序重新爬取此类目；
-                    return -1;
+                        return -1;
+                        //退出程序重新爬取此类目；
+                    }
+                    else {
+                        LoggerUtils.logger.debug(s + "获取搜索词详情爬取完成,休眠1分钟");
+                        Thread.sleep(1000 * 60 * 1);
+                    }
                 }
                 //超长子类
                 if (j == 15 && flag2) {
@@ -285,11 +295,9 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
                 //二级类目
                 //重新打开选择框
                 xpath = "//*[@class=\"search-strategy-icon search-strategy-icon-down search-strategy-cascader-arrow\"]";
-
                 element = tab.eles(By.xpath(xpath)).get(0);
                 element.click().click();
                 Thread.sleep(1000);
-
                 //二级类目
                 xpath = "//*[@class=\"ReactVirtualized__Grid__innerScrollContainer\"]";
                 //二级类目 secondFlag爬取开关

@@ -1,4 +1,4 @@
-package com.zl.task.goods;
+package com.zl.task.process.goods;
 
 // 导入产品信息到数据库 关联数据库ecommerce
 public class ImportProductFromFile {

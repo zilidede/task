@@ -1,4 +1,4 @@
-package com.zl.task.goods;
+package com.zl.task.process.goods;
 
 import com.ll.drissonPage.base.By;
 import com.ll.drissonPage.element.ChromiumElement;

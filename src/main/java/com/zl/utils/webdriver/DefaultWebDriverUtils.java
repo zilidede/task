@@ -5,7 +5,7 @@ import com.zl.utils.run.NonBlockingBatExecution;
 import com.zl.utils.run.RuntimeUtils;
 
 public class DefaultWebDriverUtils {
-    private static Integer port=9222;
+    private static Integer port=9223;
     DefaultWebDriverUtils(){
 
     }

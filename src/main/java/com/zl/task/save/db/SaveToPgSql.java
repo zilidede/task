@@ -68,7 +68,7 @@ public class SaveToPgSql {
         SaveOceanEngineKeyWords saveOceanEngineSearch = new SaveOceanEngineKeyWords();
         for (FileRecordDO file : fileRecordDOS) {
             if (file.getFileLocalPath().indexOf("yunTu") >= 0) {
-                parerOceanEngineKeyWords(file, saveOceanEngineSearch);// 解析云图关键词文件
+                saveOceanEngineKeyWords(file, saveOceanEngineSearch);// 解析云图关键词文件
             } else {
 
             }
@@ -132,7 +132,7 @@ public class SaveToPgSql {
     }
 
     //将巨量云图关键词保存到pgsql
-    public static void parerOceanEngineKeyWords(FileRecordDO file, SaveOceanEngineKeyWords saveOceanEngineSearch) throws SQLException, IOException, ParseException {
+    public static void saveOceanEngineKeyWords(FileRecordDO file, SaveOceanEngineKeyWords saveOceanEngineSearch) throws SQLException, IOException, ParseException {
         if (file.getFileLocalPath().indexOf(".csv") >= 0) {
             //解析csv文件
             List<Map<String, String>> csvContent = null;

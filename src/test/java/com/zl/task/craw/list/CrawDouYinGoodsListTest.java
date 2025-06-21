@@ -1,6 +1,6 @@
 package com.zl.task.craw.list;
 
-import com.zl.task.goods.CrawDouYinGoodsList;
+import com.zl.task.process.goods.CrawDouYinGoodsList;
 import com.zl.task.impl.taskResource.DefaultTaskResourceCrawTabList;
 import com.zl.task.vo.task.TaskVO;
 import com.zl.utils.io.FileIoUtils;

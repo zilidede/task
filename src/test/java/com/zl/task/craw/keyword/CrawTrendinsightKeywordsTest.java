@@ -38,12 +38,13 @@ public class CrawTrendinsightKeywordsTest {
         System.out.println(element.attr("value"));
         element.click().click(); // 打开日历控件选择框；
         Thread.sleep(1000 * 1);
-        //左侧选择
-        xpath="//*[@class=\"byted-date-title-item byted-date-date\"]";
+
          //start date
        // DateUtils.calculateDaysFromYearMonth()
         String startDate="2025-01-04";
         String endDate="2025-06-06";
+        //左侧选择
+        xpath="//*[@class=\"byted-date-title-item byted-date-date\"]";
         // 获取左侧标题日期
         List<ChromiumElement> eles=crawler.getTab().eles(By.xpath(xpath)); // 获取左右侧标题日期
         Thread.sleep(1000 * 1);

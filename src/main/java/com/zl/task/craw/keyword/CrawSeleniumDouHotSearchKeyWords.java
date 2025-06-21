@@ -12,6 +12,7 @@ import com.zl.utils.log.LoggerUtils;
 import com.zl.utils.webdriver.WebDriverUtils;
 
 import java.time.LocalTime;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -73,8 +74,15 @@ public class CrawSeleniumDouHotSearchKeyWords implements ExecutorTaskService {
 
     }
 
+
+
     @Override
     public void ExecutorTaskService(TaskResource taskResource) {
+
+    }
+
+    @Override
+    public void ExecutorTaskService(Object object) {
 
     }
 

@@ -10,18 +10,26 @@ import com.zl.task.impl.taskResource.TaskResource;
 import com.zl.task.vo.task.TaskVO;
 import com.zl.utils.drissonPage.ElementUtils;
 
+import java.util.Collection;
 import java.util.List;
 
 public class CrawAuroraSearchKeys implements ExecutorTaskService {
     private ChromiumTab tab;
+
+
+
+    CrawAuroraSearchKeys(ChromiumTab tab) {
+        this.tab = tab;
+    }
 
     @Override
     public void ExecutorTaskService(TaskResource taskResource) {
 
     }
 
-    CrawAuroraSearchKeys(ChromiumTab tab) {
-        this.tab = tab;
+    @Override
+    public void ExecutorTaskService(Object object) {
+
     }
 
     @Override

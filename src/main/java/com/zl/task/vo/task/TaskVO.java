@@ -5,15 +5,16 @@ package com.zl.task.vo.task;
 import com.zl.task.impl.ExecutorTaskService;
 import com.zl.task.impl.taskResource.TaskResource;
 
+import java.util.Collection;
 import java.util.Date;
 
-public class TaskVO {
+public class TaskVO<T> {
     private int taskId; //任务id号
     private String taskUuid = "0l"; //任务唯一标识
     private String taskName; //任务名
     private String taskDesc; //任务描述
     private Date executeTime; //任务运行时间
-    private TaskResource taskResource; //任务资源
+    private TaskResource<T> taskResource; //任务资源
 
     private int status;
 
@@ -21,7 +22,7 @@ public class TaskVO {
         return taskResource;
     }
 
-    public void setTaskResource(TaskResource taskResource) {
+    public void setTaskResource(TaskResource<T> taskResource) {
         this.taskResource = taskResource;
     }
 

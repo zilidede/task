@@ -19,10 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -95,6 +92,11 @@ public class CrawSeleniumDouYinList implements ExecutorTaskService {
 
     @Override
     public void ExecutorTaskService(TaskResource taskResource) {
+
+    }
+
+    @Override
+    public void ExecutorTaskService(Object  object) {
 
     }
 

@@ -11,10 +11,7 @@ import com.zl.task.impl.taskResource.TaskResource;
 import com.zl.task.vo.task.TaskVO;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @className: com.craw.nd.service.other.person.Impl.craw.weather-> CrawInternalCityWeather
@@ -29,7 +26,7 @@ public class CrawSeleniumInternalCityWeather implements ExecutorTaskService {
     private final List<InternalCityWeatherDO> list;
     private SimpleDateFormat sf;
     private ChromiumTab tab;
-    private TaskResource taskResource;
+
 
     public CrawSeleniumInternalCityWeather() throws Exception {
         list = new ArrayList<>();
@@ -44,9 +41,16 @@ public class CrawSeleniumInternalCityWeather implements ExecutorTaskService {
         this.tab = tab;
     }
 
+
+
     @Override
     public void ExecutorTaskService(TaskResource taskResource) {
-        this.taskResource = taskResource;
+
+    }
+
+    @Override
+    public void ExecutorTaskService(Object object) {
+
     }
 
     @Override

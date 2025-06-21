@@ -45,8 +45,15 @@ public class SynTaskData implements ExecutorTaskService {
         synTaskData.synAll();
     }
 
+
+
     @Override
     public void ExecutorTaskService(TaskResource taskResource) {
+
+    }
+
+    @Override
+    public void ExecutorTaskService(Object object) {
 
     }
 

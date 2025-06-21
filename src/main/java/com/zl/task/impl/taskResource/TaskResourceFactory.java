@@ -2,6 +2,7 @@ package com.zl.task.impl.taskResource;
 
 import com.ll.drissonPage.page.ChromiumTab;
 
+import java.util.Collection;
 import java.util.List;
 
 //任务资源工厂类

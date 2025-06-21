@@ -1,6 +1,7 @@
 package com.zl.task.craw.keyword;
 
 import com.zl.task.impl.taskResource.DefaultTaskResourceCrawTabList;
+import com.zl.task.save.Saver;
 import com.zl.task.vo.task.TaskVO;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +26,8 @@ public class CrawSeleniumOceanEngineKeyWordsTest {
     }
 
     @Test
-    public void crawAll() {
+    public void crawAll() throws Exception {
+        Saver.save();
         //云图搜索词
         crawler.setFlag(true); //设置巨量云图搜索词详情执行标志
         String rName = "";

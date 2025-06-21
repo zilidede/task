@@ -88,8 +88,15 @@ public class CrawSeleniumDouYinCategoryList implements ExecutorTaskService {
         this.tab = tab;
     }
 
+
+
     @Override
     public void ExecutorTaskService(TaskResource taskResource) {
+
+    }
+
+    @Override
+    public void ExecutorTaskService(Object object) {
 
     }
 

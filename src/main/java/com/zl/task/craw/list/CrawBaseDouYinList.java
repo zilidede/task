@@ -10,10 +10,11 @@ import com.zl.task.vo.task.TaskVO;
 import com.zl.utils.log.LoggerUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-public class CrawBaseDouYinList implements ExecutorTaskService {
+public class CrawBaseDouYinList implements ExecutorTaskService<String> {
     private final int maxCrawCount = 300; //最大爬取次数300
     private ChromiumTab tab; //当前爬取的tab页
     private int crawCount; //页面爬取次数；
@@ -53,9 +54,16 @@ public class CrawBaseDouYinList implements ExecutorTaskService {
         this.tab = tab;
     }
 
+
+
     @Override
-    public void ExecutorTaskService(TaskResource taskResource) {
-        //初始化任务资源
+    public void ExecutorTaskService(TaskResource<String> taskResource) {
+
+    }
+
+    @Override
+    public void ExecutorTaskService(Object object) {
+
     }
 
     @Override
