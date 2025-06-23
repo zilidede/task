@@ -2,7 +2,7 @@ package com.zl.task.craw.list;
 
 import com.ll.drissonPage.base.By;
 import com.ll.drissonPage.element.ChromiumElement;
-import com.zl.task.vo.task.TaskVO;
+import com.zl.task.vo.task.taskResource.TaskVO;
 import com.zl.utils.log.LoggerUtils;
 import com.zl.utils.other.Ini4jUtils;
 

@@ -6,11 +6,10 @@ import com.ll.drissonPage.base.By;
 import com.ll.drissonPage.element.ChromiumElement;
 import com.ll.drissonPage.page.ChromiumTab;
 import com.zl.task.impl.ExecutorTaskService;
-import com.zl.task.impl.taskResource.TaskResource;
-import com.zl.task.vo.task.TaskVO;
+import com.zl.task.vo.task.taskResource.TaskResource;
+import com.zl.task.vo.task.taskResource.TaskVO;
 import com.zl.utils.drissonPage.ElementUtils;
 
-import java.util.Collection;
 import java.util.List;
 
 public class CrawAuroraSearchKeys implements ExecutorTaskService {

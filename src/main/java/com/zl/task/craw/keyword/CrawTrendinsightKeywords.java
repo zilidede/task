@@ -6,10 +6,11 @@ import com.ll.drissonPage.base.By;
 import com.ll.drissonPage.element.ChromiumElement;
 import com.ll.drissonPage.units.listener.DataPacket;
 import com.zl.task.craw.base.x.CrawServiceXImpl;
-import com.zl.task.impl.taskResource.DefaultTaskResourceCrawTabList;
+import com.zl.task.process.keyword.CypTrendinsightData;
+import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
 import com.zl.task.save.parser.ParserFiddlerJson;
 import com.zl.task.vo.http.HttpVO;
-import com.zl.task.vo.task.TaskVO;
+import com.zl.task.vo.task.taskResource.TaskVO;
 import com.zl.utils.io.FileIoUtils;
 import com.zl.utils.log.LoggerUtils;
 import com.zl.utils.other.DateUtils;
@@ -35,6 +36,9 @@ public class CrawTrendinsightKeywords extends CrawServiceXImpl {
         Ini4jUtils.loadIni("./data/config/config.ini");
         Ini4jUtils.setSectionValue("trendinsight");
         srcDir = Ini4jUtils.readIni("srcDir");
+        Ini4jUtils.loadIni("./data/task/xhr.ini");
+        setXHRList(Ini4jUtils.traSpecificSection("trendinsight"));
+
     }
 
     public static void main(String[] args) throws Exception {
@@ -70,6 +74,7 @@ public class CrawTrendinsightKeywords extends CrawServiceXImpl {
     public void crawFromFile() throws InterruptedException {
         //从爬取文件获取关键字列表爬取
         keywords = getKeywords("./data/task/待爬取关键字列表.txt");
+
         for (String s : keywords)
             craw(s, "", "");
     }
@@ -97,19 +102,21 @@ public class CrawTrendinsightKeywords extends CrawServiceXImpl {
             elements = getTab().eles(By.xpath(xpath));
         }
         List<HttpVO> httpVOS = new ArrayList<>();
-        List<DataPacket> res = getTab().listen().waits(100, 2.1, false, true);
+        List<DataPacket> res = getTab().listen().waits(1000, 2.1, false, true);
+        CypTrendinsightData cypTrendinsightData=new CypTrendinsightData();
         if (res.size() >= 1) {
             for (DataPacket data : res)
                 if (data != null)
                     try {
-                        String filePath = saveXhr(srcDir, data);
+                        String filePath = saveXhr(srcDir, data,cypTrendinsightData);
                         HttpVO httpVO = ParserFiddlerJson.parserXHRJson(filePath);
                         String json = httpVO.getResponse().getBody();
                         JsonParser parser = new JsonParser();
                         JsonObject object = parser.parse(json).getAsJsonObject();
-                        String jsonData =CypTrendinsightData.decrypt(object.get("data").getAsString());
+                        String jsonData = cypTrendinsightData.decrypt(object.get("data").getAsString());
                         httpVO.getResponse().setBody(jsonData);
                         httpVOS.add(httpVO);
+
                     } catch (Exception e) {
                         LoggerUtils.logger.info("保存文件失败：" + data.url());
                     }
@@ -117,6 +124,8 @@ public class CrawTrendinsightKeywords extends CrawServiceXImpl {
         } else {
             System.out.println("error");
         }
+        res.clear();
+
         return httpVOS;
     }
 
@@ -217,6 +226,11 @@ public class CrawTrendinsightKeywords extends CrawServiceXImpl {
                 }
             }
         }
+    }
+
+
+    public void save(){
+        //保存数据到数据库;
     }
 
 

@@ -3,8 +3,7 @@ package com.zl.task.craw.keyword;
 
 import com.ll.drissonPage.base.By;
 import com.ll.drissonPage.element.ChromiumElement;
-import com.ll.drissonPage.page.ChromiumTab;
-import com.zl.task.impl.taskResource.DefaultTaskResourceCrawTabList;
+import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
 import com.zl.utils.other.DateUtils;
 import org.junit.Before;
 import org.junit.Test;

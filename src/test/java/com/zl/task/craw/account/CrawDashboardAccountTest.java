@@ -1,6 +1,6 @@
 package com.zl.task.craw.account;
 
-import com.zl.task.impl.taskResource.DefaultTaskResourceCrawTabList;
+import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
 import com.zl.task.vo.task.AccountVO;
 import org.junit.Before;
 import org.junit.Test;

@@ -5,11 +5,11 @@ import com.zl.dao.generate.LocalTaskDO;
 import com.zl.task.craw.base.x.DefaultCrawSeleniumInternalCityWeather;
 import com.zl.task.craw.keyword.DefaultCrawSeleniumDouHot;
 import com.zl.task.impl.ExecutorTaskService;
-import com.zl.task.impl.taskResource.DefaultTaskResourceCrawTabList;
-import com.zl.task.impl.taskResource.TaskResource;
-import com.zl.task.impl.taskResource.TaskResourceFactory;
+import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
+import com.zl.task.vo.task.taskResource.TaskResource;
+import com.zl.task.vo.task.taskResource.TaskResourceFactory;
 import com.zl.task.save.syn.DefaultSynTaskData;
-import com.zl.task.vo.task.TaskVO;
+import com.zl.task.vo.task.taskResource.TaskVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

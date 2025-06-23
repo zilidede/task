@@ -5,7 +5,7 @@ import com.ll.drissonPage.element.ChromiumElement;
 import com.ll.drissonPage.page.ChromiumTab;
 import com.ll.drissonPage.units.listener.DataPacket;
 import com.zl.dao.generate.EcommerceOrderDao;
-import com.zl.task.impl.taskResource.DefaultTaskResourceCrawTabList;
+import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
 import com.zl.utils.io.FileIoUtils;
 import com.zl.utils.jdbc.generator.jdbc.DefaultDatabaseConnect;
 import com.zl.utils.log.LoggerUtils;

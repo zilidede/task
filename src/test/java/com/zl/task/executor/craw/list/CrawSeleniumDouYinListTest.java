@@ -1,8 +1,8 @@
 package com.zl.task.executor.craw.list;
 
 import com.zl.task.craw.list.CrawSeleniumDouYinList;
-import com.zl.task.impl.taskResource.DefaultTaskResourceCrawTabList;
-import com.zl.task.vo.task.TaskVO;
+import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
+import com.zl.task.vo.task.taskResource.TaskVO;
 import org.junit.Test;
 
 public class CrawSeleniumDouYinListTest {

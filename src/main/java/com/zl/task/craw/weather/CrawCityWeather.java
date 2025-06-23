@@ -7,7 +7,7 @@ import com.zl.dao.generate.CityWeatherDao;
 import com.zl.task.craw.SaveXHR;
 import com.zl.task.craw.list.CrawBaseDouYinList;
 import com.zl.task.save.parser.weather.SaverCityWeather;
-import com.zl.task.vo.task.TaskVO;
+import com.zl.task.vo.task.taskResource.TaskVO;
 import com.zl.utils.io.FileIoUtils;
 import com.zl.utils.jdbc.generator.jdbc.DefaultDatabaseConnect;
 import com.zl.utils.log.LoggerUtils;

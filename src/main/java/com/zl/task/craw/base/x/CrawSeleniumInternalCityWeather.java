@@ -6,9 +6,9 @@ import com.ll.drissonPage.element.ChromiumElement;
 import com.ll.drissonPage.page.ChromiumTab;
 import com.zl.dao.generate.InternalCityWeatherDO;
 import com.zl.task.impl.ExecutorTaskService;
-import com.zl.task.impl.taskResource.DefaultTaskResourceCrawTabList;
-import com.zl.task.impl.taskResource.TaskResource;
-import com.zl.task.vo.task.TaskVO;
+import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
+import com.zl.task.vo.task.taskResource.TaskResource;
+import com.zl.task.vo.task.taskResource.TaskVO;
 
 import java.text.SimpleDateFormat;
 import java.util.*;

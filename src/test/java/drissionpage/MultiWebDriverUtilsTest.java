@@ -3,7 +3,7 @@ package drissionpage;
 import com.ll.drissonPage.page.ChromiumTab;
 import com.zl.task.craw.base.x.CrawSeleniumInternalCityWeather;
 import com.zl.task.craw.keyword.CrawSeleniumDouHotSearchKeyWords;
-import com.zl.task.vo.task.TaskVO;
+import com.zl.task.vo.task.taskResource.TaskVO;
 import com.zl.utils.webdriver.WebDriverUtils;
 
 //多线程标签页

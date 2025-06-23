@@ -4,7 +4,7 @@ import com.ll.drissonPage.base.By;
 import com.ll.drissonPage.element.ChromiumElement;
 import com.ll.drissonPage.page.ChromiumTab;
 import com.zl.task.craw.base.CrawBaseXHR;
-import com.zl.task.vo.task.TaskVO;
+import com.zl.task.vo.task.taskResource.TaskVO;
 import com.zl.utils.other.Ini4jUtils;
 
 import java.util.ArrayList;
@@ -26,12 +26,18 @@ public class CrawDouYinWebKeywords extends CrawBaseXHR  {
     @Override
     public void run(TaskVO task) throws Exception {
         //爬取循环
+        List<String> keywords = (List<String>) task.getTaskResource().getT();
         setListonXhr();
-        List<String> keywords = (List<String>) task.getTaskResource();
         crawRelatedKeywords( keywords);
         save();
     }
-   public  List<String>  crawRelatedKeywords(List<String> keywords) throws Exception{
+
+    @Override
+    public void craw() throws InterruptedException {
+
+    }
+
+    public  List<String>  crawRelatedKeywords(List<String> keywords) throws Exception{
        List<String> list = new ArrayList<>();
        tab.get("https://www.douyin.com/");
        Thread.sleep(1000 * 5);

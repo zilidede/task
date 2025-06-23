@@ -2,7 +2,7 @@ package com.zl.task.craw.base.x;
 
 
 import com.ll.drissonPage.page.ChromiumTab;
-import com.zl.task.vo.task.TaskVO;
+import com.zl.task.vo.task.taskResource.TaskVO;
 
 //craw服务接口
 public interface CrawServiceX {

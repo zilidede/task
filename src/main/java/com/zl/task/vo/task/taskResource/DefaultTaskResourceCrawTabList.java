@@ -1,4 +1,4 @@
-package com.zl.task.impl.taskResource;
+package com.zl.task.vo.task.taskResource;
 
 import com.ll.drissonPage.page.ChromiumPage;
 import com.ll.drissonPage.page.ChromiumTab;

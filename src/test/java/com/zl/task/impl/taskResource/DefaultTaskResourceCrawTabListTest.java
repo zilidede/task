@@ -1,5 +1,6 @@
 package com.zl.task.impl.taskResource;
 
+import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
 import org.junit.Test;
 
 public class DefaultTaskResourceCrawTabListTest {

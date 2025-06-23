@@ -12,6 +12,7 @@ public class ParserTrendInSightKeywords {
     }
     public  void parserJson(String json){
 
+
     }
 
     public GenericListContainerVO getContainer() {

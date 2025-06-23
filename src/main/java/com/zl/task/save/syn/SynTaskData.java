@@ -2,9 +2,9 @@ package com.zl.task.save.syn;
 
 
 import com.zl.task.impl.ExecutorTaskService;
-import com.zl.task.impl.taskResource.TaskResource;
+import com.zl.task.vo.task.taskResource.TaskResource;
 import com.zl.task.vo.task.SynTaskVO;
-import com.zl.task.vo.task.TaskVO;
+import com.zl.task.vo.task.taskResource.TaskVO;
 import com.zl.utils.io.DiskIoUtils;
 import com.zl.utils.jdbc.generator.convert.FieldConvert;
 import com.zl.utils.other.Ini4jUtils;

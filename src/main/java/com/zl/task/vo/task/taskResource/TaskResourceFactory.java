@@ -1,8 +1,7 @@
-package com.zl.task.impl.taskResource;
+package com.zl.task.vo.task.taskResource;
 
 import com.ll.drissonPage.page.ChromiumTab;
 
-import java.util.Collection;
 import java.util.List;
 
 //任务资源工厂类
@@ -30,4 +29,6 @@ public class TaskResourceFactory {
         }
         return null;
     }
+
+
 }

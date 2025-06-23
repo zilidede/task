@@ -3,7 +3,7 @@ package com.zl.task.craw.account;
 
 import com.ll.drissonPage.page.ChromiumTab;
 import com.zl.dao.generate.HourLiveRankDO;
-import com.zl.task.impl.taskResource.DefaultTaskResourceCrawTabList;
+import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;

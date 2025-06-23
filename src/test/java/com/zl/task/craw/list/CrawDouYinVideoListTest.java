@@ -1,7 +1,7 @@
 package com.zl.task.craw.list;
 
-import com.zl.task.impl.taskResource.DefaultTaskResourceCrawTabList;
-import com.zl.task.vo.task.TaskVO;
+import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
+import com.zl.task.vo.task.taskResource.TaskVO;
 import org.junit.Before;
 
 public class CrawDouYinVideoListTest {

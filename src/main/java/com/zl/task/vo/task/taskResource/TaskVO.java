@@ -1,11 +1,9 @@
 // Task.java
-package com.zl.task.vo.task;
+package com.zl.task.vo.task.taskResource;
 
 
 import com.zl.task.impl.ExecutorTaskService;
-import com.zl.task.impl.taskResource.TaskResource;
 
-import java.util.Collection;
 import java.util.Date;
 
 public class TaskVO<T> {
@@ -14,17 +12,49 @@ public class TaskVO<T> {
     private String taskName; //任务名
     private String taskDesc; //任务描述
     private Date executeTime; //任务运行时间
+    private int status; //任务状态
     private TaskResource<T> taskResource; //任务资源
 
-    private int status;
-
-    public TaskResource getTaskResource() {
+    public TaskResource<T> getTaskResource() {
         return taskResource;
     }
 
+    // 构造函数注入资源工厂
+    public TaskVO(int tasKId, String taskName,TaskResource<T> taskResource) {
+        this.taskResource = taskResource;
+        this.taskId = tasKId;
+        this.taskId = taskId;
+        this.taskName = taskName;
+        this.taskUuid = generateUniqueTaskUuid(); // 假设这个方法会生成一个唯一的UUID
+    }
+
+    /**
+     * 执行任务（带初始化参数）
+     * @param params 资源初始化参数
+     */
+    public void execute(Object... params) {
+        if (taskResource == null) {
+            throw new IllegalStateException("TaskResource not initialized");
+        }
+
+        T resource = taskResource.initResource(params);
+        try {
+            System.out.println("Starting task #" + taskId + ": " + taskName);
+            taskResource.processResource(resource);
+            System.out.println("Task completed successfully");
+        } finally {
+            taskResource.releaseResource(resource);
+        }
+    }
+
+    // Setter注入（备选）
     public void setTaskResource(TaskResource<T> taskResource) {
         this.taskResource = taskResource;
     }
+
+
+
+
 
     public int getStatus() {
         return status;

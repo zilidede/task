@@ -3,14 +3,14 @@ package com.zl.task.craw.base;
 import com.ll.drissonPage.page.ChromiumTab;
 import com.zl.task.craw.SaveXHR;
 import com.zl.task.impl.ExecutorTaskService;
-import com.zl.task.impl.taskResource.TaskResource;
-import com.zl.task.vo.task.TaskVO;
+import com.zl.task.vo.task.taskResource.TaskResource;
+import com.zl.task.vo.task.taskResource.TaskVO;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class CrawBaseXHR implements ExecutorTaskService<String> {
+public abstract class CrawBaseXHR implements ExecutorTaskService<String> {
     private final int maxCrawCount = 300; //最大爬取次数300
     private ChromiumTab tab; //当前爬取的tab页
     private int crawCount; //页面爬取次数；
@@ -75,6 +75,7 @@ public class CrawBaseXHR implements ExecutorTaskService<String> {
         tab.listen().start(list); //监听商品榜单xhr
         Thread.sleep(4000);
          */
+        System.out.println(xhrList);
         tab.listen().start(xhrList);
     }
 
@@ -93,4 +94,6 @@ public class CrawBaseXHR implements ExecutorTaskService<String> {
         tab.get(url);
         Thread.sleep((long) (1000 * timeout));
     }
+
+    public abstract void craw() throws InterruptedException;
 }

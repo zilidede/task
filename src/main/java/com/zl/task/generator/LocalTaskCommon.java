@@ -4,7 +4,7 @@ package com.zl.task.generator;
 import com.zl.dao.generate.LocalTaskDO;
 import com.zl.dao.generate.LocalTaskDao;
 import com.zl.task.impl.SaveServiceImpl;
-import com.zl.task.vo.task.TaskVO;
+import com.zl.task.vo.task.taskResource.TaskVO;
 import com.zl.utils.jdbc.generator.jdbc.DefaultDatabaseConnect;
 import com.zl.utils.log.LoggerUtils;
 

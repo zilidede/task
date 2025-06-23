@@ -1,6 +1,6 @@
 package com.zl.task.craw.keyword;
 
-import com.zl.task.impl.taskResource.DefaultTaskResourceCrawTabList;
+import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
 
 //获取巨量云图搜索词爬取测试用例
 

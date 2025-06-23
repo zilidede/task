@@ -1,8 +1,8 @@
 package com.zl.task.craw.keyword;
 
-import com.zl.task.impl.taskResource.DefaultTaskResourceCrawTabList;
+import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
 import com.zl.task.save.Saver;
-import com.zl.task.vo.task.TaskVO;
+import com.zl.task.vo.task.taskResource.TaskVO;
 import org.junit.Before;
 import org.junit.Test;
 

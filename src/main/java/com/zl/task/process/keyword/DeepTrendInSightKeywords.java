@@ -1,12 +1,11 @@
 package com.zl.task.process.keyword;
 
 import com.zl.task.craw.keyword.CrawTrendinsightKeywords;
-import com.zl.task.impl.taskResource.DefaultTaskResourceCrawTabList;
+import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
 import com.zl.task.save.parser.trendinsight.ParserTrendInSightKeywords;
-import com.zl.task.save.parser.trendinsight.SaveTrendInSightKeywords;
 import com.zl.task.vo.http.HttpVO;
 import com.zl.task.vo.other.GenericListContainerVO;
-import com.zl.task.vo.task.TaskVO;
+import com.zl.utils.other.Ini4jUtils;
 
 import java.util.*;
 
@@ -18,13 +17,14 @@ public class DeepTrendInSightKeywords {
     public  static  void crawRootKeyword(String keyword ,Integer deepCount) throws Exception {
         CrawTrendinsightKeywords crawler = new CrawTrendinsightKeywords();
         crawler.setTab(DefaultTaskResourceCrawTabList.getTabList().get(0));
-
-        ParserTrendInSightKeywords parser = new ParserTrendInSightKeywords(); ;
+        crawler.getTab().listen().start(crawler.getXHRList());
         int i=0;
-
         Map<String,Integer> unCrawKeywordsMaps = new HashMap<>(); // 未爬取的关键字map
         unCrawKeywordsMaps.put(keyword,0);
         Map<String,Integer> crawKeywordsMaps = new HashMap<>();  // 已爬取关键字map
+        Ini4jUtils.loadIni("./data/config/config.ini");
+        Ini4jUtils.setSectionValue("trendinsight");
+        String xhrSaveDir = Ini4jUtils.readIni("xhrSaveDir");
         while (i<deepCount){
             // 先获取当前键的静态视图（避免并发修改）
             Set<Map.Entry<String, Integer>> entries = unCrawKeywordsMaps.entrySet();
@@ -44,11 +44,9 @@ public class DeepTrendInSightKeywords {
             }
             i++;
         }
-
-
-
     }
     public static List<String> getRelationKeywords(List<HttpVO> httpVOS) throws Exception {
+        // 只解析关联词
         ParserTrendInSightKeywords parser = new ParserTrendInSightKeywords(); ;
         List<String> relationKeywords = new ArrayList<>();
         for (HttpVO httpVO : httpVOS) {
@@ -56,6 +54,7 @@ public class DeepTrendInSightKeywords {
             parser.parserJson(httpVO.getResponse().getBody());
             GenericListContainerVO container = parser.getContainer();
             //SaveTrendInSightKeywords.save( container);
+
         }
         return  relationKeywords;
     }
