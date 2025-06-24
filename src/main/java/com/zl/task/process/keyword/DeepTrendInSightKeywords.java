@@ -1,10 +1,16 @@
 package com.zl.task.process.keyword;
 
+import com.zl.task.craw.keyword.CrawDouYinWebKeywords;
 import com.zl.task.craw.keyword.CrawTrendinsightKeywords;
+import com.zl.task.save.Saver;
 import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
 import com.zl.task.save.parser.trendinsight.ParserTrendInSightKeywords;
 import com.zl.task.vo.http.HttpVO;
 import com.zl.task.vo.other.GenericListContainerVO;
+import com.zl.task.vo.task.taskResource.ListResource;
+import com.zl.task.vo.task.taskResource.TaskResource;
+import com.zl.task.vo.task.taskResource.TaskVO;
+import com.zl.utils.log.LoggerUtils;
 import com.zl.utils.other.Ini4jUtils;
 
 import java.util.*;
@@ -32,29 +38,52 @@ public class DeepTrendInSightKeywords {
             for (Map.Entry<String, Integer> entry : entries) {
                 String key = entry.getKey();
                 if (!crawKeywordsMaps.containsKey(key)) {
-                    List<HttpVO> httpVOS = crawler.craw(key, "", "");
+                    List<HttpVO> httpVOS;
+                    try {
+                       httpVOS = crawler.craw(key, "", "");
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                        LoggerUtils.logger.debug("爬取错误：" + key);
+                        continue;
+                    }
+
                     crawKeywordsMaps.put(key, 0);
                     List<String> newKeys = getRelationKeywords(httpVOS);
                     toAddKeys.addAll(newKeys); // 收集待添加的键
                 }
             }
+
+            // 使用 HashSet 去重
+            Set<String> set = new HashSet<>(toAddKeys);
+            List<String> uniqueList = new ArrayList<>(set);
+            //抖音网页版爬取;
+            CrawDouYinWebKeywords crawlerDouYinWeb = new CrawDouYinWebKeywords(DefaultTaskResourceCrawTabList.getTabList().get(1));
+            TaskResource<List<String>> taskResource=new ListResource();
+            taskResource.load(uniqueList);
+            TaskVO<List<String>> task=new TaskVO<>(1,"抖音网页版爬取",taskResource);
+            crawlerDouYinWeb.run(task);
+            // 爬取巨量云图单个搜索词;
+
             // 遍历结束后批量添加新键（避免并发修改）
             for (String newKey : toAddKeys) {
-                unCrawKeywordsMaps.putIfAbsent(newKey, 0); // 避免重复添加
+               // unCrawKeywordsMaps.putIfAbsent(newKey, 0); // 避免重复添加
             }
+
+
             i++;
         }
+        //Saver.save();
     }
     public static List<String> getRelationKeywords(List<HttpVO> httpVOS) throws Exception {
         // 只解析关联词
         ParserTrendInSightKeywords parser = new ParserTrendInSightKeywords(); ;
         List<String> relationKeywords = new ArrayList<>();
         for (HttpVO httpVO : httpVOS) {
-            parser.parserUrl(httpVO.getUrl());
-            parser.parserJson(httpVO.getResponse().getBody());
-            GenericListContainerVO container = parser.getContainer();
-            //SaveTrendInSightKeywords.save( container);
-
+            List<String> result = parser.parser(httpVO); // 假设 parser 的返回值是 List<String>
+            if (result != null && !result.isEmpty()) {
+                relationKeywords.addAll(result); // 合并进总结果
+            }
         }
         return  relationKeywords;
     }

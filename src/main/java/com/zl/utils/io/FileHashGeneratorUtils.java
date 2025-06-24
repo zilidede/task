@@ -8,6 +8,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class FileHashGeneratorUtils {
+    // 生成文件哈希值（含元数据）
 
     public static String generateHashWithMetadata(File file) throws IOException, NoSuchAlgorithmException {
         // 选择哈希算法（如 SHA-256）
