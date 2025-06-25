@@ -58,7 +58,7 @@ public class GenerateDaoCode {
         SimpleJDBC simpleJDBC = getDefaultJDBC();
         String dataBase = "pgSql";
         String catalog = "public";
-        String table = "file_record";
+        String table = "content";
         TableInfo tableInfo = simpleJDBC.getTableInfo(catalog, dataBase, table);
         generateDao.generateJavaBean(table, tableInfo);
         generateDao.codeGeneration(table, tableInfo);

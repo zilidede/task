@@ -76,7 +76,7 @@ public abstract class CrawBaseXHR implements ExecutorTaskService<String> {
         Thread.sleep(4000);
          */
         System.out.println(xhrList);
-        tab.listen().start(xhrList);
+
     }
 
     public void save() {

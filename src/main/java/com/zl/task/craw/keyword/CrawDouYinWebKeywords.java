@@ -15,7 +15,7 @@ import java.util.List;
 public class CrawDouYinWebKeywords extends CrawBaseXHR  {
     private ChromiumTab  tab;
     private List<String>  keywords;
-    CrawDouYinWebKeywords(ChromiumTab  tab) throws Exception {
+    public CrawDouYinWebKeywords(ChromiumTab tab) throws Exception {
         this.tab = tab;
         Ini4jUtils.loadIni("./data/config/config.ini");
         Ini4jUtils.setSectionValue("douYinWeb");
@@ -27,8 +27,8 @@ public class CrawDouYinWebKeywords extends CrawBaseXHR  {
     public void run(TaskVO task) throws Exception {
         //爬取循环
         List<String> keywords = (List<String>) task.getTaskResource().getT();
-        setListonXhr();
-        crawRelatedKeywords( keywords);
+        tab.listen().start(getXhrList());
+        crawRelatedKeywords(keywords);
         save();
     }
 

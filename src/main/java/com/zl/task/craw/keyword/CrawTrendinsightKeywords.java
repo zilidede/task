@@ -110,13 +110,7 @@ public class CrawTrendinsightKeywords extends CrawServiceXImpl {
                     try {
                         String filePath = saveXhr(srcDir, data,cypTrendinsightData);
                         HttpVO httpVO = ParserFiddlerJson.parserXHRJson(filePath);
-                        String json = httpVO.getResponse().getBody();
-                        JsonParser parser = new JsonParser();
-                        JsonObject object = parser.parse(json).getAsJsonObject();
-                        String jsonData = cypTrendinsightData.decrypt(object.get("data").getAsString());
-                        httpVO.getResponse().setBody(jsonData);
                         httpVOS.add(httpVO);
-
                     } catch (Exception e) {
                         LoggerUtils.logger.info("保存文件失败：" + data.url());
                     }
@@ -124,6 +118,7 @@ public class CrawTrendinsightKeywords extends CrawServiceXImpl {
         } else {
             System.out.println("error");
         }
+
         res.clear();
 
         return httpVOS;
