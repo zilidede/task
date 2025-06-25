@@ -6,6 +6,7 @@ import java.util.Map;
 
 //解析巨量算数关键字json
 public class ParserTrendInSightKeywords {
+
     private  GenericListContainerVO container = new GenericListContainerVO();  //泛型List容器
     public   void parserUrl(String url){
 

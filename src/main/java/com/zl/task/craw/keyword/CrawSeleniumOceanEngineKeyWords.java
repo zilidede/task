@@ -159,6 +159,7 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
     }
 
     public void setFlag(Boolean flag) {
+        //开启关键字详情爬取标识； true=开启 false
         this.flag = flag;
     }
 

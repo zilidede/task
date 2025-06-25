@@ -54,9 +54,9 @@ public class TaskExecutor {
         Thread.sleep(1000 * 2);
         //   weatherThread.start(); //2小时一次天气
         Thread.sleep(1000 * 2);
-        saverThread.start(); //每小时进行数据保存；
+      // saverThread.start(); //每小时进行数据保存；
         Thread.sleep(1000 * 2);
-        marketThread.start();
+      //  marketThread.start();
         Thread.sleep(1000 * 2);
         /*
         //  huiTunLiveThread.start(); //每天3小时执行一次-爬取灰豚数据直播数据爬取当前时间段前3个小时
@@ -692,6 +692,7 @@ public class TaskExecutor {
                 int i = 1;
                 while (!rName.equals("quit")) {
                     crawler.setTab(tab);
+                    crawler.setFlag( true);
                     try {
                         rName = CrawSeleniumOceanEngineKeyWords.crawAll(crawler, rName);
                     } catch (Exception e) {
