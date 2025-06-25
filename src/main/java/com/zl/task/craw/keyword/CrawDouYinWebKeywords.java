@@ -30,6 +30,7 @@ public class CrawDouYinWebKeywords extends CrawBaseXHR  {
         tab.listen().start(getXhrList());
         crawRelatedKeywords(keywords);
         save();
+
     }
 
     @Override

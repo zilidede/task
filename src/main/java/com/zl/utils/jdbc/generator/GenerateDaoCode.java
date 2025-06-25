@@ -51,14 +51,14 @@ public class GenerateDaoCode {
     // 将pgsql表结构生成javaBean
 
     public static void pgsqlToBean() {
-        String generateFileDir = "S:\\work\\task\\src\\main\\java\\com\\zl\\dao\\generate";
+        String generateFileDir = "D:\\work\\task\\src\\main\\java\\com\\zl\\dao\\generate";
         String packageName = "com.zl.dao.generate";
         //db-dao&do
         GenerateDaoCode generateDao = new GenerateDaoCode(generateFileDir, packageName);
         SimpleJDBC simpleJDBC = getDefaultJDBC();
         String dataBase = "pgSql";
         String catalog = "public";
-        String table = "content";
+        String table = "sug_keyword";
         TableInfo tableInfo = simpleJDBC.getTableInfo(catalog, dataBase, table);
         generateDao.generateJavaBean(table, tableInfo);
         generateDao.codeGeneration(table, tableInfo);

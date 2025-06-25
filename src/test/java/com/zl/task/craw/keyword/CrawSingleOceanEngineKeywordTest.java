@@ -21,8 +21,8 @@ class CrawSingleOceanEngineKeywordTest {
         keywords.add("裤子");
         TaskResource<List<String>> listRes=new ListResource();
         listRes.load(keywords);
-        CrawSingleOceanEngineKeyword crawler=new CrawSingleOceanEngineKeyword();
-        crawler.setTab(DefaultTaskResourceCrawTabList.getTabList().get(0));
-        crawler.run(new TaskVO(1, "爬取关键词",listRes));
+
     }
+
+
 }

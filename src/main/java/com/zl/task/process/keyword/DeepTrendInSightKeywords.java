@@ -1,12 +1,11 @@
 package com.zl.task.process.keyword;
 
 import com.zl.task.craw.keyword.CrawDouYinWebKeywords;
+import com.zl.task.craw.keyword.CrawSeleniumOceanEngineKeyWords;
 import com.zl.task.craw.keyword.CrawTrendinsightKeywords;
-import com.zl.task.save.Saver;
 import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
 import com.zl.task.save.parser.trendinsight.ParserTrendInSightKeywords;
 import com.zl.task.vo.http.HttpVO;
-import com.zl.task.vo.other.GenericListContainerVO;
 import com.zl.task.vo.task.taskResource.ListResource;
 import com.zl.task.vo.task.taskResource.TaskResource;
 import com.zl.task.vo.task.taskResource.TaskVO;
@@ -64,6 +63,11 @@ public class DeepTrendInSightKeywords {
             TaskVO<List<String>> task=new TaskVO<>(1,"抖音网页版爬取",taskResource);
             crawlerDouYinWeb.run(task);
             // 爬取巨量云图单个搜索词;
+            CrawSeleniumOceanEngineKeyWords crawlerSingleOceanEngineKeyword = new CrawSeleniumOceanEngineKeyWords();
+            taskResource=new ListResource();
+            taskResource.load(uniqueList);
+            task=new TaskVO<>(2,"爬取巨量云图单个搜索词",taskResource);
+            crawlerSingleOceanEngineKeyword.crawSingleKeywords(uniqueList);
 
             // 遍历结束后批量添加新键（避免并发修改）
             for (String newKey : toAddKeys) {

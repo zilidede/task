@@ -49,7 +49,7 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
     private ChromiumTab tab;
     private boolean secondFlag = false;//二级类目标识
     private String srcDir; //原始下载目录
-    private final String xhrDir;
+    private final String xhrDir; // xhr保存目录
     private final Integer maxCrawCount = 1000; // 最大爬取次数
     private int crawCount = 0;//爬取次数 ;
 
@@ -64,6 +64,14 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
         xhrDir = Ini4jUtils.readIni("xhrDir");
     }
 
+    public void setSecondFlag(boolean secondFlag) {
+        this.secondFlag = secondFlag;
+    }
+
+    public boolean isSecondFlag() {
+        return secondFlag;
+    }
+
     public void setSrcDir(String srcDir) {
         this.srcDir = srcDir;
     }
@@ -75,7 +83,7 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
     public static void main(String[] args) throws Exception {
         CrawSeleniumOceanEngineKeyWords craw = new CrawSeleniumOceanEngineKeyWords();
 
-        craw.renameDownloadFile("s:\\", "S:\\data\\task\\爬虫\\yunTu\\巨量云图行业搜索词\\", "2024-12-01", "食品饮料", 1735651800);
+        craw.renameDownloadFile("s:\\", "D:\\data\\task\\爬虫\\yunTu\\巨量云图行业搜索词\\", "2024-12-01", "食品饮料", 1735651800);
 
     }
 
@@ -259,6 +267,7 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
                 String industryName1 = elements.get(i).text() + "-" + elements1.get(j).text();
                 if (downloadIndustry(industryName1) == -1)
                     return -1;
+                /*
                 //获取搜索词详情
                 if (flag) {
                     if (downloadKeyWordDetails() < 0) {
@@ -271,6 +280,8 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
                         Thread.sleep(1000 * 60 * 1);
                     }
                 }
+
+                 */
                 //超长子类
                 if (j == 15 && flag2) {
                     //重新打开选择框
@@ -307,10 +318,9 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
                     List<ChromiumElement> elements2 = element2.eles(By.xpath("./div"));
                     for (int k = 0; k < elements2.size(); k++) {
                         // 非关注类目不爬取二级类目
-
-                        if (!industyName.equals("服饰内衣") || !industyName.equals("鞋靴箱包") || !industyName.equals("运动户外") || !industyName.equals("母婴宠物")) {
-                            break;
-                        }
+                      //  if (!industyName.equals("服饰内衣") || !industyName.equals("鞋靴箱包") || !industyName.equals("运动户外") || !industyName.equals("母婴宠物")) {
+                      //      break;
+                     //   }
                         try {
                             s = elements2.get(k).text();
                         } catch (Exception ex) {
@@ -330,10 +340,10 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
                         Thread.sleep(1000);
                         xpath = "//*[@class=\"search-strategy-pager-text\"]";
                         try {
-                            List<ChromiumElement> elements3 = tab.eles(By.xpath(xpath));
-                            Thread.sleep(1000);
-                            elements3.get(1).click().click();
-                            Thread.sleep(1000);
+                        //    List<ChromiumElement> elements3 = tab.eles(By.xpath(xpath));
+                        //    Thread.sleep(1000);
+                           // elements3.get(1).click().click();
+                        //    Thread.sleep(1000);
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
@@ -341,7 +351,18 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
                         if (downloadIndustry(industryName1) == -1)
                             return -1;
 
-
+                        //获取搜索词详情
+                        if (flag) {
+                            if (downloadKeyWordDetails() < 0) {
+                                LoggerUtils.logger.warn(s + "类目获取搜索词详情失败，休眠3分钟");
+                                return -1;
+                                //退出程序重新爬取此类目；
+                            }
+                            else {
+                                LoggerUtils.logger.debug(s + "获取搜索词详情爬取完成,休眠1分钟");
+                                Thread.sleep(1000 * 60 * 1);
+                            }
+                        }
                         //记录总数字
                         xpath = "//*[@class=\"search-strategy-pager-record\"]";
                         s = tab.ele(By.xpath(xpath)).text();
@@ -349,10 +370,9 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
                         s = s.replaceAll("条记录", "");
                         Integer count = Integer.parseInt(s);
                         String content = className + "-" + count + "\n";
-                        FileIoUtils.writeTxtFile("C:\\work\\craw\\data\\test\\class.txt", content, "utf-8");
+                        LoggerUtils.logger.info(className + "类目搜索词数量：" + count);
                         //重新打开选择框
                         xpath = "//*[@class=\"search-strategy-icon search-strategy-icon-down search-strategy-cascader-arrow\"]";
-
                         tab.eles(By.xpath(xpath)).get(0).click().click();
                         Thread.sleep(1000);
                         if (k == 15) {
@@ -396,10 +416,10 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
             ex.printStackTrace();
             return -1;
         }
-        //排序 -订单量
+        //排序 -搜索量
 //*[@id="garfish_app_for_search_strategy_18nut35u"]/div/div[2]/div/div/div[3]/div/div[3]/div[2]/div/div[1]/div[1]/div/table/thead/tr/th[7]/span/span[2]/button
         xpath = "//*[@class=\"search-strategy-Table-HeadCellContentTrigger\"]";
-        ChromiumElement element = tab.eles(By.xpath(xpath)).get(6);
+        ChromiumElement element = tab.eles(By.xpath(xpath)).get(3);
         if (element != null) {
             element.click().click();
             Thread.sleep(1000);
@@ -530,7 +550,7 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
         int i = 0;
         xpath = "//*[@class=\"search-strategy-btn search-strategy-btn-size-md search-strategy-btn-type-primary search-strategy-btn-shape-angle search-strategy-can-input-grouped\"]";
         List<ChromiumElement> elements = tab.eles(By.xpath(xpath));
-        elements.get(0).click().click();
+        elements.get(0).click().click(); //下载csv
         Thread.sleep(1000);
         elements = tab.eles(By.xpath(xpath));
         elements.get(2).click().click();
@@ -551,7 +571,6 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
 
     public String getDate() throws InterruptedException {
         //获取搜索词行业大盘日期
-
         String xpath = "//*[@class=\"search-strategy-input-inner__wrapper search-strategy-input-inner__wrapper-border search-strategy-input-inner__wrapper-size-md search-strategy-input-inner__wrapper-add-suffix search-strategy-input-inner__wrapper-filled\"]";
         ChromiumElement element = tab.eles(By.xpath(xpath)).get(2);
         Thread.sleep(1000);
@@ -611,5 +630,36 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
 
     }
 
-
+    public void crawSingleKeywords(List<String> keywords) throws InterruptedException {
+        openEnterUrl("https://yuntu.oceanengine.com/yuntu_lite/search_strategy/search_words");
+        String xpath="//*[@class=\"search-strategy-cascader search-strategy-cascader-select search-strategy-can-input-grouped\"]" ;
+        List<ChromiumElement> elements=getTab().eles(By.xpath(xpath)); //打开搜索词输入框
+        elements.get(1).click().click();
+        Thread.sleep(1000);
+        for (String keyword : keywords) {
+            xpath= "//*[@class=\"search-strategy-input search-strategy-input-size-md\"]";
+            List<ChromiumElement> elements1=getTab().eles(By.xpath(xpath)); //输入搜索词
+            Thread.sleep(1000);
+            ChromiumElement element=elements1.get(5);
+            element.input( keyword);
+            Thread.sleep(2000);
+            xpath= "//*[@class=\"search-strategy-list-item-inner-wrapper search-strategy-cascader-item-inner-wrapper\"]";;
+            elements1=getTab().eles(By.xpath(xpath)); //选择搜索框
+            elements1.get(0).click().click();
+            xpath = "//*[@class=\"search-strategy-btn search-strategy-btn-size-md search-strategy-btn-type-primary search-strategy-btn-shape-angle search-strategy-can-input-grouped\"]";
+            elements = tab.eles(By.xpath(xpath));
+            elements.get(1).click().click(); //下载csv
+            //下载相关性图谱
+            downloadKeyWordDetails();
+            for (ChromiumElement element1 : elements1){
+                String s=element1.text();
+                // System.out.println(s);
+            }
+            Thread.sleep(2000);
+            //重新打开搜索框；
+            xpath="//*[@class=\"search-strategy-cascader search-strategy-cascader-select search-strategy-can-input-grouped\"]" ;
+            elements=getTab().eles(By.xpath(xpath)); //打开搜索词输入框
+            elements.get(1).click().click();
+        }
+    }
 }

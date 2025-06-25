@@ -693,6 +693,12 @@ public class TaskExecutor {
                 while (!rName.equals("quit")) {
                     crawler.setTab(tab);
                     crawler.setFlag( true);
+                    crawler.setSecondFlag(true);
+                    try {
+                        Saver.save();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                     try {
                         rName = CrawSeleniumOceanEngineKeyWords.crawAll(crawler, rName);
                     } catch (Exception e) {
