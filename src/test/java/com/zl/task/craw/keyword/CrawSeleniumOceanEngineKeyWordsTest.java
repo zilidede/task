@@ -29,7 +29,7 @@ public class CrawSeleniumOceanEngineKeyWordsTest {
     public void crawAll() throws Exception {
         //Saver.save();
         //云图搜索词
-        crawler.setFlag(true); //设置巨量云图搜索词详情执行标志
+        crawler.setFlag(false); //设置巨量云图搜索词详情执行标志
         crawler.setSecondFlag(true);
         String rName = "";
         int i = 1;

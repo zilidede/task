@@ -313,6 +313,7 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
                 //二级类目
                 xpath = "//*[@class=\"ReactVirtualized__Grid__innerScrollContainer\"]";
                 //二级类目 secondFlag爬取开关
+                Boolean secondLongFlag = true;
                 if (secondFlag) {
                     ChromiumElement element2 = tab.eles(By.xpath(xpath)).get(2);
                     List<ChromiumElement> elements2 = element2.eles(By.xpath("./div"));
@@ -375,14 +376,15 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
                         xpath = "//*[@class=\"search-strategy-icon search-strategy-icon-down search-strategy-cascader-arrow\"]";
                         tab.eles(By.xpath(xpath)).get(0).click().click();
                         Thread.sleep(1000);
-                        if (k == 15) {
+                        if (k == 15&& secondLongFlag) {
                             xpath = "//*[@class=\"ReactVirtualized__Grid__innerScrollContainer\"]";
                             elements2 = tab.eles(By.xpath(xpath));
                             Thread.sleep(1000);
                             element = elements2.get(2);
                             Thread.sleep(1000);
                             elements2 = element.eles(By.xpath("./div"));
-                            k = 0;
+                            k = 6;
+                            continue;
                         }
                     }
                 }
