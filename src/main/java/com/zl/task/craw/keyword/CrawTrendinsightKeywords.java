@@ -38,22 +38,22 @@ public class CrawTrendinsightKeywords extends CrawServiceXImpl {
         srcDir = Ini4jUtils.readIni("srcDir");
         Ini4jUtils.loadIni("./data/task/xhr.ini");
         setXHRList(Ini4jUtils.traSpecificSection("trendinsight"));
-
-    }
-
-    public static void main(String[] args) throws Exception {
-        CrawTrendinsightKeywords craw = new CrawTrendinsightKeywords();
-        craw.setTab(DefaultTaskResourceCrawTabList.getTabList().get(0));
-
-        craw.run(new TaskVO(1, "爬取巨量算数关键字"));
-    }
-
-    public void run(TaskVO task) throws Exception {
         getXHRList().add("index/get_multi_keyword_interpretation");
         getXHRList().add("index/get_multi_keyword_hot_trend");
         getXHRList().add("index/get_relation_word");
         getXHRList().add("index/get_portrait");
-        getTab().listen().start(getXHRList());
+
+
+    }
+
+
+    public static void main(String[] args) throws Exception {
+        CrawTrendinsightKeywords craw = new CrawTrendinsightKeywords();
+        craw.setTab(DefaultTaskResourceCrawTabList.getTabList().get(0));
+        craw.run(new TaskVO(1, "爬取巨量算数关键字"));
+    }
+
+    public void run(TaskVO task) throws Exception {
         crawFromFile();
 
     }
@@ -62,7 +62,7 @@ public class CrawTrendinsightKeywords extends CrawServiceXImpl {
         //从词根爬取关键字列表-deep=深度，startTime=开始时间，endTime=结束时间;
         keywords = getKeywords("./data/task/手工词根列表.txt");
         for (String s : keywords) {
-            craw(s, "2025-01-06", "2025-01-12");
+            craw(s, startTime , endTime);
         }
     }
 
@@ -149,7 +149,7 @@ public class CrawTrendinsightKeywords extends CrawServiceXImpl {
         xpath="//*[@viewBox=\"0 0 16 16\"]";
         List<ChromiumElement> eles1=getTab().eles(By.xpath(xpath)); // 获取左右侧月份调节器
         if(count<0){
-            for (int i = 0; i < -count+1; i++) {
+            for (int i = 0; i < -count; i++) {
                 eles1.get(1).click().click(); //月份减一
                 Thread.sleep(1000 * 2);
             }
@@ -194,7 +194,7 @@ public class CrawTrendinsightKeywords extends CrawServiceXImpl {
         xpath="//*[@class=\"byted-date-view byted-date-date byted-date-owner-date byted-date-position-end byted-date-view-size-md\"]";
         ele3=getTab().ele(By.xpath(xpath)); //获得右侧日历表
         Thread.sleep(1000 * 1);
-        selectCalendarDay(startDate, ele3);
+        selectCalendarDay(endDate, ele3);
 
 
     }

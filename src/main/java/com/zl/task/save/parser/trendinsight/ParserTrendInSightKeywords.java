@@ -31,12 +31,11 @@ public class ParserTrendInSightKeywords {
         contents = new ArrayList<>();
         relationKeywords = new ArrayList<>();
         relationKeywordScores = new ArrayList<>();
-        contentDao = new ContentDao(DefaultDatabaseConnect.getConn());
-        relationKeywordDao = new RelationKeywordDao(DefaultDatabaseConnect.getConn());
-        relationKeywordScoreDao = new RelationKeywordScoreDao(DefaultDatabaseConnect.getConn());
+        contentDao = new ContentDao();
+        relationKeywordDao = new RelationKeywordDao();
+        relationKeywordScoreDao = new RelationKeywordScoreDao();
     }
     public List<String> parserRelationWord(HttpVO httpVO){
-
         List<String> result = new ArrayList<>();
         String reqBody = httpVO.getRequest().getBody();
         RelationKeywordDO relaKeyWord=new RelationKeywordDO();

@@ -4,9 +4,11 @@ package com.zl.task.craw.keyword;
 import com.ll.drissonPage.base.By;
 import com.ll.drissonPage.element.ChromiumElement;
 import com.ll.drissonPage.page.ChromiumTab;
+import com.ll.drissonPage.units.Actions;
 import com.ll.drissonPage.units.listener.DataPacket;
 import com.zl.dao.generate.OceanenSearchKeywordsDetailDao;
 import com.zl.task.impl.ExecutorTaskService;
+import com.zl.task.save.Saver;
 import com.zl.task.vo.task.taskResource.TaskResource;
 import com.zl.task.vo.task.taskResource.TaskVO;
 import com.zl.utils.io.DiskIoUtils;
@@ -55,7 +57,7 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
 
     public CrawSeleniumOceanEngineKeyWords() throws Exception {
         keywordDetailMaps = new HashMap<>();
-        dao = new OceanenSearchKeywordsDetailDao(DefaultDatabaseConnect.getConn());
+        dao = new OceanenSearchKeywordsDetailDao();
         flag = true; //开启搜索关键字详情爬取标识； true=开启 false
         secondFlag = false;
         Ini4jUtils.loadIni("./data/config/config.ini");
@@ -157,8 +159,8 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
         vo.setStatus(selectAll(vo.getTaskDesc()));
     }
 
-    void openEnterUrl(String url) throws InterruptedException {
-        tab.get(url);
+    public void openEnterUrl(String url) throws InterruptedException {
+        getTab().get(url);
         Thread.sleep(1000 * 10);
     }
 
@@ -265,7 +267,7 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
                 elements1.get(j).click().click();
                 Thread.sleep(1000 * 3);
                 String industryName1 = elements.get(i).text() + "-" + elements1.get(j).text();
-                if (downloadIndustry(industryName1) == -1)
+                if (downloadIndustry(industryName1,0) == -1)
                     return -1;
                 /*
                 //获取搜索词详情
@@ -349,12 +351,12 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
                             ex.printStackTrace();
                         }
                         industryName1 = elements.get(i).text() + "-" + elements1.get(j).text() + "-" + elements2.get(k).text();
-                        if (downloadIndustry(industryName1) == -1)
+                        if (downloadIndustry(industryName1,0) == -1)
                             return -1;
 
                         //获取搜索词详情
                         if (flag) {
-                            if (downloadKeyWordDetails() < 0) {
+                            if (downloadKeyWordDetails(0) < 0) {
                                 LoggerUtils.logger.warn(s + "类目获取搜索词详情失败，休眠3分钟");
                                 return -1;
                                 //退出程序重新爬取此类目；
@@ -399,7 +401,7 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
 
 
     //下载当前页所有搜索词详细信息；
-    public int downloadKeyWordDetails() throws InterruptedException {
+    public int downloadKeyWordDetails(int index) throws InterruptedException {
         String xpath = "";
         List<ChromiumElement> elements;
         Thread.sleep(1000);
@@ -409,7 +411,7 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
             xpath = "//*[@class=\"search-strategy-pager-record\"]";
             elements = tab.eles(By.xpath(xpath));
             if (elements.size() > 0) {
-                String s = elements.get(0).text();
+                String s = elements.get(index).text();
                 s = s.replaceAll("条记录", "");
                 s = s.replaceAll("共", "");
                 len = Integer.parseInt(s) / 10;
@@ -421,21 +423,29 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
         //排序 -搜索量
 //*[@id="garfish_app_for_search_strategy_18nut35u"]/div/div[2]/div/div/div[3]/div/div[3]/div[2]/div/div[1]/div[1]/div/table/thead/tr/th[7]/span/span[2]/button
         xpath = "//*[@class=\"search-strategy-Table-HeadCellContentTrigger\"]";
-        ChromiumElement element = tab.eles(By.xpath(xpath)).get(3);
+        ChromiumElement element = tab.eles(By.xpath(xpath)).get(3+ index*10);
         if (element != null) {
             element.click().click();
             Thread.sleep(1000);
         }
         //循环列表
         for (int j = 0; j < len; j++) {
+
             xpath = "//*[@class=\"search-strategy-Table-Body\"]";
-            elements = tab.eles(By.xpath(xpath)).get(0).eles(By.xpath("./tr"));
+            elements = tab.eles(By.xpath(xpath)).get(index).eles(By.xpath("./tr"));
+            Thread.sleep(1000);
             //当前页搜索词爬取
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < elements.size(); i++) {
                 if (i > elements.size())
                     continue;
-                element = elements.get(i).ele(By.xpath("td[3]/div/span/span/div"));
+                String s="";
+                if(index==0)
+                    s=String.format("td[%d]/div/span/span/div",3-index);
+                else if(index==1)
+                    s=String.format("td[%d]/div/span/div",3-index);
+                element = elements.get(i).ele(By.xpath(s));
                 // System.out.println(element.text());
+                //*[@id="garfish_app_for_search_strategy_vzp1anmm"]/div/div[2]/div/div/div[4]/div[1]/div[3]/div/div[1]/div[1]/div/table/tbody/tr[1]/td[2]
                 if (!keywordDetailMaps.containsKey(element.text())) {
                     tab.listen().start("lite_keywords_packet/get_search_word_detail"); //监听搜索词
                     if (downloadKeyWordDetail(element.text(), element) < 0)
@@ -443,12 +453,14 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
                     keywordDetailMaps.put(element.text(), 0);
                 }
             }
+            //获取页码element
+            Thread.sleep(1000);
             xpath = "//*[@class=\"search-strategy-pager-item-group\"]";
-            elements = tab.eles(By.xpath(xpath));
+            elements = tab.eles(By.xpath(xpath)); //获取页码element
             Thread.sleep(1000);
             if (elements.size() > 0) {
                 try {
-                    elements = elements.get(0).eles(By.xpath("./li"));
+                    elements = elements.get(index).eles(By.xpath("./li"));
                     element = elements.get(elements.size() - 1);
                     element.click().click();
                     Thread.sleep(1000);
@@ -543,7 +555,7 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
 
     }
 
-    public int downloadIndustry(String industryName) throws InterruptedException {
+    public int downloadIndustry(String industryName, int index) throws InterruptedException {
         //
         long currentTimeMillis = System.currentTimeMillis() / 1000;
         //下载行业关键字
@@ -552,7 +564,7 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
         int i = 0;
         xpath = "//*[@class=\"search-strategy-btn search-strategy-btn-size-md search-strategy-btn-type-primary search-strategy-btn-shape-angle search-strategy-can-input-grouped\"]";
         List<ChromiumElement> elements = tab.eles(By.xpath(xpath));
-        elements.get(0).click().click(); //下载csv
+        elements.get(index).click().click(); //下载csv
         Thread.sleep(1000);
         elements = tab.eles(By.xpath(xpath));
         elements.get(2).click().click();
@@ -632,13 +644,23 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
 
     }
 
-    public void crawSingleKeywords(List<String> keywords) throws InterruptedException {
+    public void crawSingleKeywords(List<String> keywords) throws Exception {
         openEnterUrl("https://yuntu.oceanengine.com/yuntu_lite/search_strategy/search_words");
         String xpath="//*[@class=\"search-strategy-cascader search-strategy-cascader-select search-strategy-can-input-grouped\"]" ;
         List<ChromiumElement> elements=getTab().eles(By.xpath(xpath)); //打开搜索词输入框
+        elements.get(1).runAsyncJs("arguments[0].scrollIntoView();");
+        Thread.sleep(1000);
         elements.get(1).click().click();
         Thread.sleep(1000);
         for (String keyword : keywords) {
+            //保存记录 重新更新keyMap;
+            try {
+                Saver.save();
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            dao.findOcSearchKeywordsDetail(keywordDetailMaps);
             xpath= "//*[@class=\"search-strategy-input search-strategy-input-size-md\"]";
             List<ChromiumElement> elements1=getTab().eles(By.xpath(xpath)); //输入搜索词
             Thread.sleep(1000);
@@ -647,12 +669,15 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
             Thread.sleep(2000);
             xpath= "//*[@class=\"search-strategy-list-item-inner-wrapper search-strategy-cascader-item-inner-wrapper\"]";;
             elements1=getTab().eles(By.xpath(xpath)); //选择搜索框
+            String temp=elements1.get(0).text();
+            if (!temp.equals(keyword)) {
+                LoggerUtils.logger.error(String.format("搜索词：%s-%s:在搜索框无法找到：下载失败", keyword, keyword));
+                continue;
+            }
             elements1.get(0).click().click();
-            xpath = "//*[@class=\"search-strategy-btn search-strategy-btn-size-md search-strategy-btn-type-primary search-strategy-btn-shape-angle search-strategy-can-input-grouped\"]";
-            elements = tab.eles(By.xpath(xpath));
-            elements.get(1).click().click(); //下载csv
-            //下载相关性图谱
-            downloadKeyWordDetails();
+            downloadIndustry(keyword,1);
+            //下载相关性图谱详情
+            downloadKeyWordDetails(1);
             for (ChromiumElement element1 : elements1){
                 String s=element1.text();
                 // System.out.println(s);
@@ -662,6 +687,8 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
             xpath="//*[@class=\"search-strategy-cascader search-strategy-cascader-select search-strategy-can-input-grouped\"]" ;
             elements=getTab().eles(By.xpath(xpath)); //打开搜索词输入框
             elements.get(1).click().click();
+
+
         }
     }
 }

@@ -17,7 +17,7 @@ public class SaveToPgSqlTest {
 
     @Test
     public void saveCityWeatherToPgSql() throws Exception {
-        SaveToPgSql.saveCityWeatherToPgSql("S:\\data\\task\\爬虫\\weather\\");
+        SaveToPgSql.saveCityWeatherToPgSql("D:\\data\\back\\day\\2025-06-26\\");
     }
 
     @Test
@@ -26,4 +26,7 @@ public class SaveToPgSqlTest {
     }
 
 
+    @org.junit.jupiter.api.Test
+    void testSaveCityWeatherToPgSql() {
+    }
 }

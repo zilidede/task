@@ -3,6 +3,7 @@ package com.zl.task.process.keyword;
 import com.zl.task.craw.keyword.CrawDouYinWebKeywords;
 import com.zl.task.craw.keyword.CrawSeleniumOceanEngineKeyWords;
 import com.zl.task.craw.keyword.CrawTrendinsightKeywords;
+import com.zl.task.save.Saver;
 import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
 import com.zl.task.save.parser.trendinsight.ParserTrendInSightKeywords;
 import com.zl.task.vo.http.HttpVO;
@@ -30,10 +31,12 @@ public class DeepTrendInSightKeywords {
         Ini4jUtils.loadIni("./data/config/config.ini");
         Ini4jUtils.setSectionValue("trendinsight");
         String xhrSaveDir = Ini4jUtils.readIni("xhrSaveDir");
+        ParserTrendInSightKeywords parser = new ParserTrendInSightKeywords(); ;
         while (i<deepCount){
             // 先获取当前键的静态视图（避免并发修改）
             Set<Map.Entry<String, Integer>> entries = unCrawKeywordsMaps.entrySet();
             List<String> toAddKeys = new ArrayList<>(); // 存储待添加的键
+
             for (Map.Entry<String, Integer> entry : entries) {
                 String key = entry.getKey();
                 if (!crawKeywordsMaps.containsKey(key)) {
@@ -48,7 +51,7 @@ public class DeepTrendInSightKeywords {
                     }
 
                     crawKeywordsMaps.put(key, 0);
-                    List<String> newKeys = getRelationKeywords(httpVOS);
+                    List<String> newKeys = getRelationKeywords(parser,httpVOS);
                     toAddKeys.addAll(newKeys); // 收集待添加的键
                 }
             }
@@ -57,13 +60,14 @@ public class DeepTrendInSightKeywords {
             Set<String> set = new HashSet<>(toAddKeys);
             List<String> uniqueList = new ArrayList<>(set);
             //抖音网页版爬取;
-            CrawDouYinWebKeywords crawlerDouYinWeb = new CrawDouYinWebKeywords(DefaultTaskResourceCrawTabList.getTabList().get(1));
+            CrawDouYinWebKeywords crawlerDouYinWeb = new CrawDouYinWebKeywords(DefaultTaskResourceCrawTabList.getTabList().get(0));
             TaskResource<List<String>> taskResource=new ListResource();
             taskResource.load(uniqueList);
             TaskVO<List<String>> task=new TaskVO<>(1,"抖音网页版爬取",taskResource);
-            crawlerDouYinWeb.run(task);
+           // crawlerDouYinWeb.run(task);
             // 爬取巨量云图单个搜索词;
             CrawSeleniumOceanEngineKeyWords crawlerSingleOceanEngineKeyword = new CrawSeleniumOceanEngineKeyWords();
+            crawlerSingleOceanEngineKeyword.setTab(DefaultTaskResourceCrawTabList.getTabList().get(1));
             taskResource=new ListResource();
             taskResource.load(uniqueList);
             task=new TaskVO<>(2,"爬取巨量云图单个搜索词",taskResource);
@@ -77,11 +81,10 @@ public class DeepTrendInSightKeywords {
 
             i++;
         }
-        //Saver.save();
+        Saver.save();
     }
-    public static List<String> getRelationKeywords(List<HttpVO> httpVOS) throws Exception {
+    public static List<String> getRelationKeywords(ParserTrendInSightKeywords parser,List<HttpVO> httpVOS) throws Exception {
         // 只解析关联词
-        ParserTrendInSightKeywords parser = new ParserTrendInSightKeywords(); ;
         List<String> relationKeywords = new ArrayList<>();
         for (HttpVO httpVO : httpVOS) {
             List<String> result = parser.parser(httpVO); // 假设 parser 的返回值是 List<String>

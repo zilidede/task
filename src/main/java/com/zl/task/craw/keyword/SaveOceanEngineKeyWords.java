@@ -39,9 +39,9 @@ public class SaveOceanEngineKeyWords {
     private final SaveServiceImpl saveService;
     private Map<String, Integer> keywordMap;
     private String srcDir;
-    private OceanenSearchKeywordsProductDao productDao = new OceanenSearchKeywordsProductDao(DefaultDatabaseConnect.getConn());
-    private OceanenSearchKeywordsVideoDao videoDao = new OceanenSearchKeywordsVideoDao(DefaultDatabaseConnect.getConn());
-    private OceanenSearchKeywordsDetailDao keywordsDetailDao = new OceanenSearchKeywordsDetailDao(DefaultDatabaseConnect.getConn());
+    private OceanenSearchKeywordsProductDao productDao ;
+    private OceanenSearchKeywordsVideoDao videoDao ;
+    private OceanenSearchKeywordsDetailDao keywordsDetailDao ;
 
 
     private final List<OceanenSearchKeywordsProductDO> productDOList = new ArrayList<>();
@@ -60,7 +60,10 @@ public class SaveOceanEngineKeyWords {
         saveService = new SaveServiceImpl();
         keywordMap = new HashMap<>();
         keywordsDOS = new ArrayList<>();
-        keywordsDao = new OceanengineSearchKeywordsDao(DefaultDatabaseConnect.getConn());
+        keywordsDao = new OceanengineSearchKeywordsDao();
+        productDao = new OceanenSearchKeywordsProductDao();
+        videoDao = new OceanenSearchKeywordsVideoDao();
+        keywordsDetailDao = new OceanenSearchKeywordsDetailDao();
     }
 
     public void save() throws SQLException, IOException, ParseException {
@@ -214,9 +217,13 @@ public class SaveOceanEngineKeyWords {
         date = sf.parse(strings[1].substring(0, 10));
         Date date1 = sf.parse(strings[0]);
         // System.out.println("开始日期"+sf.format(date)+"结束日期"+sf.format(date1));
+
         for (int i = 0; i < csvContent.size(); i++) {
             OceanengineSearchKeywordsDO vo = new OceanengineSearchKeywordsDO();
-            if (csvContent.get(i).get("搜索词").equals("＂")) {
+            Map<String, String> tmap=csvContent.get(i);
+
+            String searchKeyword = "搜索词";
+            if (tmap.get("搜索词").equals("＂")) {
 
             }
             vo.setRecordEndTime(date);

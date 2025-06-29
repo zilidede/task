@@ -12,7 +12,6 @@ public class DeepTrendInSightKeywordsTest {
         // 测试正常输入
         String keyword = "防晒衣";
         Integer deepCount = 1;
-
         // 调用方法
         DeepTrendInSightKeywords.crawRootKeyword(keyword, deepCount);
 

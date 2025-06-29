@@ -24,7 +24,7 @@ public class OceanEngineKeyWordsStemmer {
 
     static {
         try {
-            dao = new OceanenSearchKeywordsDetailDao(DefaultDatabaseConnect.getConn());
+            dao = new OceanenSearchKeywordsDetailDao();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
@@ -65,7 +65,7 @@ public class OceanEngineKeyWordsStemmer {
             }
         }
         // 从搜索词订单数量和搜索此次过滤，从七天搜索词求平均值>100,搜索次数>20000；
-        OceanengineSearchKeywordsDao dao1 = new OceanengineSearchKeywordsDao(DefaultDatabaseConnect.getConn());
+        OceanengineSearchKeywordsDao dao1 = new OceanengineSearchKeywordsDao();
         List<String> contents = new ArrayList<>();
         for (String key : searchKeywordRootMaps.keySet()) {
             Integer value = searchKeywordRootMaps.get(key);

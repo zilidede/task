@@ -24,13 +24,15 @@ public class SaverCityWeather {
         }
         List<Map<String, CityWeatherDO>> cityMaps = new ArrayList<>();
         SimpleDateFormatUtils.setDateFormat("yyyy/MM/dd HH");
-        List<String> files = DiskIoUtils.getFileListFromDir(srcDir + "//weather.cma.cnApiNow//");
+        List<String> files = DiskIoUtils.getFileListFromDir(dir + "weather.cma.cnApiNow\\");
         for (String file : files) {
             HttpVO httpVO = ParserFiddlerJson.parserXHRJson(file);
             String url = httpVO.getUrl();
             String json = httpVO.getResponse().getBody();
             String s = url.substring(url.indexOf("now/") + 4, url.indexOf("now/") + 9);
             CityWeatherDO cWDO = parserJson(json, s);
+            if(cWDO == null)
+                continue;
             Map<String, CityWeatherDO> map = new HashMap<>();
             map.put(s + "-" + cWDO.getLastUpdate(), cWDO);
             cityMaps.add(map);

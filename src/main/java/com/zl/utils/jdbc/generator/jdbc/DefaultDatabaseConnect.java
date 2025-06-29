@@ -2,6 +2,7 @@ package com.zl.utils.jdbc.generator.jdbc;
 
 
 import com.zl.utils.jdbc.generator.GenerateDaoCode;
+import com.zl.utils.jdbc.hikariCP.ConnectionPool;
 import com.zl.utils.other.Ini4jUtils;
 import com.zl.utils.other.PostgreSQLConnectionUtils;
 
@@ -15,6 +16,9 @@ import java.sql.Connection;
  */
 public class DefaultDatabaseConnect {
     public static Connection getConn() {
+        return ConnectionPool.getConnection();
+    }
+    public static Connection getConn1() {
         Ini4jUtils.loadIni("./data/config/config.ini");
         Ini4jUtils.setSectionValue("database");
         Connection connection = null;
@@ -30,7 +34,6 @@ public class DefaultDatabaseConnect {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-
         }
         return connection;
     }

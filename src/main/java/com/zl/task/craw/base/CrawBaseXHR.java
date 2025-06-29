@@ -17,7 +17,9 @@ public abstract class CrawBaseXHR implements ExecutorTaskService<String> {
     private String xhrSaveDir = ""; //xhr文件保存主目录
     private final List<String> xhrList = new ArrayList<>();
     private TaskVO task;
-
+    public CrawBaseXHR(ChromiumTab tab){
+        this.tab = tab;
+    }
     public void init() {
         //资源初始化
 

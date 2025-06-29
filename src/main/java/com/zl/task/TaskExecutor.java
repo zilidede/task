@@ -3,6 +3,7 @@ package com.zl.task;
 import com.ll.drissonPage.page.ChromiumTab;
 import com.zl.dao.generate.HourLiveRankDO;
 import com.zl.dao.generate.HourLiveRankDao;
+import com.zl.task.main.CrawSearchKeyWordTestCase;
 import com.zl.task.craw.account.CrawHuiTunAccount;
 import com.zl.task.craw.base.x.DefaultCrawSeleniumDouYinList;
 import com.zl.task.craw.keyword.CrawSeleniumDouHotSearchKeyWords;
@@ -34,7 +35,8 @@ import java.util.concurrent.TimeUnit;
 // 任务执行者单元
 public class TaskExecutor {
     public static void main(String[] args) throws Exception {
-        multipleThreadsCraw();
+       // multipleThreadsCraw();
+        CrawSearchKeyWordTestCase.crawYunTuCategorySecondSearchKeyWord();
     }
 
     public static void multipleThreadsCraw() throws InterruptedException, SQLException {
@@ -52,11 +54,11 @@ public class TaskExecutor {
         ParameterizedMarketThread marketThread = new ParameterizedMarketThread(DefaultTaskResourceCrawTabList.getTabList().get(i++));
         keywordsThread.start(); //每日执行一次 巨量云图搜索词爬取；-csv下载
         Thread.sleep(1000 * 2);
-        //   weatherThread.start(); //2小时一次天气
+        weatherThread.start(); //2小时一次天气
         Thread.sleep(1000 * 2);
       // saverThread.start(); //每小时进行数据保存；
         Thread.sleep(1000 * 2);
-      //  marketThread.start();
+        marketThread.start();
         Thread.sleep(1000 * 2);
         /*
         //  huiTunLiveThread.start(); //每天3小时执行一次-爬取灰豚数据直播数据爬取当前时间段前3个小时
@@ -97,7 +99,6 @@ public class TaskExecutor {
 
 
     }
-
     //小时级别爬取天气
     static class ParameterizedWeatherThread extends Thread {
         private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(0);

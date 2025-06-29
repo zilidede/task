@@ -9,7 +9,7 @@ class DeepTrendInSightKeywordsTest {
     @Test
     void crawRootKeyword() {
         try {
-            DeepTrendInSightKeywords.crawRootKeyword("防晒衣", 1);
+            DeepTrendInSightKeywords.crawRootKeyword("防晒", 1);
         } catch (Exception e) {
             e.printStackTrace();
         }

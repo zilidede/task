@@ -38,7 +38,7 @@ public class SaveToPgSql {
         String dayDir = Ini4jUtils.readIni("dayDir");
         String backDir = Ini4jUtils.readIni("BaiduSyncdisk");
         LocalDate currentDate = LocalDate.now();
-        FileRecordDao fileRecordDao = new FileRecordDao(DefaultDatabaseConnect.getConn());
+        FileRecordDao fileRecordDao = new FileRecordDao();
         SaveService saveService = new SaveServiceImpl();
 // 将 LocalDate 转换为 OffsetDateTime
         OffsetDateTime startDateTime = currentDate.minusDays(day)
@@ -113,7 +113,7 @@ public class SaveToPgSql {
 
     //将天气数据保存到pgsql
     public static void saveCityWeatherToPgSql(String srcDir) throws Exception {
-        String dir = srcDir + "weather-DESKTOP-RBM0GP7\\";
+        String dir = srcDir ;
         if (!DiskIoUtils.isExist(dir)) {
             LoggerUtils.logger.warn("天气文件数据:" + dir + "不存在");
             return;

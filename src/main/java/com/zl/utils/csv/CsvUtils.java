@@ -46,7 +46,7 @@ public class CsvUtils {
             String s1 = csvReader.get(i);
             if (i == 0) {
                 for (int j = 0; j < csvReader.getColumnCount(); j++) {
-                    strings[j] = csvReader.get(j).replace("\t", "").replace("\uFEFF", "");
+                    strings[j] = csvReader.get(j).replace("\t", "").replace("\uFEFF", "").replace("\"","");
                     keys.add(strings[j]);
                 }
                 i++;
@@ -55,7 +55,7 @@ public class CsvUtils {
                     continue;
                 map = new HashMap<>();
                 for (int j = 0; j < csvReader.getColumnCount(); j++) {
-                    strings[j] = csvReader.get(j).replace("\t", "").replace("\uFEFF", "");
+                    strings[j] = csvReader.get(j).replace("\t", "").replace("\uFEFF", "").replace("\"","");
                     map.put(keys.get(j), strings[j]);
                 }
                 csvContent.add(map);

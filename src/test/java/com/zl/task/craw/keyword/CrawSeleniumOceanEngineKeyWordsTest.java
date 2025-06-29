@@ -6,6 +6,9 @@ import com.zl.task.vo.task.taskResource.TaskVO;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CrawSeleniumOceanEngineKeyWordsTest {
     CrawSeleniumOceanEngineKeyWords crawler;
 
@@ -27,14 +30,13 @@ public class CrawSeleniumOceanEngineKeyWordsTest {
 
     @Test
     public void crawAll() throws Exception {
-        //Saver.save();
+        Saver.save();
         //云图搜索词
-        crawler.setFlag(false); //设置巨量云图搜索词详情执行标志
+        crawler.setFlag(true); //设置巨量云图搜索词详情执行标志
         crawler.setSecondFlag(true);
         String rName = "";
         int i = 1;
         while (!rName.equals("quit")) {
-
             try {
                 rName = CrawSeleniumOceanEngineKeyWords.crawAll(crawler, rName);
             } catch (Exception e) {
@@ -46,6 +48,27 @@ public class CrawSeleniumOceanEngineKeyWordsTest {
                 }
             }
 
+        }
+    }
+
+    @Test
+    public void downloadKeyWordDetails() throws InterruptedException {
+        crawler.downloadKeyWordDetails(0);
+        Thread.sleep(1000 * 10);
+      //  crawler.downloadKeyWordDetails(1);
+    }
+
+    @Test
+   public void crawSingleKeywords() {
+        try {
+            List<String> keywords = new ArrayList<>();
+            keywords.add("手机");
+            keywords.add("电脑");
+            crawler.crawSingleKeywords(keywords);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }
