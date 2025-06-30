@@ -105,7 +105,7 @@ public class CrawSeleniumDouYinCategoryList implements ExecutorTaskService {
         //
         openGoodListPage();
         Thread.sleep(2000);
-        craw(time);
+        craw(time, vo.getTaskDesc());
         vo.setStatus(3);
         LoggerUtils.logger.info("已爬取抖店罗盘类目榜单任务：" + vo.getTaskDesc());
         Thread.sleep(2000);
@@ -116,7 +116,9 @@ public class CrawSeleniumDouYinCategoryList implements ExecutorTaskService {
         tab.get("https://compass.jinritemai.com/shop/chance/category-overview?from_page=%2");
     }
 
-    public void craw(String time) throws Exception {
+    public void craw(String time,String selectorCategoryName) throws Exception {
+
+
         List<ChromiumElement> elements = null;
         //选择时间
         String xpath = "//*[@class=\"ecom-radio-group ecom-radio-group-outline\"]/label";
@@ -133,8 +135,21 @@ public class CrawSeleniumDouYinCategoryList implements ExecutorTaskService {
         list.add("compass_api/shop/product/product_chance_market/category_overview_price_band_distribution");
         list.add("compass_api/shop/product/product_chance_market/category_overview_price_analysis_product");
         tab.listen().start(list); //监听类目xhr
+        Boolean isEndSign = false; // 结束标识
         for (int j = 0; j < elements.size(); j++) {
-            String s = elements.get(j).text();
+            String name1 = elements.get(j).text(); //第一类目名称
+            String s = name1;
+            if(!selectorCategoryName.equals("")){
+                if(isEndSign){
+                    return;
+                }
+                if(!selectorCategoryName.equals(name1)){
+                    continue;
+                }
+                else{
+                    isEndSign=true;
+                }
+            }
             try {
                 elements.get(j).click().click();
             } catch (Exception e) {
@@ -150,6 +165,7 @@ public class CrawSeleniumDouYinCategoryList implements ExecutorTaskService {
             List<ChromiumElement> elements1 = tab.eles(By.xpath(xpath)).get(1).eles(By.xpath("./li")); //获取子类目类别
             Thread.sleep(1000);
             for (int i = 0; i < elements1.size(); i++) {
+                String name2 = elements1.get(i).text(); //第一子类目名称
                 try {
                     elements1.get(i).click().click();
                 } catch (Exception e) {
@@ -173,6 +189,10 @@ public class CrawSeleniumDouYinCategoryList implements ExecutorTaskService {
                         break;
                     else {
                         for (int k = 1; k < elements3.size(); k++) {
+                            String name3 = elements3.get(k).text(); //第三子类目名称
+                            String [] categoryIds = null;
+
+
                             try {
                                 elements3.get(k).click().click();
                             } catch (Exception e) {
@@ -192,6 +212,7 @@ public class CrawSeleniumDouYinCategoryList implements ExecutorTaskService {
                                     break;
                                 else {
                                     for (int m = 1; m < elements5.size(); m++) {
+                                        String name4 = elements5.get(m).text(); //第四子类目名称
                                         try {
                                             elements5.get(m).click().click();
                                         } catch (Exception e) {
@@ -274,7 +295,6 @@ public class CrawSeleniumDouYinCategoryList implements ExecutorTaskService {
     public void crawCategoryInfo() throws Exception {
         //爬取类目信息 流量渠道以及价格域 width:
         saveXHr();
-
         Thread.sleep(1000);
         String xpath = "//*[@style=\"width: max-content; min-width: 100%; table-layout: auto;\"]";
         List<ChromiumElement> elements = tab.eles(By.xpath(xpath));

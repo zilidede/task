@@ -46,7 +46,7 @@ public class TaskExecutor {
         // ParameterizedHourListThread hourListThread = new ParameterizedHourListThread(DefaultTaskResourceCrawTabList.getTabList().get(i++));
         //   ParameterizedHuiTunLiveThread huiTunLiveThread = new ParameterizedHuiTunLiveThread(DefaultTaskResourceCrawTabList.getTabList().get(i++));
         //     ParameterizedDayListThread dayListThread = new ParameterizedDayListThread(DefaultTaskResourceCrawTabList.getTabList().get(i++));
-        //    ParameterizedUnHourListThread unHourListThread= new ParameterizedUnHourListThread(DefaultTaskResourceCrawTabList.getTabList().get(i++),"./data/task/抖店罗盘小时榜.txt");
+            ParameterizedUnHourListThread unHourListThread= new ParameterizedUnHourListThread(DefaultTaskResourceCrawTabList.getTabList().get(i++),"./data/task/抖店罗盘小时榜.txt");
         //   ParameterizedUnHourListThread unHourListThread2= new ParameterizedUnHourListThread(DefaultTaskResourceCrawTabList.getTabList().get(i++),"./data/task/抖店罗盘小时榜2.txt");
         ParameterizedSaverThread saverThread = new ParameterizedSaverThread();
         ParameterizedWeatherThread weatherThread = new ParameterizedWeatherThread(DefaultTaskResourceCrawTabList.getTabList().get(i++));
