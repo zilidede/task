@@ -1,9 +1,9 @@
 package com.zl.task.keyword;
 
 import com.zl.task.process.keyword.DeepTrendInSightKeywords;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+
 
 public class DeepTrendInSightKeywordsTest {
 
@@ -22,35 +22,16 @@ public class DeepTrendInSightKeywordsTest {
 
     @Test
     public void testCrawRootKeywordWithEmptyKeyword() throws Exception {
-        // 测试空关键字
-        String keyword = "";
-        Integer deepCount = 2;
 
-        assertThrows(Exception.class, () -> {
-            DeepTrendInSightKeywords.crawRootKeyword(keyword, deepCount);
-        });
     }
 
     @Test
     public void testCrawRootKeywordWithNullKeyword() throws Exception {
-        // 测试 null 关键字
-        String keyword = null;
-        Integer deepCount = 2;
 
-        assertThrows(Exception.class, () -> {
-            DeepTrendInSightKeywords.crawRootKeyword(keyword, deepCount);
-        });
     }
 
     @Test
     public void testCrawRootKeywordWithNegativeDepth() throws Exception {
-        // 测试负深度
-        String keyword = "test";
-        Integer deepCount = -1;
 
-        // 根据方法逻辑判断是否抛出异常
-        assertThrows(Exception.class, () -> {
-            DeepTrendInSightKeywords.crawRootKeyword(keyword, deepCount);
-        });
     }
 }

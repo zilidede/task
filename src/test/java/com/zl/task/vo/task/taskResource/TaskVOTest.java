@@ -1,16 +1,18 @@
 package com.zl.task.vo.task.taskResource;
 
-import org.junit.jupiter.api.Test;
+
+
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 
-class TaskVOTest {
+
+public class TaskVOTest {
 
     @Test
-    void getTaskResource() {
+    public void getTaskResource() {
         // 2. 使用List<String>类型资源
         ListResource listResource= new ListResource();
         List<String> smallList = new ArrayList<>();

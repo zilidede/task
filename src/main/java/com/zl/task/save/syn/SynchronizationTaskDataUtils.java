@@ -74,7 +74,8 @@ public class SynchronizationTaskDataUtils {
             String[] strings = task.getDesDir().split("\\\\");
             String zipFilePath = "";
             if (strings.length > 1) {
-                zipFilePath = syncDir + strings[strings.length - 3] + "-" + strings[strings.length - 2] + ".zip";
+                // 加上当前时间戳
+                zipFilePath = syncDir + strings[strings.length - 3] + "-" + strings[strings.length - 2] +  System.currentTimeMillis()+".zip";
             }
             File sourceFolder = new File(task.getDesDir());
             File zipFile = new File(zipFilePath);

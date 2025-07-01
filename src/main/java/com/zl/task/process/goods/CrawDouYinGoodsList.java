@@ -105,7 +105,7 @@ public class CrawDouYinGoodsList extends CrawBaseDouYinList {
     }
 
     @Override
-    public void craw(TaskVO task) throws Exception {
+    public int craw(TaskVO task) throws Exception {
         String s = task.getTaskDesc();
         String[] s1 = s.split("&");
         String[] strings = s1[s1.length - 1].split("-");//获取类目名
@@ -176,6 +176,7 @@ public class CrawDouYinGoodsList extends CrawBaseDouYinList {
 
             }
         }
+        return 0;
     }
 }
 

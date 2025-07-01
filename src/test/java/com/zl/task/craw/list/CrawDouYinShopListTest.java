@@ -50,4 +50,6 @@ public class CrawDouYinShopListTest {
         craw.select(taskVO);
         craw.craw(taskVO);
     }
+
+
 }

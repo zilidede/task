@@ -102,7 +102,7 @@ public class CrawDouYinLiveList extends CrawBaseDouYinList {
         }
     }
 
-    public void craw(TaskVO task) throws Exception {
+    public int craw(TaskVO task) throws Exception {
         //选择爬取的类目
         String s = task.getTaskDesc();
         String[] s1 = s.split("&");
@@ -130,6 +130,7 @@ public class CrawDouYinLiveList extends CrawBaseDouYinList {
             crawCompassListOne(s); //遍历爬取子类目
         }
 
+        return 0;
     }
 
 

@@ -1,14 +1,13 @@
 package com.zl.utils.jdbc.hikariCP;
 
 import com.zl.task.craw.keyword.CrawTrendinsightKeywords;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 
-class ConnectionPoolTest {
+public class ConnectionPoolTest {
 
     @Test
-    void getConnection() throws Exception {
+    public void getConnection() throws Exception {
         CrawTrendinsightKeywords crawler = new CrawTrendinsightKeywords();
     }
 }

@@ -26,7 +26,7 @@ public class SaveToPgSqlTest {
     }
 
 
-    @org.junit.jupiter.api.Test
-    void testSaveCityWeatherToPgSql() {
+    @Test
+    public void testSaveCityWeatherToPgSql() {
     }
 }

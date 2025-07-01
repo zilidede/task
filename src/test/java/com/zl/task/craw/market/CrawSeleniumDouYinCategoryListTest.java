@@ -1,12 +1,11 @@
 package com.zl.task.craw.market;
 
-import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.Test;
 
-class CrawSeleniumDouYinCategoryListTest {
+public class CrawSeleniumDouYinCategoryListTest {
 
     @Test
-    void craw() {
+    public void craw() {
     }
 }

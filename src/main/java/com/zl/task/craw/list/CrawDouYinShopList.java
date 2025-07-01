@@ -134,9 +134,10 @@ public class CrawDouYinShopList extends CrawBaseDouYinList {
 
     }
 
-    public void craw(TaskVO task) throws Exception {
+    public int craw(TaskVO task) throws Exception {
         selectCategory(task);
         crawCompassListOne(task.getTaskDesc()); //遍历爬取子类目
+        return 0;
     }
 
     public void crawCompassListOne(String s) throws Exception {

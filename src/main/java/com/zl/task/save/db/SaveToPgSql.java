@@ -119,7 +119,7 @@ public class SaveToPgSql {
             return;
         }
         SaveServiceImpl saveService = new SaveServiceImpl();
-        DaoService daoService = new CityWeatherDao(DefaultDatabaseConnect.getConn());
+        DaoService daoService = new CityWeatherDao();
         List<CityWeatherDO> list = new ArrayList<>();
         List<Map<String, CityWeatherDO>> cityMaps = SaverCityWeather.parser(dir);
         for (Map<String, CityWeatherDO> cityMap : cityMaps) {

@@ -26,7 +26,7 @@ public class CrawCityWeather extends CrawBaseDouYinList {
         setXhrSaveDir(Ini4jUtils.readIni("xhrDir"));
         Ini4jUtils.loadIni("./data/task/xhr.ini");
         setXhrList(Ini4jUtils.traSpecificSection("weather"));
-        daoService = new CityWeatherDao(DefaultDatabaseConnect.getConn());
+        daoService = new CityWeatherDao();
 
     }
 

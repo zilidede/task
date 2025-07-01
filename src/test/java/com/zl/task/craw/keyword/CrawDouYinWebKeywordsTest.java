@@ -4,15 +4,15 @@ import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
 import com.zl.task.vo.task.taskResource.ListResource;
 import com.zl.task.vo.task.taskResource.TaskResource;
 import com.zl.task.vo.task.taskResource.TaskVO;
-import org.junit.jupiter.api.Test;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
-class CrawDouYinWebKeywordsTest {
+public class CrawDouYinWebKeywordsTest {
 
-    @Test
-    void crawRelatedKeywords() throws Exception {
+    @org.junit.Test
+    public void crawRelatedKeywords() throws Exception {
         List<String> keywords= new ArrayList<>();
         keywords.add("街舞");
         keywords.add("防晒");
@@ -21,8 +21,8 @@ class CrawDouYinWebKeywordsTest {
         crawler.crawRelatedKeywords(keywords);
     }
 
-    @Test
-    void run() throws Exception {
+    @org.junit.Test
+    public void run() throws Exception {
         List<String> keywords= new ArrayList<>();
         keywords.add("街舞");
         keywords.add("防晒");

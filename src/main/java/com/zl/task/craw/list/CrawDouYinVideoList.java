@@ -120,7 +120,7 @@ public class CrawDouYinVideoList extends CrawBaseDouYinList {
     }
 
 
-    public void craw(TaskVO task) throws Exception {
+    public int craw(TaskVO task) throws Exception {
         //选择爬取的类目
         // 爬取电商和非电商
         String xpath = "//*[@class=\"ecom-form-item-control-input-content\"]";
@@ -140,6 +140,7 @@ public class CrawDouYinVideoList extends CrawBaseDouYinList {
         }
 
 
+        return 0;
     }
 
     public boolean isECommercType(String s) {

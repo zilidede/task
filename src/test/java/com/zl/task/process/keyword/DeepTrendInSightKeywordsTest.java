@@ -1,13 +1,12 @@
 package com.zl.task.process.keyword;
 
-import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.Test;
 
-class DeepTrendInSightKeywordsTest {
+public class DeepTrendInSightKeywordsTest {
 
     @Test
-    void crawRootKeyword() {
+    public void crawRootKeyword() {
         try {
             DeepTrendInSightKeywords.crawRootKeyword("防晒", 1);
         } catch (Exception e) {

@@ -1,18 +1,20 @@
 package com.zl.task.vo.other;
 
-import org.junit.jupiter.api.Test;
+
+
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 
-class GenericListContainerVOTest {
+
+public class GenericListContainerVOTest {
 
 
     @Test
-    void containerVOTest() {
+    public void containerVOTest() {
         GenericListContainerVO container = new GenericListContainerVO();
         List<String> strings=new ArrayList<>();
         strings.add("a");

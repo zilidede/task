@@ -1,12 +1,11 @@
 package com.zl.task.keyword;
 
-import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.Test;
 
-class TrendinsightKeywordsTest {
+public class TrendinsightKeywordsTest {
 
     @Test
-    void crawRootKeyword() {
+    public void crawRootKeyword() {
     }
 }

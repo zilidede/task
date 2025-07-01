@@ -24,7 +24,7 @@ public class CrawTrendinsightKeywordsTest {
         crawler.setTab(DefaultTaskResourceCrawTabList.getTabList().get(1));
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void run() {
     }
 

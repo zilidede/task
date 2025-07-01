@@ -1,13 +1,12 @@
 package com.zl.task.save.parser.weather;
 
-import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.Test;
 
-class SaverCityWeatherTest {
+public class SaverCityWeatherTest {
 
     @Test
-    void parser() {
+    public void parser() {
 
     }
 }

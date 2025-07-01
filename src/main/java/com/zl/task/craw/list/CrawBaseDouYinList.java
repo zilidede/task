@@ -92,8 +92,9 @@ public class CrawBaseDouYinList implements ExecutorTaskService<String> {
         //确定爬取范围；
     }
 
-    public void craw(TaskVO task) throws Exception {
+    public int craw(TaskVO task) throws Exception {
         //爬取已经确认的选择内容信息；
+        return 0;
     }
 
     public void openEnterUrl(String url) throws InterruptedException {
