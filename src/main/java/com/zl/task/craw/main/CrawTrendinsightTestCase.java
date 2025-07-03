@@ -1,4 +1,4 @@
-package com.zl.task.main;
+package com.zl.task.craw.main;
 
 import com.zl.task.craw.keyword.CrawTrendinsightKeywords;
 import com.zl.task.process.keyword.DeepTrendInSightKeywords;

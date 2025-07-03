@@ -1,31 +1,31 @@
 Manifest-Version: 1.0
-Main-Class: com.zl.task.TaskExecutor
-Class-Path: lucene-queries-8.0.0.jar checker-qual-3.42.0.jar poi-ooxml-s
- chemas-4.1.2.jar httpcore-4.4.11.jar httpclient5-5.2.1.jar sqlite-jdbc-
- 3.45.2.0.jar hutool-all-5.8.25.jar jollyday-0.4.9.jar log4j-api-2.20.0.
- jar activation-1.1.1.jar commons-math3-3.6.1.jar xercesImpl-2.12.2.jar 
- fastjson-1.2.83.jar kotlin-stdlib-jdk7-1.8.0.jar commons-text-1.11.0.ja
- r commons-io-2.8.0.jar ejml-dsparse-0.39.jar tika-core-2.7.0.jar jaxb-a
- pi-2.4.0-b180830.0359.jar jsr305-3.0.2.jar okhttp-4.10.0.jar ejml-core-
- 0.39.jar poi-ooxml-5.2.3.jar commons-compress-1.21.jar logback-classic-
- 1.3.5.jar kotlin-stdlib-common-1.8.0.jar jna-platform-5.10.0.jar Sparse
- BitSet-1.2.jar juniversalchardet-1.0.3.jar joda-time-2.10.5.jar hanlp-p
- ortable-1.8.2.jar postgresql-42.7.4.jar slf4j-api-2.0.6.jar lucene-sand
- box-8.0.0.jar httpcore5-h2-5.2.jar commons-codec-1.15.jar ejml-zdense-0
- .39.jar IKAnalyzer-lucene-8.0.0.jar log4j-core-2.20.0.jar stanford-core
- nlp-4.5.1.jar ejml-cdense-0.39.jar kotlin-stdlib-jdk8-1.8.0.jar curvesa
- pi-1.07.jar lucene-core-8.11.0.jar json-20220924.jar istack-commons-run
- time-3.0.7.jar ejml-fdense-0.39.jar jna-5.10.0.jar okio-jvm-3.4.0.jar x
- om-1.3.7.jar xalan-2.7.2.jar stanford-corenlp-4.5.1-models.jar logback-
- core-1.3.5.jar javax.mail-1.6.2.jar kotlin-stdlib-1.6.20.jar javacsv-2.
- 0.jar commons-logging-1.2.jar commons-collections4-4.4.jar jsoup-1.16.1
- .jar javax.servlet-api-3.0.1.jar ejml-fsparse-0.39.jar serializer-2.7.2
- .jar javax.json-1.0.4.jar lucene-queryparser-8.0.0.jar httpcore5-5.2.ja
- r javax.activation-api-1.2.0.jar commons-lang3-3.17.0.jar lucene-analyz
- ers-common-8.0.0.jar ejml-simple-0.39.jar protobuf-java-3.19.2.jar json
- -simple-1.1.1.jar poi-ooxml-lite-5.2.3.jar gson-2.10.jar httpclient-4.5
- .8.jar AppleJavaExtensions-1.4.jar annotations-26.0.1.jar icu4j-70.1.ja
- r commons-csv-1.9.0.jar ini4j-0.5.4.jar ejml-ddense-0.39.jar xmlbeans-5
- .1.1.jar jaxb-impl-2.4.0-b180830.0438.jar xml-apis-1.4.01.jar poi-5.2.3
- .jar
+Main-Class: com.zl.task.craw.main.CrawEcommerceMarketTestCase
+Class-Path: log4j-core-2.20.0.jar lucene-queryparser-8.0.0.jar joda-time
+ -2.10.5.jar xercesImpl-2.12.2.jar ejml-core-0.39.jar httpcore-4.4.11.ja
+ r httpcore5-5.2.jar kotlin-stdlib-jdk8-1.8.0.jar tika-core-2.7.0.jar ej
+ ml-fdense-0.39.jar json-simple-1.1.1.jar SparseBitSet-1.2.jar serialize
+ r-2.7.2.jar lucene-sandbox-8.0.0.jar ejml-fsparse-0.39.jar commons-comp
+ ress-1.21.jar httpclient-4.5.8.jar activation-1.1.1.jar stanford-corenl
+ p-4.5.1-models.jar icu4j-70.1.jar poi-ooxml-schemas-4.1.2.jar fastjson-
+ 1.2.83.jar stanford-corenlp-4.5.1.jar xml-apis-1.4.01.jar xom-1.3.7.jar
+  hanlp-portable-1.8.2.jar log4j-api-2.20.0.jar commons-lang3-3.17.0.jar
+  slf4j-api-2.0.6.jar jollyday-0.4.9.jar httpclient5-5.2.1.jar ejml-cden
+ se-0.39.jar lucene-analyzers-common-8.0.0.jar httpcore5-h2-5.2.jar jna-
+ platform-5.10.0.jar kotlin-stdlib-1.6.20.jar protobuf-java-3.19.2.jar c
+ ommons-csv-1.9.0.jar logback-classic-1.3.5.jar IKAnalyzer-lucene-8.0.0.
+ jar hutool-all-5.8.25.jar commons-io-2.8.0.jar kotlin-stdlib-common-1.8
+ .0.jar javacsv-2.0.jar checker-qual-3.42.0.jar poi-ooxml-5.2.3.jar juni
+ versalchardet-1.0.3.jar poi-ooxml-lite-5.2.3.jar logback-core-1.3.5.jar
+  ini4j-0.5.4.jar ejml-dsparse-0.39.jar ejml-zdense-0.39.jar AppleJavaEx
+ tensions-1.4.jar commons-math3-3.6.1.jar jsr305-3.0.2.jar javax.json-1.
+ 0.4.jar jaxb-api-2.4.0-b180830.0359.jar okhttp-4.10.0.jar commons-colle
+ ctions4-4.4.jar javax.servlet-api-3.0.1.jar poi-5.2.3.jar kotlin-stdlib
+ -jdk7-1.8.0.jar commons-codec-1.15.jar javax.activation-api-1.2.0.jar l
+ ucene-core-8.11.0.jar xalan-2.7.2.jar istack-commons-runtime-3.0.7.jar 
+ postgresql-42.7.4.jar commons-text-1.11.0.jar ejml-simple-0.39.jar anno
+ tations-26.0.1.jar jaxb-impl-2.4.0-b180830.0438.jar lucene-queries-8.0.
+ 0.jar javax.mail-1.6.2.jar json-20220924.jar xmlbeans-5.1.1.jar HikariC
+ P-5.1.0.jar jsoup-1.16.1.jar gson-2.10.jar jna-5.10.0.jar okio-jvm-3.4.
+ 0.jar sqlite-jdbc-3.45.2.0.jar curvesapi-1.07.jar ejml-ddense-0.39.jar 
+ commons-logging-1.2.jar
 

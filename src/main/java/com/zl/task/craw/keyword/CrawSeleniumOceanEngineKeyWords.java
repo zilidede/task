@@ -269,10 +269,10 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
                 String industryName1 = elements.get(i).text() + "-" + elements1.get(j).text();
                 if (downloadIndustry(industryName1,0) == -1)
                     return -1;
-                /*
+
                 //获取搜索词详情
                 if (flag) {
-                    if (downloadKeyWordDetails() < 0) {
+                    if (downloadKeyWordDetails(0) < 0) {
                         LoggerUtils.logger.warn(s + "类目获取搜索词详情失败，休眠3分钟");
                         return -1;
                         //退出程序重新爬取此类目；
@@ -282,8 +282,6 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
                         Thread.sleep(1000 * 60 * 1);
                     }
                 }
-
-                 */
                 //超长子类
                 if (j == 15 && flag2) {
                     //重新打开选择框

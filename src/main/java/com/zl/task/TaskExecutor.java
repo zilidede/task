@@ -3,7 +3,7 @@ package com.zl.task;
 import com.ll.drissonPage.page.ChromiumTab;
 import com.zl.dao.generate.HourLiveRankDO;
 import com.zl.dao.generate.HourLiveRankDao;
-import com.zl.task.main.CrawSearchKeyWordTestCase;
+import com.zl.task.craw.main.CrawSearchKeyWordTestCase;
 import com.zl.task.craw.account.CrawHuiTunAccount;
 import com.zl.task.craw.base.x.DefaultCrawSeleniumDouYinList;
 import com.zl.task.craw.keyword.CrawSeleniumDouHotSearchKeyWords;

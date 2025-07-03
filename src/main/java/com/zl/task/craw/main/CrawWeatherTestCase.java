@@ -1,4 +1,4 @@
-package com.zl.task.main;
+package com.zl.task.craw.main;
 
 import com.zl.task.craw.weather.CrawCityWeather;
 import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;

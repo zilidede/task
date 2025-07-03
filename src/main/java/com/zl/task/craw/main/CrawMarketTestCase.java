@@ -1,4 +1,4 @@
-package com.zl.task.main;
+package com.zl.task.craw.main;
 
 import cn.hutool.log.Log;
 import com.zl.task.craw.market.CrawSeleniumDouYinCategoryList;

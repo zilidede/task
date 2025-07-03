@@ -3,8 +3,7 @@ package com.zl.task.craw.live;
 import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
 import com.zl.task.vo.task.taskResource.TaskVO;
 import org.junit.Before;
-
-
+import org.junit.Test;
 
 
 public  class CrawCompassLiveTest {
@@ -17,7 +16,10 @@ public  class CrawCompassLiveTest {
     }
 
     @org.junit.Test
-    public void run() {
+    public void run() throws Exception {
+        TaskVO task = new TaskVO(1,"");
+        task.setTaskDesc("小时榜&7:00&运动户外");
+        crawler.run(task);
     }
 
     @org.junit.Test
@@ -48,4 +50,9 @@ public  class CrawCompassLiveTest {
     }
 
 
+    @Test
+    public void crawCompassList() throws Exception {
+        //翻页操作
+        crawler.crawCompassList();
+    }
 }

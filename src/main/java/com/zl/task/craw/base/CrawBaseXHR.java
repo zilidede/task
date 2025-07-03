@@ -92,9 +92,9 @@ public abstract class CrawBaseXHR implements ExecutorTaskService<String> {
         //爬取已经确认的选择内容信息；
     }
 
-    public void openEnterUrl(String url, Double timeout) throws InterruptedException {
+    public void openEnterUrl(String url) throws InterruptedException {
         tab.get(url);
-        Thread.sleep((long) (1000 * timeout));
+        Thread.sleep((long) (1000 * 3));
     }
 
     public abstract void craw() throws InterruptedException;
