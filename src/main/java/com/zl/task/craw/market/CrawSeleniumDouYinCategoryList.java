@@ -125,8 +125,8 @@ public class CrawSeleniumDouYinCategoryList implements ExecutorTaskService {
         selectTime(time);
         //选择类目
         selectOrIndustry();
-        xpath = "//*[@style=\"display: flex; flex-direction: column;\"]/div";
-        elements = tab.eles(By.xpath(xpath));
+        xpath = "//*[@class=\"rc-virtual-list-holder-inner\"]";
+        elements = tab.eles(By.xpath(xpath)).get(0).eles(By.xpath("./li")); //获取子类目类别
         Thread.sleep(1000);
         //监听价格带商品分布
         List<String> list = new ArrayList<>();
@@ -247,7 +247,7 @@ public class CrawSeleniumDouYinCategoryList implements ExecutorTaskService {
     public void selectOrIndustry() throws InterruptedException {
         //选择框没打开 重新打开行业选择框。
         //重新打开行业选择框
-        String xpath = "//*[@class=\"ecom-select-selection-item\"]";
+        String xpath = "//*[@style=\"width: 264px; height: 32px;\"]";
         tab.ele(By.xpath(xpath)).click().click();
         Thread.sleep(1000);
 

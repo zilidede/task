@@ -1,7 +1,13 @@
 package com.zl.task.craw.main;
 
 import com.ll.drissonPage.page.ChromiumTab;
+import com.zl.task.craw.goods.CrawCompassGoods;
+import com.zl.task.craw.list.CrawSeleniumDouYinList;
+import com.zl.task.craw.live.CrawCompassLive;
+import com.zl.task.craw.video.CrawCompassVideo;
 import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
+import com.zl.task.vo.task.taskResource.TaskVO;
+import com.zl.utils.io.FileIoUtils;
 import com.zl.utils.log.LoggerUtils;
 
 import java.time.LocalTime;
@@ -77,13 +83,34 @@ public class CrawCategoryMarket {
                     LoggerUtils.logger.info("每日24小时榜任务执行：" + new Date());
                     List<Integer> integerLists = new ArrayList<>();
                     // dowork
-
-
+                    CrawCompassLive crawler= new CrawCompassLive();
+                    doWork(crawler);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
             }, delay, TimeUnit.DAYS.toMillis(1), TimeUnit.MILLISECONDS);
+        }
+        public void doWork(CrawCompassLive crawler) throws Exception {
+            String filePath = "./data/task/抖店罗盘小时榜.txt";
+            //爬取24小时所有时间点的抖店罗盘小时榜
+            LoggerUtils.logger.info("爬取抖店罗盘小时榜任务开始：" + filePath);
+            for (int i = 0; i < 24; i++) {
+                String s = FileIoUtils.readTxtFile(filePath, "utf-8");
+                String[] strings = s.split("\r\n");
+                for (String string : strings) {
+                    TaskVO taskVO = new TaskVO(1, "抖店罗盘小时榜");
+                    String taskDes = String.format("小时榜&%s:00&%s", i, string);
+                    taskVO.setTaskDesc(taskDes);
+                    try {
+                        crawler.setTab(tab);
+                        crawler.setHour(i);
+                        crawler.run(taskVO);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
         }
     }
 
@@ -129,28 +156,49 @@ public class CrawCategoryMarket {
             }
             // 定义日期格式
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            long delay = calculateDelayUntilNextExecution(currentHour, currentMinute + 1); // 设定每日任务在每天的9点执行
+            long delay = calculateDelayUntilNextExecution(currentHour, currentMinute + 2); // 设定每日任务在每天的9点执行
             scheduler.scheduleAtFixedRate(() -> {
                 try {
-                    LoggerUtils.logger.info("每日24小时榜任务执行：" + new Date());
+                    LoggerUtils.logger.info("每日抖店罗盘商品日榜任务执行：" + new Date());
                     List<Integer> integerLists = new ArrayList<>();
                     // dowork
-
-
+                    CrawCompassGoods crawler= new CrawCompassGoods(tab);
+                    doWork(crawler);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
             }, delay, TimeUnit.DAYS.toMillis(1), TimeUnit.MILLISECONDS);
+
         }
+        public void doWork(CrawCompassGoods crawler) throws Exception {
+            String filePath = "./data/task/抖店罗盘商品日榜";
+            //爬取24小时所有时间点的抖店罗盘小时榜
+            LoggerUtils.logger.info("爬取抖店罗盘商品榜任务开始：" + filePath);
+            String s = FileIoUtils.readTxtFile(filePath, "utf-8");
+            String[] strings = s.split("\r\n");
+            for (String string : strings) {
+                    TaskVO taskVO = new TaskVO(1, "抖店罗盘商品日榜");
+                    taskVO.setTaskDesc(string);
+                    try {
+                        crawler.setTab(tab);
+                        crawler.openEnterUrl("https://compass.jinritemai.com/shop/chance/product-rank?from_page=%2Fshop%2Fcommodity%2Fproduct-list");
+                        Thread.sleep(5000);
+                        crawler.craw(taskVO);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+        }
+
+
     }
 
     static class ParameterizedVideoThread extends Thread {
         private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
         private ChromiumTab tab;
-
         //爬取天级任务-未被记录小时榜
-
         ParameterizedVideoThread(ChromiumTab tab) {
             this.tab = tab;
 
@@ -187,19 +235,40 @@ public class CrawCategoryMarket {
             }
             // 定义日期格式
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            long delay = calculateDelayUntilNextExecution(currentHour, currentMinute + 1); // 设定每日任务在每天的9点执行
+            long delay = calculateDelayUntilNextExecution(currentHour, currentMinute + 3); // 设定每日任务在每天的9点执行
             scheduler.scheduleAtFixedRate(() -> {
                 try {
-                    LoggerUtils.logger.info("每日24小时榜任务执行：" + new Date());
+                    LoggerUtils.logger.info("每日抖店罗盘视频日榜执行：" + new Date());
                     List<Integer> integerLists = new ArrayList<>();
                     // dowork
-
-
+                    CrawCompassVideo crawler= new CrawCompassVideo(tab);
+                    doWork(crawler);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
             }, delay, TimeUnit.DAYS.toMillis(1), TimeUnit.MILLISECONDS);
+        }
+
+        public void doWork(CrawCompassVideo crawler) throws Exception {
+            String filePath = "./data/task/抖店罗盘视频日榜";
+            //爬取24小时所有时间点的抖店罗盘小时榜
+            LoggerUtils.logger.info("爬取抖店罗盘视频日榜任务开始：" + filePath);
+            String s = FileIoUtils.readTxtFile(filePath, "utf-8");
+            String[] strings = s.split("\r\n");
+            for (String string : strings) {
+                TaskVO taskVO = new TaskVO(1, "抖店罗盘视频日榜");
+                taskVO.setTaskDesc(string);
+                try {
+                    crawler.setTab(tab);
+                    crawler.openEnterUrl("https://compass.jinritemai.com/shop/chance/video-rank?from_page=%2Fshop%2Fvideo%2Foverview");
+                    Thread.sleep(5000);
+                    crawler.craw(taskVO);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
         }
     }
 

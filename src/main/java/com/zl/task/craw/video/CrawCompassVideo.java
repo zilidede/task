@@ -111,9 +111,8 @@ public  class CrawCompassVideo extends CrawBaseXHR {
                         Thread.sleep(3000);
                         if(listType.equals("视频销量榜")||listType.equals("引流直播榜")) {
                             // 选择自营和合作类目
-                            //*[@id="root"]/div[2]/div/form/div/div[1]/div/div/div[2]/div/div
-                            //*[@id="root"]/div[2]/div/form/div/div[1]/div/div/div[2]/div/div
-                           ChromiumElement  element11 = getTab().ele("//*[@id=\"root\"]/div[2]/div/form/div/div[1]/div/div/div[2]/div/div/div/div/div[1]");
+                            List<ChromiumElement> elements5=elementss.get(0).eles(By.xpath("./div/div/div"));
+                            ChromiumElement  element11 = elements5.get(0);
                             Thread.sleep(1000);
                             if (element11.text().equals("自营")) {
                                 element11.click().click();
@@ -122,7 +121,7 @@ public  class CrawCompassVideo extends CrawBaseXHR {
                                 continue;
                             }
                             CompassPageTurn.crawCompassListOne(getTab(), name);// 爬取类目列表
-                            element11 = getTab().ele("//*[@id=\"root\"]/div[2]/div/form/div/div[1]/div/div/div[2]/div/div/div/div/div[2]");
+                            element11 = elements5.get(1);
                             Thread.sleep(1000);
                             if (element11.text().equals("合作")) {
                                 element11.click().click();

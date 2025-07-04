@@ -116,9 +116,8 @@ public class CrawCompassLive extends CrawBaseDouYinList {
                             elements4.get(k).click().click();
                         }
                         catch (Exception e){
-
                             LoggerUtils.logger.info("子类目选择失败：" + name);
-                            continue;
+                            break;
                         }
                         Thread.sleep(3000);
                         //爬取自营和合作列表
