@@ -2,7 +2,7 @@ package com.zl.task.save.list;
 
 import com.zl.dao.generate.HourLiveRankDO;
 import com.zl.dao.generate.HourLiveRankDao;
-import com.zl.task.save.parser.ParserFiddlerJson;
+import com.zl.task.save.parser.ParserJsonToHttpVO;
 import com.zl.task.save.parser.list.SaveHourLiveList;
 import com.zl.task.vo.http.HttpVO;
 import com.zl.utils.io.DiskIoUtils;
@@ -25,7 +25,7 @@ public class SaveHourLiveListTest {
     @Test
     public void parserJson() throws IOException, SQLException {
         SaveHourLiveList saver = new SaveHourLiveList();
-        HttpVO httpVO = ParserFiddlerJson.parserXHRJson("./data/test/hourLiveList.txt");
+        HttpVO httpVO = ParserJsonToHttpVO.parserXHRJson("./data/test/hourLiveList.txt");
         String url = httpVO.getUrl();
         String json = httpVO.getResponse().getBody();
         saver.parserJson(json, httpVO);

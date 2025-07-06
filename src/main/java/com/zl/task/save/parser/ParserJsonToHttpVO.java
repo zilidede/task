@@ -9,10 +9,10 @@ import java.io.IOException;
 
 
 // 解析fiddler Json
-public class ParserFiddlerJson {
+public class ParserJsonToHttpVO {
     public static void main(String[] args) throws Exception {
 
-        HttpVO httpVO = ParserFiddlerJson.parserXHRJson("D:\\data\\爬虫\\电商\\抖音\\抖店罗盘\\market\\compassApiShopProductProductChanceMarketCategoryOverviewPriceAnalysisProduct\\2024-8-25-0-11-34-13-871.txt");
+        HttpVO httpVO = ParserJsonToHttpVO.parserXHRJson("D:\\data\\爬虫\\电商\\抖音\\抖店罗盘\\market\\compassApiShopProductProductChanceMarketCategoryOverviewPriceAnalysisProduct\\2024-8-25-0-11-34-13-871.txt");
     }
 
     public static HttpVO parserXHRJson(String fileName) throws IOException {

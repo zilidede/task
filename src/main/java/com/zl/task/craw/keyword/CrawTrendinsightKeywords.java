@@ -1,14 +1,12 @@
 package com.zl.task.craw.keyword;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.ll.drissonPage.base.By;
 import com.ll.drissonPage.element.ChromiumElement;
 import com.ll.drissonPage.units.listener.DataPacket;
 import com.zl.task.craw.base.x.CrawServiceXImpl;
 import com.zl.task.process.keyword.CypTrendinsightData;
 import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
-import com.zl.task.save.parser.ParserFiddlerJson;
+import com.zl.task.save.parser.ParserJsonToHttpVO;
 import com.zl.task.vo.http.HttpVO;
 import com.zl.task.vo.task.taskResource.TaskVO;
 import com.zl.utils.io.FileIoUtils;
@@ -109,7 +107,7 @@ public class CrawTrendinsightKeywords extends CrawServiceXImpl {
                 if (data != null)
                     try {
                         String filePath = saveXhr(srcDir, data,cypTrendinsightData);
-                        HttpVO httpVO = ParserFiddlerJson.parserXHRJson(filePath);
+                        HttpVO httpVO = ParserJsonToHttpVO.parserXHRJson(filePath);
                         httpVOS.add(httpVO);
                     } catch (Exception e) {
                         LoggerUtils.logger.info("保存文件失败：" + data.url());

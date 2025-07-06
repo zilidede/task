@@ -5,7 +5,7 @@ import com.zl.task.craw.keyword.CrawSeleniumOceanEngineKeyWords;
 import com.zl.task.craw.keyword.CrawTrendinsightKeywords;
 import com.zl.task.save.Saver;
 import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
-import com.zl.task.save.parser.trendinsight.ParserTrendInSightKeywords;
+import com.zl.task.save.parser.trendinsight.ParserTrendInSightRelKeywords;
 import com.zl.task.vo.http.HttpVO;
 import com.zl.task.vo.task.taskResource.ListResource;
 import com.zl.task.vo.task.taskResource.TaskResource;
@@ -31,7 +31,7 @@ public class DeepTrendInSightKeywords {
         Ini4jUtils.loadIni("./data/config/config.ini");
         Ini4jUtils.setSectionValue("trendinsight");
         String xhrSaveDir = Ini4jUtils.readIni("xhrSaveDir");
-        ParserTrendInSightKeywords parser = new ParserTrendInSightKeywords(); ;
+        ParserTrendInSightRelKeywords parser = new ParserTrendInSightRelKeywords(); ;
         while (i<deepCount){
             // 先获取当前键的静态视图（避免并发修改）
             Set<Map.Entry<String, Integer>> entries = unCrawKeywordsMaps.entrySet();
@@ -83,7 +83,7 @@ public class DeepTrendInSightKeywords {
         }
         Saver.save();
     }
-    public static List<String> getRelationKeywords(ParserTrendInSightKeywords parser,List<HttpVO> httpVOS) throws Exception {
+    public static List<String> getRelationKeywords(ParserTrendInSightRelKeywords parser, List<HttpVO> httpVOS) throws Exception {
         // 只解析关联词
         List<String> relationKeywords = new ArrayList<>();
         for (HttpVO httpVO : httpVOS) {

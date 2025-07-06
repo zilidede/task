@@ -24,6 +24,9 @@ import java.util.concurrent.TimeUnit;
 public class CrawCategoryMarket {
     public static void main(String[] args) throws Exception {
             // 小时直播榜 -每日商品榜 -视频榜单;
+        runEveryDay();
+    }
+    public static void runEveryDay() throws InterruptedException {
         int i = 0;
         ParameterizedLiveListThread hourLiveList = new ParameterizedLiveListThread(DefaultTaskResourceCrawTabList.getTabList().get(i++));
         ParameterizedGoodsThread goodsList = new ParameterizedGoodsThread(DefaultTaskResourceCrawTabList.getTabList().get(i++));
@@ -33,8 +36,8 @@ public class CrawCategoryMarket {
         goodsList.start(); //一天一次
         Thread.sleep(1000 * 2);
         videoList.start(); //一天一次；
-
     }
+
     static class ParameterizedLiveListThread extends Thread {
         private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
         private ChromiumTab tab;

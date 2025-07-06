@@ -9,7 +9,7 @@ import com.zl.dao.generate.EcommerceOrderDO;
 import com.zl.dao.generate.EcommerceOrderDao;
 import com.zl.dao.generate.GoodsProfitDO;
 import com.zl.dao.generate.GoodsProfitDao;
-import com.zl.task.save.parser.ParserFiddlerJson;
+import com.zl.task.save.parser.ParserJsonToHttpVO;
 import com.zl.task.vo.http.HttpVO;
 import com.zl.utils.csv.BatchCSVReader;
 import com.zl.utils.excel.ExcelReaderUtils;
@@ -215,7 +215,7 @@ public class SaveDouYinOrder {
 
     public void parser(String content, List<EcommerceOrderDO> list) throws IOException {
 
-        HttpVO httpVO = ParserFiddlerJson.parserXHRJson(content);
+        HttpVO httpVO = ParserJsonToHttpVO.parserXHRJson(content);
         String url = httpVO.getUrl();
         int iBegin = url.indexOf("oid=");
         if (iBegin > 0) {

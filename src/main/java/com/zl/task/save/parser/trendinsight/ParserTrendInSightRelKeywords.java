@@ -7,17 +7,15 @@ import com.google.gson.JsonParser;
 import com.zl.dao.generate.*;
 import com.zl.task.vo.http.HttpVO;
 import com.zl.task.vo.other.GenericListContainerVO;
-import com.zl.utils.jdbc.generator.jdbc.DefaultDatabaseConnect;
 import com.zl.utils.time.SimpleDateFormatUtils;
 import com.zl.utils.uuid.UUIDGeneratorUtils;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-//解析巨量算数关键字json
-public class ParserTrendInSightKeywords {
+//解析巨量算数关键字indexGetRelationWord json
+public class ParserTrendInSightRelKeywords {
 
     private  GenericListContainerVO container = new GenericListContainerVO();  //泛型List容器
     private List<ContentDO> contents ; // 内容列表
@@ -27,7 +25,7 @@ public class ParserTrendInSightKeywords {
     private RelationKeywordDao relationKeywordDao;//关联关键字DAO
     private RelationKeywordScoreDao relationKeywordScoreDao ;//关联关键字得分DAO
 
-    public ParserTrendInSightKeywords() throws SQLException {
+    public ParserTrendInSightRelKeywords() throws SQLException {
         contents = new ArrayList<>();
         relationKeywords = new ArrayList<>();
         relationKeywordScores = new ArrayList<>();

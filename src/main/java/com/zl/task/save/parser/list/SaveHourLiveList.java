@@ -7,7 +7,7 @@ import com.zl.dao.generate.HourLiveRankDO;
 import com.zl.dao.generate.HourLiveRankDao;
 import com.zl.task.impl.SaveServiceImpl;
 import com.zl.task.save.base.SaveXHRImpl;
-import com.zl.task.save.parser.ParserFiddlerJson;
+import com.zl.task.save.parser.ParserJsonToHttpVO;
 import com.zl.task.vo.http.HttpVO;
 import com.zl.utils.io.DiskIoUtils;
 import com.zl.utils.jdbc.generator.jdbc.DefaultDatabaseConnect;
@@ -43,7 +43,7 @@ public class SaveHourLiveList extends SaveXHRImpl<HourLiveRankDO> {
         String dir = sDir + "\\boardList";
         List<String> files = DiskIoUtils.getFileListFromDir(dir);
         for (String file : files) {
-            HttpVO httpVO = ParserFiddlerJson.parserXHRJson(file);
+            HttpVO httpVO = ParserJsonToHttpVO.parserXHRJson(file);
             String url = httpVO.getUrl();
             String json = httpVO.getResponse().getBody();
             List<HourLiveRankDO> result = parserJson(json, httpVO);

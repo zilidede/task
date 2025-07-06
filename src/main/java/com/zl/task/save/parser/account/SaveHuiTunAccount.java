@@ -10,7 +10,7 @@ import com.zl.dao.generate.LiveRecordDO;
 import com.zl.dao.generate.LiveRecordDao;
 import com.zl.task.impl.SaveServiceImpl;
 import com.zl.task.save.base.SaveXHRImpl;
-import com.zl.task.save.parser.ParserFiddlerJson;
+import com.zl.task.save.parser.ParserJsonToHttpVO;
 import com.zl.task.vo.http.HttpVO;
 import com.zl.utils.io.DiskIoUtils;
 import com.zl.utils.jdbc.generator.jdbc.DefaultDatabaseConnect;
@@ -46,7 +46,7 @@ public class SaveHuiTunAccount extends SaveXHRImpl<LiveRecordDO> {
         String dir = sDir + "\\liveV2RecordT";
         List<String> files = DiskIoUtils.getFileListFromDir(dir);
         for (String file : files) {
-            HttpVO httpVO = ParserFiddlerJson.parserXHRJson(file);
+            HttpVO httpVO = ParserJsonToHttpVO.parserXHRJson(file);
             String url = httpVO.getUrl();
             String json = httpVO.getResponse().getBody();
             parserLiveRecordJson(json, httpVO);
@@ -58,7 +58,7 @@ public class SaveHuiTunAccount extends SaveXHRImpl<LiveRecordDO> {
         dir = sDir + "\\liveRoomInfoChartT";
         files = DiskIoUtils.getFileListFromDir(dir);
         for (String file : files) {
-            HttpVO httpVO = ParserFiddlerJson.parserXHRJson(file);
+            HttpVO httpVO = ParserJsonToHttpVO.parserXHRJson(file);
             String url = httpVO.getUrl();
             String json = httpVO.getResponse().getBody();
             parserLiveMinRecordJson(json, httpVO);

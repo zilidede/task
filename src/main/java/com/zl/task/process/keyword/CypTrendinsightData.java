@@ -2,7 +2,7 @@ package com.zl.task.process.keyword;
 //解密 巨量算数 xhr 密文
 
 import com.google.gson.JsonParser;
-import com.zl.task.save.parser.ParserFiddlerJson;
+import com.zl.task.save.parser.ParserJsonToHttpVO;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -19,22 +19,22 @@ public class CypTrendinsightData implements CypherData {
         JsonParser parser = new JsonParser();
         System.out.println("解析关键词的解=index/get_multi_keyword_interpretation");
         filePath = "S:\\data\\task\\爬虫\\trendinsight\\indexGetMultiKeywordInterpretation\\trendinsight.txt";
-        data = parser.parse(ParserFiddlerJson.parserXHRJson(filePath).getResponse().getBody()).getAsJsonObject().get("data").getAsString();
+        data = parser.parse(ParserJsonToHttpVO.parserXHRJson(filePath).getResponse().getBody()).getAsJsonObject().get("data").getAsString();
         String decryptedString = cypTrendinsightData.decrypt(data);
         System.out.println(decryptedString);
         System.out.println("解析关键词的热门趋势=index/get_multi_keyword_hot_trend");
         filePath = "S:\\data\\task\\爬虫\\trendinsight\\indexGetMultiKeywordHotTrend\\trendinsight.txt";
-        data = parser.parse(ParserFiddlerJson.parserXHRJson(filePath).getResponse().getBody()).getAsJsonObject().get("data").getAsString();
+        data = parser.parse(ParserJsonToHttpVO.parserXHRJson(filePath).getResponse().getBody()).getAsJsonObject().get("data").getAsString();
         decryptedString = cypTrendinsightData.decrypt(data);
         System.out.println(decryptedString);
         System.out.println("解析关键词的关联词=index/get_relation_word");
         filePath = "S:\\data\\task\\爬虫\\trendinsight\\indexGetRelationWord\\trendinsight.txt";
-        data = parser.parse(ParserFiddlerJson.parserXHRJson(filePath).getResponse().getBody()).getAsJsonObject().get("data").getAsString();
+        data = parser.parse(ParserJsonToHttpVO.parserXHRJson(filePath).getResponse().getBody()).getAsJsonObject().get("data").getAsString();
         decryptedString = cypTrendinsightData.decrypt(data);
         System.out.println(decryptedString);
         System.out.println("解析获取关键词的画像=index/get_portrait");
         filePath = "S:\\data\\task\\爬虫\\trendinsight\\indexGetPortrait\\trendinsight.txt";
-        data = parser.parse(ParserFiddlerJson.parserXHRJson(filePath).getResponse().getBody()).getAsJsonObject().get("data").getAsString();
+        data = parser.parse(ParserJsonToHttpVO.parserXHRJson(filePath).getResponse().getBody()).getAsJsonObject().get("data").getAsString();
         decryptedString = cypTrendinsightData.decrypt(data);
         System.out.println(decryptedString);
     }

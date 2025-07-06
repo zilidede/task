@@ -2,6 +2,7 @@ package com.zl.task.craw.live;
 
 import com.ll.drissonPage.base.By;
 import com.ll.drissonPage.element.ChromiumElement;
+import com.zl.task.craw.base.CompassPageTurn;
 import com.zl.task.craw.list.CrawBaseDouYinList;
 import com.zl.task.vo.task.taskResource.TaskVO;
 import com.zl.utils.log.LoggerUtils;
@@ -15,7 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class CrawCompassLive extends CrawBaseDouYinList {
     private Integer hour = 0;
     private  int crawCount = 0;
-    private final int maxCrawCount = 1000;
+    private final int maxCrawCount = 100;
     public CrawCompassLive() throws Exception {
         Ini4jUtils.loadIni("./data/config/config.ini");
         Ini4jUtils.setSectionValue("list");
@@ -131,7 +132,7 @@ public class CrawCompassLive extends CrawBaseDouYinList {
                         else {
                             continue;
                         }
-                        crawCompassListOne(name);// 爬取类目列表
+                        CompassPageTurn.crawCompassListOne(getTab(),name);// 爬取类目列表
                         xpath="//*[@id=\"root\"]/div[2]/div/form/div[2]/div[1]/div/div/div[2]/div/div/div/div/div[2]";
                         element11 = getTab().ele(By.xpath(xpath));
                         Thread.sleep(1000);
@@ -142,7 +143,12 @@ public class CrawCompassLive extends CrawBaseDouYinList {
                         else {
                             continue;
                         }
-                        crawCompassListOne(name);// 爬取类目列表
+                        CompassPageTurn.crawCompassListOne(getTab(),name);// 爬取类目列表
+                        if (crawCount++ > maxCrawCount) {
+                            LoggerUtils.logger.warn("翻页次数超过最大限制，休眠1小时");
+                            Thread.sleep(60 * 60 * 1000);
+                            crawCount = 0;
+                        }
                         //重新打开行业类型选择框
                         xpath = "//*[@style=\"width: 264px; height: 32px;\"]";
                         element = getTab().ele(By.xpath(xpath)); //获取行业类型选择框

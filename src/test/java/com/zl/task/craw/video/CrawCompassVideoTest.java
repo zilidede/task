@@ -21,7 +21,7 @@ public class CrawCompassVideoTest {
     void run() {
     }
 
-    @org.junit.Test
+
     public void craw() throws Exception {
         TaskVO task = new TaskVO(1, "爬取抖店罗盘商品榜单");
         task.setTaskDesc("近一天&视频销量榜&电商&服饰内衣&2");

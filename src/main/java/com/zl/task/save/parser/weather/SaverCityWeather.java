@@ -3,7 +3,7 @@ package com.zl.task.save.parser.weather;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.zl.dao.generate.CityWeatherDO;
-import com.zl.task.save.parser.ParserFiddlerJson;
+import com.zl.task.save.parser.ParserJsonToHttpVO;
 import com.zl.task.vo.http.HttpVO;
 import com.zl.utils.io.DiskIoUtils;
 import com.zl.utils.log.LoggerUtils;
@@ -26,7 +26,7 @@ public class SaverCityWeather {
         SimpleDateFormatUtils.setDateFormat("yyyy/MM/dd HH");
         List<String> files = DiskIoUtils.getFileListFromDir(dir + "weather.cma.cnApiNow\\");
         for (String file : files) {
-            HttpVO httpVO = ParserFiddlerJson.parserXHRJson(file);
+            HttpVO httpVO = ParserJsonToHttpVO.parserXHRJson(file);
             String url = httpVO.getUrl();
             String json = httpVO.getResponse().getBody();
             String s = url.substring(url.indexOf("now/") + 4, url.indexOf("now/") + 9);

@@ -72,6 +72,7 @@ public class SynTaskData implements ExecutorTaskService {
         tasks.add("huiTunLive");
         tasks.add("market");
         tasks.add("weather");
+        tasks.add("trendinsight");
         //日期 2023-10-01 -2024-02-17;
         //通过文件日期对不同创建日期进行同步；
         while (true) {

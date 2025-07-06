@@ -6,7 +6,7 @@ import com.google.gson.JsonParser;
 import com.zl.dao.generate.MarketCategoryGoodsDO;
 import com.zl.dao.generate.MarketCategoryGoodsDao;
 import com.zl.task.impl.SaveServiceImpl;
-import com.zl.task.save.parser.ParserFiddlerJson;
+import com.zl.task.save.parser.ParserJsonToHttpVO;
 import com.zl.task.vo.http.HttpVO;
 import com.zl.utils.io.DiskIoUtils;
 import com.zl.utils.jdbc.generator.jdbc.DefaultDatabaseConnect;
@@ -42,7 +42,7 @@ public class SaveMarketCategoryGoods {
         String dir = sdir + "\\compassApiShopProductProductChanceMarketCategoryOverviewPriceAnalysisProduct";
         List<String> files = DiskIoUtils.getFileListFromDir(dir);
         for (String file : files) {
-            HttpVO httpVO = ParserFiddlerJson.parserXHRJson(file);
+            HttpVO httpVO = ParserJsonToHttpVO.parserXHRJson(file);
             String url = httpVO.getUrl();
             String json = httpVO.getResponse().getBody();
             parserJson(json, parserUrl(url));

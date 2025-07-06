@@ -67,29 +67,7 @@ public class Saver {
         synTaskData.synAll();
     }
 
-    public static void saveOceanEngineKeyWords(String srcDir) throws Exception {
-        // 保存云图数据
-        SaveOceanEngineKeyWords saveOceanEngineSearch = new SaveOceanEngineKeyWords();
-        String dir = srcDir + "yunTu-DESKTOP-RBM0GP7\\";
-        if (DiskIoUtils.isExist(dir)) {
-            saveOceanEngineSearch.setSrcDir(dir);
-            saveOceanEngineSearch.save();
-        }
 
-    }
-
-    public static void saveCityWeather() throws Exception {
-        // 获取配置文件
-
-    }
-
-    /**
-     * 根据给定的源目录和日期保存相关数据。
-     *
-     * @param srcDir 源目录路径
-     * @param date   日期字符串（格式：yyyy-MM-dd）
-     * @throws Exception 如果发生异常
-     */
     public static void save(String srcDir, String date) throws Exception {
         String dir = srcDir + date + "\\";
         // 保存云图数据

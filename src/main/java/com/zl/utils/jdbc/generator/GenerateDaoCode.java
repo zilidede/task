@@ -58,7 +58,7 @@ public class GenerateDaoCode {
         SimpleJDBC simpleJDBC = getDefaultJDBC();
         String dataBase = "pgSql";
         String catalog = "public";
-        String table = "sug_keyword";
+        String table = "trendinsight_keywords";
         TableInfo tableInfo = simpleJDBC.getTableInfo(catalog, dataBase, table);
         generateDao.generateJavaBean(table, tableInfo);
         generateDao.codeGeneration(table, tableInfo);
@@ -130,6 +130,8 @@ public class GenerateDaoCode {
         String sImport = "import com.zl.config.Config;\n" +
                 "import com.zl.dao.DaoService;\n" +
                 "import com.zl.dao.ErrorMsg;\n" +
+                "import java.util.List;\n" +
+                "import com.zl.utils.jdbc.hikariCP.ConnectionPool;\n"+
                 "import java.sql.*;";
         sImport = sImport + String.format("import %s.%s;\n", packageName, beanClassName);
         Date now = new Date();
@@ -142,21 +144,13 @@ public class GenerateDaoCode {
                 " * @Date: %s\n" +
                 " */\n", "", "", "zl", sNow);
         String sClassName = String.format("public class %s implements DaoService<%s>{\n", className + "Dao", beanClassName);
-        String statementCode = String.format(
-                "    private static int QueryTimeout = 30;\n" +
-                        "    private ErrorMsg errorMsg;\n" +
-                        "    private Connection conn;\n" +
-                        "    private Statement stmt = null;\n" +
-                        "    private PreparedStatement pStmt = null;\n" +
-                        "    private String tableName = \"%s\";", tableName);
+        String statementCode =
+                        "    private ErrorMsg errorMsg;\n";
 
         String sFunctions = String.format("\n" +
                 "    public %s(Connection connection) throws SQLException {\n" +
                 "        errorMsg=new ErrorMsg();\n" +
-                "        this.conn = connection;\n" +
-                "        stmt = conn.createStatement();\n" +
-                "        stmt.setQueryTimeout(QueryTimeout);  // set timeout to 30 sec;\n" +
-                "    }", className + "Dao");
+                "    }\r\n", className + "Dao");
         String temp = "    public ErrorMsg getErrorMsg() {\n" +
                 "        return errorMsg;\n" +
                 "    }\n";
@@ -166,6 +160,9 @@ public class GenerateDaoCode {
         sFunctions = sFunctions + temp;
         temp = generateDoDelete(tableInfo);
         sFunctions = sFunctions + temp;
+        temp = generateDoBatch(tableInfo);
+        sFunctions = sFunctions + temp;
+
         //findFields
         for (Map.Entry<String, String> entry : tableInfo.getFieldsMap().entrySet()) {
             String key = entry.getKey();
@@ -234,7 +231,7 @@ public class GenerateDaoCode {
         sql = String.format("        String sql = \"%s\";", sql);
         String temp = String.format("@Override\n" + "    public void doInsert(%s vo) throws SQLException {\n" +
                 "%s\n" +
-                "        pStmt = conn.prepareStatement(sql);\n" +
+                "        try (Connection conn = ConnectionPool.getConnection(); PreparedStatement pStmt = conn.prepareStatement(sql)) {\n" +
                 "%s" +
                 "        if(pStmt.execute())\n" +
                 "            errorMsg.setCode(0);\n" +
@@ -242,6 +239,9 @@ public class GenerateDaoCode {
                 "            errorMsg.setCode(Config.FAIL_INSERT);\n" +
                 "            errorMsg.setMsg(pStmt.toString());\n" +
                 "        }\n" +
+                " } catch (SQLException e) {\n" +
+                "            // 异常处理\n" +
+                "        }"+
                 "    }", beanClassName, sql, generateJdbcCode(tempMap));
 
         sFunctions = sFunctions + temp;
@@ -271,6 +271,7 @@ public class GenerateDaoCode {
         sql = sql + String.format("WHERE %s=?", tableInfo.getPrimaryKey());
         String s = generateJdbcCode(tempMap.size() + 1, FieldConvert.toCameCase(tableInfo.getPrimaryKey()), tableInfo.getFieldsMap().get(tableInfo.getPrimaryKey()));
         sql = String.format("        String sql = \"%s\";", sql);
+        /*
         String temp = String.format("\n" + "    public void doUpdate(%s vo) throws SQLException {\n" +
                 "%s\n" +
                 "        pStmt = conn.prepareStatement(sql);\n" +
@@ -283,6 +284,12 @@ public class GenerateDaoCode {
                 "        }\n" +
                 "    }", beanClassName, sql, generateJdbcCode(tempMap) + s);
 
+         */
+
+        String temp = String.format("@Override\n" + "     public void doUpdate(%s vo) throws SQLException {\n" +
+
+                "    }", beanClassName);
+
         sFunctions = sFunctions + temp;
         return sFunctions;
 
@@ -293,6 +300,7 @@ public class GenerateDaoCode {
         String sFunctions = "";
         String sql = String.format("DELETE FROM  %s WHERE %s=?", tableInfo.getTableName(), tableInfo.getPrimaryKey());
         sql = String.format("        String sql =String.format(\"%s\",vo.get%s());", sql, FieldConvert.toFirstCharUppercase(FieldConvert.toCameCase(tableInfo.getPrimaryKey())));
+        /*
         String temp = String.format("@Override\n" + "    public void doDelete(%s vo) throws SQLException {\n" +
                 "%s\n" +
                 "        pStmt = conn.prepareStatement(sql);\n" +
@@ -304,6 +312,35 @@ public class GenerateDaoCode {
                 "        }\n" +
                 "    }", beanClassName, sql);
 
+         */
+        String temp = String.format("@Override\n" + "    public void doDelete(%s vo) throws SQLException {\n" +
+
+                "        }\n" , beanClassName);
+        sFunctions = sFunctions + temp;
+        return sFunctions;
+    }
+
+    private String generateDoBatch(TableInfo tableInfo) {
+        String beanClassName = FieldConvert.toFirstCharUppercase(FieldConvert.toCameCase(tableInfo.getTableName() + "DO"));
+        String sFunctions = "";
+        String sql = String.format("DELETE FROM  %s WHERE %s=?", tableInfo.getTableName(), tableInfo.getPrimaryKey());
+        sql = String.format("        String sql =String.format(\"%s\",vo.get%s());", sql, FieldConvert.toFirstCharUppercase(FieldConvert.toCameCase(tableInfo.getPrimaryKey())));
+        /*
+        String temp = String.format("@Override\n" + "    public void doDelete(%s vo) throws SQLException {\n" +
+                "%s\n" +
+                "        pStmt = conn.prepareStatement(sql);\n" +
+                "        if(pStmt.execute())\n" +
+                "            errorMsg.setCode(0);\n" +
+                "        else{\n" +
+                "            errorMsg.setCode(Config.FAIL_INSERT);\n" +
+                "            errorMsg.setMsg(pStmt.toString());\n" +
+                "        }\n" +
+                "    }", beanClassName, sql);
+
+         */
+        String temp = String.format("@Override\n" + "    public void doBatch(List<%s> vo) throws SQLException {\n" +
+
+                "        }\n" , beanClassName);
         sFunctions = sFunctions + temp;
         return sFunctions;
     }

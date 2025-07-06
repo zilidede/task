@@ -11,15 +11,12 @@ import java.util.List;
 
 // 抖店罗盘翻页
 public class CompassPageTurn {
-    private static int maxCrawCount = 1000;
-    private static int crawCount = 0;
+
     public static void main(String[] args) throws Exception {
     }
     public static void crawCompassListOne(ChromiumTab tab,String s) throws Exception {
         //first //爬取已选择类目榜单;
         crawCompassList(tab);
-
-
     }
     public static boolean crawCompassList(ChromiumTab tab) throws Exception {
         //爬取已经选择的抖店罗盘榜单-翻页操作
@@ -86,18 +83,18 @@ public class CompassPageTurn {
                 return false;
             }
         }
+        if(len-1>9){
+           len=9;
+        }
+        Thread.sleep(2000);
         for (int i = 0; i < len-1; i++) {
             try {
                 xpath = "//*[@class=\"ecom-pagination-next\"]";
                 ChromiumElement element = tab.ele(By.xpath(xpath));
+                Thread.sleep(2000);
                 element.click().click();
-                Thread.sleep(3000);
-                if (crawCount++ > maxCrawCount) {
-                    LoggerUtils.logger.warn("翻页次数超过最大限制，休眠1小时");
-                    Thread.sleep(60 * 60 * 1000);
-                    crawCount = 0;
+                Thread.sleep(4000);
 
-                }
             } catch (Exception ex) {
                 LoggerUtils.logger.warn("翻页失败");
                 ex.printStackTrace();

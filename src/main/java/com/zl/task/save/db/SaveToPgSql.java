@@ -45,7 +45,6 @@ public class SaveToPgSql {
                 .atStartOfDay() // 设置时间为当天的开始（00:00:00）
                 .atZone(ZoneId.systemDefault()) // 指定时区
                 .toOffsetDateTime(); // 转换为 OffsetDateTime
-
         OffsetDateTime endDateTime = currentDate
                 .atTime(23, 59, 59) // 设置时间为当天的结束（23:59:59）
                 .atZone(ZoneId.systemDefault())
@@ -69,8 +68,8 @@ public class SaveToPgSql {
         for (FileRecordDO file : fileRecordDOS) {
             if (file.getFileLocalPath().indexOf("yunTu") >= 0) {
                 saveOceanEngineKeyWords(file, saveOceanEngineSearch);// 解析云图关键词文件
-            } else {
-
+            } else if(file.getFileLocalPath().indexOf("trendinsight") >= 0) {
+                saveTrendInsightKeywords(file);
             }
         }
         fileRecordDao.batchUpdateFileStatus(fileRecordDOS);
@@ -164,5 +163,9 @@ public class SaveToPgSql {
 
     }
 
+    //将巨量算数关键词保存到pgsql
+    public static void saveTrendInsightKeywords(FileRecordDO file) throws SQLException, IOException, ParseException {
+        //
 
+    }
 }

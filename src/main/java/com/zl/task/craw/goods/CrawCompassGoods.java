@@ -12,6 +12,8 @@ import java.util.List;
 
 // 爬取抖店罗盘商品
 public class CrawCompassGoods  extends CrawBaseXHR {
+    private  int crawCount = 0;
+    private final int maxCrawCount = 100;
     public CrawCompassGoods(ChromiumTab tab) {
         super(tab);
     }
@@ -77,6 +79,13 @@ public class CrawCompassGoods  extends CrawBaseXHR {
                         }
                         Thread.sleep(3000);
                         CompassPageTurn.crawCompassListOne(getTab(),name);// 爬取类目列表
+                        Thread.sleep(1000);
+                        if (crawCount++ > maxCrawCount) {
+                            LoggerUtils.logger.warn("翻页次数超过最大限制，休眠1小时");
+                            Thread.sleep(60 * 60 * 1000);
+                            crawCount = 0;
+
+                        }
                         xpath = "//*[@style=\"width: 264px;\"]";
                         element = getTab().ele(By.xpath(xpath)); //获取行业类型选择框
                         Thread.sleep(1000);
