@@ -44,7 +44,13 @@ public class ParserTrendinSightHotKeywords  {
         //request
         String reBody=vo.getRequest().getBody();
         object =parser.parse(reBody).getAsJsonObject();
-        String scopeInfluence = object.get("region").getAsJsonArray().get(0).getAsString();
+        String scopeInfluence="全国";
+        try {
+             scopeInfluence = object.get("region").getAsJsonArray().get(0).getAsString();
+        }
+        catch (Exception ex){
+            scopeInfluence="全国";
+        }
 
         //response
         String reqBody = vo.getResponse().getBody();

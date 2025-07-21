@@ -85,7 +85,7 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
     public static void main(String[] args) throws Exception {
         CrawSeleniumOceanEngineKeyWords craw = new CrawSeleniumOceanEngineKeyWords();
 
-        craw.renameDownloadFile("s:\\", "D:\\data\\task\\爬虫\\yunTu\\巨量云图行业搜索词\\", "2024-12-01", "食品饮料", 1735651800);
+        craw.renameDownloadFile("d:\\", "D:\\data\\task\\爬虫\\yunTu\\巨量云图行业搜索词\\", "2024-12-01", "食品饮料", 1735651800);
 
     }
 

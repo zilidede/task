@@ -27,9 +27,9 @@ public class CrawEcommerceMarketTestCase {
         ParameterizedSearchKeywordsThread keywordsThread = new ParameterizedSearchKeywordsThread(DefaultTaskResourceCrawTabList.getTabList().get(i++));
         ParameterizedWeatherThread weatherThread = new ParameterizedWeatherThread(DefaultTaskResourceCrawTabList.getTabList().get(i++));
         ParameterizedMarketThread marketThread = new ParameterizedMarketThread(DefaultTaskResourceCrawTabList.getTabList().get(i++));
-        keywordsThread.start(); //每日执行一次 巨量云图搜索词爬取；-csv下载
+     //   keywordsThread.start(); //每日执行一次 巨量云图搜索词爬取；-csv下载
         Thread.sleep(1000 * 2);
-        weatherThread.start(); //2小时一次天气
+      //  weatherThread.start(); //2小时一次天气
         Thread.sleep(1000 * 2);
         marketThread.start();
     }
@@ -138,6 +138,9 @@ public class CrawEcommerceMarketTestCase {
         }
 
         public void doWork() throws Exception {
+            // datashareclub
+            LoggerUtils.logger.debug("初始化CrawDatashareclubWeather对象");
+            //中国气象局天气
             LoggerUtils.logger.debug("初始化CrawCityWeather对象");
             CrawCityWeather crawler;
             try {

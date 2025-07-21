@@ -71,7 +71,6 @@ public class DeepTrendInSightKeywords {
             taskResource.load(uniqueList);
             task=new TaskVO<>(2,"爬取巨量云图单个搜索词",taskResource);
             crawlerSingleOceanEngineKeyword.crawSingleKeywords(uniqueList);
-
             // 遍历结束后批量添加新键（避免并发修改）
             for (String newKey : toAddKeys) {
                // unCrawKeywordsMaps.putIfAbsent(newKey, 0); // 避免重复添加

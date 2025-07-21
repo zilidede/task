@@ -3,6 +3,7 @@ package com.zl.task.craw.main;
 import com.ll.drissonPage.page.ChromiumTab;
 import com.zl.task.craw.goods.CrawCompassGoods;
 import com.zl.task.craw.list.CrawSeleniumDouYinList;
+import com.zl.task.craw.live.CrawAnchorLive;
 import com.zl.task.craw.live.CrawCompassLive;
 import com.zl.task.craw.video.CrawCompassVideo;
 import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
@@ -28,16 +29,80 @@ public class CrawCategoryMarket {
     }
     public static void runEveryDay() throws InterruptedException {
         int i = 0;
+        ParameterizedMinLiveThread minLive= new ParameterizedMinLiveThread(DefaultTaskResourceCrawTabList.getTabList().get(i++));
         ParameterizedLiveListThread hourLiveList = new ParameterizedLiveListThread(DefaultTaskResourceCrawTabList.getTabList().get(i++));
         ParameterizedGoodsThread goodsList = new ParameterizedGoodsThread(DefaultTaskResourceCrawTabList.getTabList().get(i++));
         ParameterizedVideoThread videoList = new ParameterizedVideoThread(DefaultTaskResourceCrawTabList.getTabList().get(i++));
-        hourLiveList.start(); //每小时执行一次 
+        hourLiveList.start(); //每小时执行一次
         Thread.sleep(1000 * 2);
         goodsList.start(); //一天一次
         Thread.sleep(1000 * 2);
         videoList.start(); //一天一次；
+       // minLive.start();//一分钟一次；
+        Thread.sleep(1000 * 2);
     }
+    static class ParameterizedMinLiveThread extends Thread {
+        private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
+        private ChromiumTab tab;
 
+        //爬取天级任务-未被记录小时榜
+
+        ParameterizedMinLiveThread(ChromiumTab tab)  {
+            this.tab = tab;
+
+        }
+        private static long calculateDelayUntilNextExecution(int hourOfDay, int minuteOfHour) {
+            long now = System.currentTimeMillis();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(now);
+            int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+            int currentMinute = calendar.get(Calendar.MINUTE);
+            if (hourOfDay < currentHour || (hourOfDay == currentHour && minuteOfHour <= currentMinute)) {
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+            }
+            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            calendar.set(Calendar.MINUTE, minuteOfHour);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            return calendar.getTimeInMillis() - now;
+        }
+
+        @Override
+        public void run() {
+            //每天执行爬取固定类目日榜
+            LocalTime now = LocalTime.now();
+            // 获取当前小时和分钟
+            int currentHour = now.getHour();
+            int currentMinute = now.getMinute();
+            // 如果分钟大于30分钟，则将小时加1
+            if (currentMinute > 58) {
+                currentHour = currentHour + 1;
+            }
+            if (currentHour < 11) {
+                currentHour = 11;
+            }
+            // 定义日期格式
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            long delay = calculateDelayUntilNextExecution(currentHour, currentMinute + 1); // 设定每日任务在每天的9点执行
+            scheduler.scheduleAtFixedRate(() -> {
+                try {
+                    LoggerUtils.logger.info("每分钟实时直播数据执行：" + new Date());
+                    List<Integer> integerLists = new ArrayList<>();
+                    // dowork
+                    CrawAnchorLive crawler= new CrawAnchorLive(tab);
+                    doWork(crawler);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }, 0, 1, TimeUnit.MINUTES);  // 初始延迟0分钟，之后每分钟执行一次
+        }
+        public void doWork(CrawAnchorLive crawler) throws Exception {
+            LoggerUtils.logger.info("每分钟实时直播数据执行：" + new Date());
+            //爬取24小时所有时间点的抖店罗盘小时榜
+            crawler.craw();
+        }
+    }
     static class ParameterizedLiveListThread extends Thread {
         private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
         private ChromiumTab tab;

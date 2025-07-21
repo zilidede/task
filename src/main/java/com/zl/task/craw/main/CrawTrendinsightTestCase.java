@@ -10,15 +10,15 @@ import com.zl.utils.io.FileIoUtils;
 public class CrawTrendinsightTestCase {
     public static void main(String[] args) throws Exception {
         //crawlTrendInsightKeywordWithTimeRanges();
-        crawRootSingleKeyword();
+        deepCrawlRotTrendInsightKeyword();
     }
     public static  void  crawRootSingleKeyword() throws Exception {
         CrawTrendinsightKeywords crawler = new CrawTrendinsightKeywords();
         crawler.setTab(DefaultTaskResourceCrawTabList.getTabList().get(1));
         crawler.getTab().listen().start(crawler.getXHRList());
         crawler.setLocationTag(true);
-        String startTime = "2025-06-01";
-        String endTime = "2025-07-11";
+        String startTime = "2024-01-01";
+        String endTime = "2025-07-17";
         crawler.craw("冲锋衣", "", startTime, endTime);
         Saver.save();
     }
@@ -39,7 +39,7 @@ public class CrawTrendinsightTestCase {
     //深度爬取巨量算数词根
     public static void deepCrawlRotTrendInsightKeyword() throws Exception {
         // 测试正常输入
-        String keyword = "防晒衣";
+        String keyword = "冲锋衣";
         Integer deepCount = 2;
         // 调用方法
         DeepTrendInSightKeywords.crawRootKeyword(keyword, deepCount);

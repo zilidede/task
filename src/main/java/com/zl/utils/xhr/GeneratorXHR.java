@@ -20,9 +20,9 @@ public class GeneratorXHR {
     public static void main(String[] args) throws Exception {
 
         Ini4jUtils.loadIni("./data/task/xhr.ini");
-        Ini4jUtils.setSectionValue("yunTu");
-        Map<String, String> map = Ini4jUtils.getWini().get("yunTu");
-        String dir = "S:\\data\\task\\爬虫\\yunTu\\";
+        Ini4jUtils.setSectionValue("weather");
+        Map<String, String> map = Ini4jUtils.getWini().get("weather");
+        String dir = "d:\\data\\task\\爬虫\\weather\\";
         FileIoUtils.clearTxtFile("./data/task/fiddler.java");
         for (Map.Entry<String, String> entry : map.entrySet()) {
             String s1 = map.get(entry.getKey());

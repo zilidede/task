@@ -5,7 +5,9 @@ import com.zl.task.craw.SaveXHR;
 import com.zl.task.impl.ExecutorTaskService;
 import com.zl.task.vo.task.taskResource.TaskResource;
 import com.zl.task.vo.task.taskResource.TaskVO;
+import com.zl.utils.other.Ini4jUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,10 +21,16 @@ public abstract class CrawBaseXHR implements ExecutorTaskService<String> {
     private TaskVO task;
     public CrawBaseXHR(ChromiumTab tab){
         this.tab = tab;
-    }
-    public void init() {
-        //资源初始化
 
+    }
+    public void init(String tag) throws Exception {
+        //资源初始化
+        //设置xhrlist
+        Ini4jUtils.loadIni("./data/task/xhr.ini");
+        setXhrList(Ini4jUtils.traSpecificSection(tag));
+        Ini4jUtils.loadIni("./data/config/config.ini");
+        Ini4jUtils.setSectionValue(tag);
+        setXhrSaveDir(Ini4jUtils.readIni("xhrDir"));
     }
 
     public List<String> getXhrList() {
@@ -97,5 +105,5 @@ public abstract class CrawBaseXHR implements ExecutorTaskService<String> {
         Thread.sleep((long) (1000 * 3));
     }
 
-    public abstract void craw() throws InterruptedException;
+    public abstract void craw() throws Exception;
 }

@@ -71,10 +71,10 @@ public class SaveToPgSql {
             if (file.getFileLocalPath().indexOf("yunTu") >= 0) {
                 //saveOceanEngineKeyWords(file, saveOceanEngineSearch);// 解析云图关键词文件
             } else if(file.getFileLocalPath().indexOf("trendinsight") >= 0) {
-               // saveTrendInsightKeywords(file,saveTrendInSightKeywords);
+                saveTrendInsightKeywords(file,saveTrendInSightKeywords);
             }
             else  if (file.getFileLocalPath().indexOf("weather")>=0){
-                saveCityWeatherToPgSql(file.getFileLocalPath());
+               // saveCityWeatherToPgSql(file.getFileLocalPath());
             }
         }
         fileRecordDao.batchUpdateFileStatus(fileRecordDOS);

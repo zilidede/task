@@ -58,7 +58,7 @@ public class GenerateDaoCode {
         SimpleJDBC simpleJDBC = getDefaultJDBC();
         String dataBase = "pgSql";
         String catalog = "public";
-        String table = "trendinsight_keywords";
+        String table = "city_weather_history";
         TableInfo tableInfo = simpleJDBC.getTableInfo(catalog, dataBase, table);
         generateDao.generateJavaBean(table, tableInfo);
         generateDao.codeGeneration(table, tableInfo);

@@ -142,6 +142,7 @@ public class CrawTrendinsightKeywords extends CrawServiceXImpl {
                         element1  = getTab().eles(By.xpath("//*[@class=\"ReactVirtualized__Grid__innerScrollContainer\"]")).get(0).eles(By.xpath("./div")); // 获取区域选择框内容框列表个数
                         Thread.sleep(1000 * 2);
 
+
                     } else {
                         //有二级类目
                         List<ChromiumElement> element3 = elementsLocation.get(1).eles(By.xpath("./div"));//获取区域二级列表
@@ -159,7 +160,6 @@ public class CrawTrendinsightKeywords extends CrawServiceXImpl {
 
                         }
                     }
-
                 }
             }
 
@@ -168,7 +168,7 @@ public class CrawTrendinsightKeywords extends CrawServiceXImpl {
             LoggerUtils.logger.info("区域选择为全国");
         }
         List<HttpVO> httpVOS = new ArrayList<>();
-        List<DataPacket> res = getTab().listen().waits(1000, 2.1, false, true);
+        List<DataPacket> res = getTab().listen().waits(5000, 2.1, false, true);
         CypTrendinsightData cypTrendinsightData=new CypTrendinsightData();
         if (res.size() >= 1) {
             for (DataPacket data : res)
