@@ -16,7 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class CrawCompassLive extends CrawBaseDouYinList {
     private Integer hour = 0;
     private  int crawCount = 0;
-    private final int maxCrawCount = 100;
+    private final int maxCrawCount = 1000;
     public CrawCompassLive() throws Exception {
         Ini4jUtils.loadIni("./data/config/config.ini");
         Ini4jUtils.setSectionValue("list");
@@ -61,6 +61,21 @@ public class CrawCompassLive extends CrawBaseDouYinList {
     }
     public int craw(TaskVO task) throws Exception {
         String []strings=task.getTaskDesc().split("&");
+        String first = "";
+        String second = "";
+        String third = "";
+        if(strings.length == 5) {
+            first = strings[2];
+            second = strings[3];
+            third = strings[4];
+        }
+        else if(strings.length == 4) {
+            first = strings[2];
+            second = strings[3];
+        }
+        else if(strings.length ==3) {
+            first = strings[2];
+        }
         //选择爬取的类目
         String xpath = "//*[@style=\"width: 264px; height: 32px;\"]";
         ChromiumElement element = getTab().ele(By.xpath(xpath)); //获取行业类型选择框
@@ -77,7 +92,7 @@ public class CrawCompassLive extends CrawBaseDouYinList {
         List<ChromiumElement> elements1 =elements.get(1).eles(By.xpath("./li"));
         for (int i = 0; i < elements1.size(); i++) {
             String name = elements1.get(i).text();
-            if(!name.equals(strings[2]))
+            if(!name.equals(first)&&!first.equals(""))
                 continue;
             else{
                 elements1.get(i).click().click();
@@ -89,7 +104,7 @@ public class CrawCompassLive extends CrawBaseDouYinList {
             xpath = "//*[@class=\"rc-virtual-list-holder-inner\"]";
             elements = getTab().eles(By.xpath(xpath)); //获取行业选择框
             Thread.sleep(1000);
-           len = elements.size();
+            len = elements.size();
             if (len < 1) {
                 LoggerUtils.logger.warn("获取行业选择框失败");
                 return -1;
@@ -97,13 +112,19 @@ public class CrawCompassLive extends CrawBaseDouYinList {
             List<ChromiumElement> elements2 =elements.get(2).eles(By.xpath("./li"));
             for (int j = 0; j < elements2.size(); j++) {
                 name = elements2.get(j).text();
-                try {
-                    elements2.get(j).click().click();
-                }
-                catch (Exception e){
-                    e.printStackTrace();
+                if(!name.equals(second)&&!second.equals(""))
                     continue;
+                else{
+                    try {
+                        elements2.get(j).click().click();
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                        continue;
+                    }
                 }
+                LoggerUtils.logger.info("选择第二子类目：" + name);
+
 
                 Thread.sleep(3000);
                 //检测是否存在三级类目
@@ -114,13 +135,18 @@ public class CrawCompassLive extends CrawBaseDouYinList {
                     List<ChromiumElement> elements4 =elements3.get(3).eles(By.xpath("./li"));
                     for (int k = 1; k < elements4.size(); k++) {
                         name = elements4.get(k).text();
-                        try {
-                            elements4.get(k).click().click();
+                        if(!name.equals(third)&&!third.equals(""))
+                            continue;
+                        else{
+                            try {
+                                elements4.get(k).click().click();
+                            }
+                            catch (Exception e){
+                                LoggerUtils.logger.info("子类目选择失败：" + name);
+                                break;
+                            }
                         }
-                        catch (Exception e){
-                            LoggerUtils.logger.info("子类目选择失败：" + name);
-                            break;
-                        }
+                        LoggerUtils.logger.info("选择第三子类目：" + name);
                         Thread.sleep(3000);
                         //爬取自营和合作列表
                         xpath="//*[@id=\"root\"]/div[2]/div/form/div[2]/div[1]/div/div/div[2]/div/div/div/div/div[1]";

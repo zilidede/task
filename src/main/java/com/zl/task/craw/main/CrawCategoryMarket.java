@@ -11,6 +11,7 @@ import com.zl.task.vo.task.taskResource.TaskVO;
 import com.zl.utils.io.FileIoUtils;
 import com.zl.utils.log.LoggerUtils;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -163,20 +164,21 @@ public class CrawCategoryMarket {
             String filePath = "./data/task/抖店罗盘小时榜.txt";
             //爬取24小时所有时间点的抖店罗盘小时榜
             LoggerUtils.logger.info("爬取抖店罗盘小时榜任务开始：" + filePath);
-            for (int i = 0; i < 24; i++) {
                 String s = FileIoUtils.readTxtFile(filePath, "utf-8");
                 String[] strings = s.split("\n");
                 for (String string : strings) {
                     TaskVO taskVO = new TaskVO(1, "抖店罗盘小时榜");
-                    String taskDes = String.format("小时榜&%s:00&%s", i, string);
-                    taskVO.setTaskDesc(taskDes);
-                    try {
-                        crawler.setTab(tab);
-                        crawler.setHour(i);
-                        crawler.run(taskVO);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
+                    for (int i = 0; i < 24; i++) {
+
+                        String taskDes = String.format("小时榜&%s:00&%s", i, string);
+                        taskVO.setTaskDesc(taskDes);
+                        try {
+                            crawler.setTab(tab);
+                            crawler.setHour(i);
+                            crawler.run(taskVO);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
                 }
             }
         }
