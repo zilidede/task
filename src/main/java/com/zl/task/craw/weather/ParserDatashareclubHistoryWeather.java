@@ -1,5 +1,5 @@
 package com.zl.task.craw.weather;
-// 爬取天气数据
+// 解析天气数据
 import com.zl.dao.generate.CityWeatherHistoryDO;
 import com.zl.dao.generate.CityWeatherHistoryDao;
 import com.zl.task.impl.SaveService;
@@ -23,7 +23,7 @@ public class ParserDatashareclubHistoryWeather {
     public static void main(String[] args) throws Exception {
         File input = new File("./data/test/cityweather.txt");
         Document doc = Jsoup.parse(input, "UTF-8");
-        SimpleDateFormatUtils.setDateFormat("yyyy-MM-dd");
+
         String scope="上海";
         // 提取日级数据
         List<CityWeatherHistoryDO> dailyData = parseCityWeatherHistoryDO(FileIoUtils.readTxtFile("./data/test/cityweather.txt","UTF-8"),scope);
@@ -43,7 +43,7 @@ public class ParserDatashareclubHistoryWeather {
         public static List<CityWeatherHistoryDO> parseCityWeatherHistoryDO(String html,String cityName) {
             List<CityWeatherHistoryDO> data = new ArrayList<>();
             Document doc = Jsoup.parse(html);
-
+            SimpleDateFormatUtils.setDateFormat("yyyy-MM-dd");
             // 定位每日数据表格
             Element table = doc.selectFirst(String.format("div.card:contains(%s近30天历史天气) table.table",cityName));
             if (table == null) return data;
@@ -92,7 +92,6 @@ public class ParserDatashareclubHistoryWeather {
                     // 假设原始数据已经是数字，没有单位
                     dw.setDaylightSeconds(parseInt(cols.get(13).text()));
                  //   dw.setSunshineHours(parseDouble(cols.get(14).text()));
-
                     // 太阳辐射总量（MJ/m²）
                     String solarText = cols.get(15).text();
                     if (solarText.contains("MJ/m²")) {

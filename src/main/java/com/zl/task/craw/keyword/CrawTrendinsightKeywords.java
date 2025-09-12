@@ -110,6 +110,8 @@ public class CrawTrendinsightKeywords extends CrawServiceXImpl {
                 ChromiumElement element = getTab().eles(By.xpath(xpath)).get(1); ////打开区域选择框
                 element.click().click();
                 Thread.sleep(1000 * 2);
+
+                Thread.sleep(1000 * 2);
                 xpath = "//*[@class=\"ReactVirtualized__Grid__innerScrollContainer\"]";
                 List<ChromiumElement> elements2 = getTab().eles(By.xpath(xpath)); // 获取区域选择框内容框列表个数
                 Thread.sleep(1000 * 2);
@@ -122,7 +124,7 @@ public class CrawTrendinsightKeywords extends CrawServiceXImpl {
                     getTab().actions().moveTo(element1.get(j));
                     Thread.sleep(1000);
                     //重新建立选择框
-                    if (name.equals("江西")) {
+                    if (name.equals("江西")||name.equals("重庆")) {
                         xpath = "//*[@class=\"ReactVirtualized__Grid__innerScrollContainer\"]";
                         elements2 = getTab().eles(By.xpath(xpath)); // 获取区域选择框内容框列表个数
                         Thread.sleep(1000 * 2);
@@ -141,8 +143,6 @@ public class CrawTrendinsightKeywords extends CrawServiceXImpl {
                         selectSecondLocation(element1.get(j));
                         element1  = getTab().eles(By.xpath("//*[@class=\"ReactVirtualized__Grid__innerScrollContainer\"]")).get(0).eles(By.xpath("./div")); // 获取区域选择框内容框列表个数
                         Thread.sleep(1000 * 2);
-
-
                     } else {
                         //有二级类目
                         List<ChromiumElement> element3 = elementsLocation.get(1).eles(By.xpath("./div"));//获取区域二级列表
@@ -160,6 +160,8 @@ public class CrawTrendinsightKeywords extends CrawServiceXImpl {
 
                         }
                     }
+
+
                 }
             }
 

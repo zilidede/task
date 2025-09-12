@@ -51,21 +51,21 @@ public class GenerateDaoCode {
     // 将pgsql表结构生成javaBean
 
     public static void pgsqlToBean() {
-        String generateFileDir = "D:\\work\\task\\src\\main\\java\\com\\zl\\dao\\generate";
-        String packageName = "com.zl.dao.generate";
+        String generateFileDir = "D:\\data\\work\\task\\src\\main\\java\\com\\ecommerce\\dao\\generate";
+        String packageName = "com.ecommerce.dao.generate";
         //db-dao&do
+        String dataBase = "pgSql"; //数据库类型/mysql pgsql 用于格式转换
         GenerateDaoCode generateDao = new GenerateDaoCode(generateFileDir, packageName);
-        SimpleJDBC simpleJDBC = getDefaultJDBC();
-        String dataBase = "pgSql";
-        String catalog = "public";
-        String table = "city_weather_history";
-        TableInfo tableInfo = simpleJDBC.getTableInfo(catalog, dataBase, table);
+        String catalog = "ecommerce"; //数据库名称
+        SimpleJDBC simpleJDBC = getDefaultJDBC(catalog);
+        String table = "platform_sku_map";
+        TableInfo tableInfo = simpleJDBC.getTableInfo(catalog, "pgSql", table);
         generateDao.generateJavaBean(table, tableInfo);
         generateDao.codeGeneration(table, tableInfo);
     }
 
-    public static SimpleJDBC getDefaultJDBC() {
-        String url = "jdbc:postgresql://127.0.0.1:5432/postgres";
+    public static SimpleJDBC getDefaultJDBC(String catalog) {
+        String url = String.format("jdbc:postgresql://127.0.0.1:5432/%s", catalog);
         String className = "org.postgresql.Driver";
         String user = "postgres";
         String password = "332500asd";

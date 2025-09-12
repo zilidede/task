@@ -5,6 +5,7 @@ import com.ll.drissonPage.element.ChromiumElement;
 import com.zl.task.craw.base.CompassPageTurn;
 import com.zl.task.craw.list.CrawBaseDouYinList;
 import com.zl.task.vo.task.taskResource.TaskVO;
+import com.zl.utils.convert.IntervalConverterUtils;
 import com.zl.utils.log.LoggerUtils;
 import com.zl.utils.other.Ini4jUtils;
 
@@ -17,6 +18,7 @@ public class CrawCompassLive extends CrawBaseDouYinList {
     private Integer hour = 0;
     private  int crawCount = 0;
     private final int maxCrawCount = 1000;
+    private  Long minSaleSums=10*30l;
     public CrawCompassLive() throws Exception {
         Ini4jUtils.loadIni("./data/config/config.ini");
         Ini4jUtils.setSectionValue("list");
@@ -40,15 +42,10 @@ public class CrawCompassLive extends CrawBaseDouYinList {
                // crawEBusVideoDayList(vo);
     }
     public void crawLiveHourList(TaskVO vo) throws Exception {
-        LocalTime now = LocalTime.now();
-        int hour = now.getHour();
+
         if (hour == -2) {
             setHour(-1);
         } else {
-            while (now.getHour() - getHour() < 1) {
-                Thread.sleep(1000 * 60 * 10);
-                LoggerUtils.logger.info("当前时间：" + now.getHour() + "小时，未到爬取时间，请稍后重试");
-            }
             LoggerUtils.logger.info("今日爬取" + getHour() + vo.getTaskDesc() + "行业商品榜单");
             String []strings=vo.getTaskDesc().split("&");
             selectTime(strings[1], strings[0]);
@@ -216,6 +213,7 @@ public class CrawCompassLive extends CrawBaseDouYinList {
             e.printStackTrace();
             return false;
         }
+
         try
             {
                 pageTurnTwo(); //翻页操作
@@ -272,7 +270,11 @@ public class CrawCompassLive extends CrawBaseDouYinList {
                 return false;
             }
         }
+        //设置翻页条件
+
         for (int i = 0; i < len-1; i++) {
+            if (!isCraw(minSaleSums))
+                return true;
             try {
                 xpath = "//*[@class=\"ecom-pagination-next\"]";
                 ChromiumElement element = getTab().ele(By.xpath(xpath));
@@ -287,11 +289,23 @@ public class CrawCompassLive extends CrawBaseDouYinList {
             } catch (Exception ex) {
                 LoggerUtils.logger.warn("翻页失败");
                 ex.printStackTrace();
-                break;
+                continue;
             }
 
         }
         return true;
+    }
+    public boolean isCraw(Long saleSum) {
+        // 设置翻页条件
+        String xpath = "//*[@class=\"ecom-table-tbody\"]/tr";
+        String s=getTab().eles(By.xpath(xpath)).get(1).eles(By.xpath("./td")).get(2).text();
+        Long iSaleSum = IntervalConverterUtils.convertIntervalToInteger(s);
+        if (saleSum >iSaleSum) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 
     public void selectTime(String time,String timeType) throws InterruptedException {

@@ -31,7 +31,7 @@ public class Saver {
      */
     public static void save() throws Exception {
         syn(); // 同步数据
-        SaveToPgSql.cycleSave(10);// 循环保存pqsql
+        SaveToPgSql.cycleSave(3);// 循环保存pqsql
 
     }
 

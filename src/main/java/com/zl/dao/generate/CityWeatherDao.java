@@ -125,4 +125,17 @@ public class CityWeatherDao implements DaoService<CityWeatherDO> {
         }
         return list;
     }
+    public List<String> findCityNames() throws SQLException {
+        List<String> list = new ArrayList<>();
+        String sql = "select distinct city_name from city_weather";
+        try (Connection conn = ConnectionPool.getConnection(); PreparedStatement pStmt = conn.prepareStatement(sql)) {
+            ResultSet set = pStmt.executeQuery();
+            while (set.next()) {
+                list.add(set.getString("city_name"));
+            }
+        } catch (SQLException e) {
+            // 异常处理
+        }
+        return list;
+    }
 }

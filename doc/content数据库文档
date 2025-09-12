@@ -1,0 +1,202 @@
+-- 启用UUID扩展（如果需要使用UUID作为主键）
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- 1. 素材主表 (content_master)
+CREATE TABLE content_master (
+    content_id BIGINT PRIMARY KEY,
+    spu_id BIGINT NOT NULL,
+    content_name VARCHAR(255) NOT NULL,
+    content_url VARCHAR(255),
+    content_type VARCHAR(20) NOT NULL CHECK (content_type IN ('短视频', '图文', '商品卡', '直播切片')),
+    content_duration INTERVAL NOT NULL,
+    material_source VARCHAR(20) NOT NULL,
+    evaluation_tag VARCHAR(20),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 为content_master表创建索引
+CREATE INDEX idx_content_master_spu_id ON content_master (spu_id);
+CREATE INDEX idx_content_master_created_at ON content_master (created_at);
+CREATE INDEX idx_content_master_evaluation ON content_master (evaluation_tag);
+
+COMMENT ON TABLE content_master IS '素材主表，存储素材基本元数据';
+COMMENT ON COLUMN content_master.content_id IS '素材唯一ID';
+COMMENT ON COLUMN content_master.spu_id IS '关联商品SPU ID';
+COMMENT ON COLUMN content_master.content_name IS '素材名称';
+COMMENT ON COLUMN content_master.content_url IS '素材存储路径（OSS链接）';
+COMMENT ON COLUMN content_master.content_type IS '素材类型：短视频、图文、商品卡、直播切片';
+COMMENT ON COLUMN content_master.content_duration IS '素材时长';
+COMMENT ON COLUMN content_master.material_source IS '素材来源：本地上传、巨量引擎工作台共享素材等';
+COMMENT ON COLUMN content_master.evaluation_tag IS '素材评估标签：首发、优质、低效等';
+COMMENT ON COLUMN content_master.created_at IS '创建时间';
+COMMENT ON COLUMN content_master.updated_at IS '更新时间';
+
+-- 2. 素材平台关系表 (content_platform_relation)
+CREATE TABLE content_platform_relation (
+    id BIGSERIAL PRIMARY KEY,
+    content_id BIGINT NOT NULL REFERENCES content_master(content_id) ON DELETE CASCADE,
+    platform_id BIGINT NOT NULL,
+    sku_id BIGINT,
+    platform_content_id VARCHAR(50),
+
+    -- 约束
+    UNIQUE (content_id, platform_id)
+);
+
+-- 为content_platform_relation表创建索引
+CREATE INDEX idx_cpr_platform_id ON content_platform_relation (platform_id);
+CREATE INDEX idx_cpr_sku_id ON content_platform_relation (sku_id);
+CREATE INDEX idx_cpr_platform_content_id ON content_platform_relation (platform_content_id);
+
+COMMENT ON TABLE content_platform_relation IS '素材平台关系表，处理平台差异化和SKU关联';
+COMMENT ON COLUMN content_platform_relation.content_id IS '关联素材ID';
+COMMENT ON COLUMN content_platform_relation.platform_id IS '关联平台商品ID';
+COMMENT ON COLUMN content_platform_relation.sku_id IS '关联SKU ID（可空）';
+COMMENT ON COLUMN content_platform_relation.platform_content_id IS '平台侧素材ID（用于API拉取数据）';
+
+-- 3. 素材每日绩效表 (content_performance_daily)
+CREATE TABLE content_performance_daily (
+    id BIGSERIAL PRIMARY KEY,
+    content_id BIGINT NOT NULL REFERENCES content_master(content_id) ON DELETE CASCADE,
+    performance_date DATE NOT NULL,
+    impressions INTEGER DEFAULT 0,
+    clicks INTEGER DEFAULT 0,
+    ctr DECIMAL(5,4) DEFAULT 0,
+    conversions INTEGER DEFAULT 0,
+    cvr DECIMAL(5,4) DEFAULT 0,
+    spend DECIMAL(10,2) DEFAULT 0,
+    revenue DECIMAL(10,2) DEFAULT 0,
+    roi DECIMAL(5,2) DEFAULT 0,
+    orders INTEGER DEFAULT 0,
+    cpm DECIMAL(10,2) DEFAULT 0,
+
+    -- 约束
+    UNIQUE (content_id, performance_date)
+);
+
+-- 为content_performance_daily表创建索引
+CREATE INDEX idx_cpd_date ON content_performance_daily (performance_date);
+CREATE INDEX idx_cpd_roi ON content_performance_daily (roi);
+CREATE INDEX idx_cpd_ctr ON content_performance_daily (ctr);
+
+COMMENT ON TABLE content_performance_daily IS '素材每日绩效表，记录核心广告指标';
+COMMENT ON COLUMN content_performance_daily.content_id IS '关联素材ID';
+COMMENT ON COLUMN content_performance_daily.performance_date IS '绩效日期';
+COMMENT ON COLUMN content_performance_daily.impressions IS '展现次数';
+COMMENT ON COLUMN content_performance_daily.clicks IS '点击次数';
+COMMENT ON COLUMN content_performance_daily.ctr IS '点击率';
+COMMENT ON COLUMN content_performance_daily.conversions IS '转化数';
+COMMENT ON COLUMN content_performance_daily.cvr IS '转化率';
+COMMENT ON COLUMN content_performance_daily.spend IS '消耗（元）';
+COMMENT ON COLUMN content_performance_daily.revenue IS '成交金额（元）';
+COMMENT ON COLUMN content_performance_daily.roi IS '支付ROI';
+COMMENT ON COLUMN content_performance_daily.orders IS '成交订单数';
+COMMENT ON COLUMN content_performance_daily.cpm IS '千次展现费用（元）';
+
+-- 4. 素材互动明细表 (content_interaction_detail)
+CREATE TABLE content_interaction_detail (
+    id BIGSERIAL PRIMARY KEY,
+    content_id BIGINT NOT NULL REFERENCES content_master(content_id) ON DELETE CASCADE,
+    likes INTEGER DEFAULT 0,
+    comments INTEGER DEFAULT 0,
+    shares INTEGER DEFAULT 0,
+    favorites INTEGER DEFAULT 0,
+    new_followers INTEGER DEFAULT 0,
+    lost_followers INTEGER DEFAULT 0,
+    uninterested_count INTEGER DEFAULT 0,
+    avg_watch_duration DECIMAL(5,2) DEFAULT 0,
+    completion_rate DECIMAL(5,2) DEFAULT 0,
+    bounce_2s_rate DECIMAL(5,2) DEFAULT 0,
+    playback_rates JSONB,
+    interaction_timeline JSONB
+);
+
+-- 为content_interaction_detail表创建索引
+CREATE INDEX idx_cid_content_id ON content_interaction_detail (content_id);
+CREATE INDEX idx_cid_completion_rate ON content_interaction_detail (completion_rate);
+
+COMMENT ON TABLE content_interaction_detail IS '素材互动明细表，记录用户互动数据';
+COMMENT ON COLUMN content_interaction_detail.content_id IS '关联素材ID';
+COMMENT ON COLUMN content_interaction_detail.likes IS '点赞量';
+COMMENT ON COLUMN content_interaction_detail.comments IS '评论量';
+COMMENT ON COLUMN content_interaction_detail.shares IS '分享量';
+COMMENT ON COLUMN content_interaction_detail.favorites IS '收藏量';
+COMMENT ON COLUMN content_interaction_detail.new_followers IS '新增粉丝数';
+COMMENT ON COLUMN content_interaction_detail.lost_followers IS '脱粉量';
+COMMENT ON COLUMN content_interaction_detail.uninterested_count IS '不感兴趣量';
+COMMENT ON COLUMN content_interaction_detail.avg_watch_duration IS '平均观看时长（秒）';
+COMMENT ON COLUMN content_interaction_detail.completion_rate IS '完播率';
+COMMENT ON COLUMN content_interaction_detail.bounce_2s_rate IS '2秒跳出率';
+COMMENT ON COLUMN content_interaction_detail.playback_rates IS '播放完成度分布JSON';
+COMMENT ON COLUMN content_interaction_detail.interaction_timeline IS '互动时序数据JSON';
+
+-- 5. 素材观众洞察表 (content_audience_insight)
+CREATE TABLE content_audience_insight (
+    id BIGSERIAL PRIMARY KEY,
+    content_id BIGINT NOT NULL REFERENCES content_master(content_id) ON DELETE CASCADE,
+    gender_distribution JSONB,
+    age_distribution JSONB,
+    customer_segment_distribution JSONB,
+    geographical_distribution JSONB,
+    interest_tags JSONB
+);
+
+-- 为content_audience_insight表创建索引
+CREATE INDEX idx_cai_content_id ON content_audience_insight (content_id);
+
+COMMENT ON TABLE content_audience_insight IS '素材观众洞察表，记录受众画像数据';
+COMMENT ON COLUMN content_audience_insight.content_id IS '关联素材ID';
+COMMENT ON COLUMN content_audience_insight.gender_distribution IS '性别分布JSON';
+COMMENT ON COLUMN content_audience_insight.age_distribution IS '年龄分布JSON';
+COMMENT ON COLUMN content_audience_insight.customer_segment_distribution IS '八大人群分布JSON';
+COMMENT ON COLUMN content_audience_insight.geographical_distribution IS '地域分布JSON';
+COMMENT ON COLUMN content_audience_insight.interest_tags IS '兴趣标签JSON';
+
+-- 6. 素材内容基因表 (content_creative_dna)
+CREATE TABLE content_creative_dna (
+    id BIGSERIAL PRIMARY KEY,
+    content_id BIGINT NOT NULL REFERENCES content_master(content_id) ON DELETE CASCADE,
+    content_theme VARCHAR(50),
+    ai_prompt TEXT,
+    ai_model VARCHAR(100),
+    manual_tags JSONB,
+    scene_tags JSONB,
+    presentation_style JSONB,
+    selling_points JSONB,
+    script_formula TEXT,
+    full_script TEXT,
+    highlight_frame_second INTEGER
+);
+
+-- 为content_creative_dna表创建索引
+CREATE INDEX idx_ccd_content_id ON content_creative_dna (content_id);
+CREATE INDEX idx_ccd_content_theme ON content_creative_dna (content_theme);
+
+COMMENT ON TABLE content_creative_dna IS '素材内容基因表，记录AI生成和内容分析数据';
+COMMENT ON COLUMN content_creative_dna.content_id IS '关联素材ID';
+COMMENT ON COLUMN content_creative_dna.content_theme IS '内容主题';
+COMMENT ON COLUMN content_creative_dna.ai_prompt IS 'AI生成提示词';
+COMMENT ON COLUMN content_creative_dna.ai_model IS 'AI模型';
+COMMENT ON COLUMN content_creative_dna.manual_tags IS '手动标签JSON';
+COMMENT ON COLUMN content_creative_dna.scene_tags IS '场景标签JSON';
+COMMENT ON COLUMN content_creative_dna.presentation_style IS '呈现形式JSON';
+COMMENT ON COLUMN content_creative_dna.selling_points IS '宣传卖点JSON';
+COMMENT ON COLUMN content_creative_dna.script_formula IS '脚本公式';
+COMMENT ON COLUMN content_creative_dna.full_script IS '完整脚本';
+COMMENT ON COLUMN content_creative_dna.highlight_frame_second IS '高光帧时间点（秒）';
+
+-- 创建更新触发器函数（用于自动更新updated_at字段）
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+-- 为content_master表创建触发器
+CREATE TRIGGER update_content_master_updated_at
+    BEFORE UPDATE ON content_master
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();

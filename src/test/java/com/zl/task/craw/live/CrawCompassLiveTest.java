@@ -55,4 +55,9 @@ public  class CrawCompassLiveTest {
         //翻页操作
         crawler.crawCompassList();
     }
+
+    @org.junit.Test
+    public void isCraw() {
+        crawler.isCraw(30*30l) ;
+    }
 }

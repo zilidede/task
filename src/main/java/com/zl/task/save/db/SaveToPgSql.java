@@ -1,15 +1,15 @@
 package com.zl.task.save.db;
 
 import com.zl.dao.DaoService;
-import com.zl.dao.generate.CityWeatherDO;
-import com.zl.dao.generate.CityWeatherDao;
-import com.zl.dao.generate.FileRecordDO;
-import com.zl.dao.generate.FileRecordDao;
+import com.zl.dao.generate.*;
 import com.zl.task.craw.keyword.SaveOceanEngineKeyWords;
 import com.zl.task.craw.keyword.SaveTrendInSightKeywords;
+import com.zl.task.craw.weather.ParserDatashareclubHistoryWeather;
 import com.zl.task.impl.SaveService;
 import com.zl.task.impl.SaveServiceImpl;
+import com.zl.task.save.parser.ParserJsonToHttpVO;
 import com.zl.task.save.parser.weather.SaverCityWeather;
+import com.zl.task.vo.http.HttpVO;
 import com.zl.utils.csv.CsvUtils;
 import com.zl.utils.io.DiskIoUtils;
 import com.zl.utils.io.FileHashGeneratorUtils;
@@ -20,6 +20,7 @@ import com.zl.utils.other.Ini4jUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -71,14 +72,14 @@ public class SaveToPgSql {
             if (file.getFileLocalPath().indexOf("yunTu") >= 0) {
                 //saveOceanEngineKeyWords(file, saveOceanEngineSearch);// 解析云图关键词文件
             } else if(file.getFileLocalPath().indexOf("trendinsight") >= 0) {
-                saveTrendInsightKeywords(file,saveTrendInSightKeywords);
+               // saveTrendInsightKeywords(file,saveTrendInSightKeywords);
             }
             else  if (file.getFileLocalPath().indexOf("weather")>=0){
-               // saveCityWeatherToPgSql(file.getFileLocalPath());
+                saveCityWeatherToPgSql(file.getFileLocalPath());
             }
         }
-        fileRecordDao.batchUpdateFileStatus(fileRecordDOS);
-        //saveOceanEngineSearch.saveToPgSql(); //保存关键词文件;保存
+        fileRecordDao.batchUpsertFileStatus(fileRecordDOS);
+        saveOceanEngineSearch.saveToPgSql(); //保存关键词文件;保存
         fileRecordDOS.clear();
     }
 
@@ -118,16 +119,34 @@ public class SaveToPgSql {
     //将天气数据保存到pgsql
     public static void saveCityWeatherToPgSql(String filePath) throws Exception {
         SaveServiceImpl saveService = new SaveServiceImpl();
-        DaoService daoService = new CityWeatherDao();
-        List<CityWeatherDO> list = new ArrayList<>();
-        List<Map<String, CityWeatherDO>> cityMaps = SaverCityWeather.parser(filePath);
-        for (Map<String, CityWeatherDO> cityMap : cityMaps) {
-            for (Map.Entry<String, CityWeatherDO> entry : cityMap.entrySet()) {
-                list.add(entry.getValue());
+        if(filePath.indexOf("cnApiNow")>=0) {
+            //中国气象网
+            DaoService daoService = new CityWeatherDao();
+            List<CityWeatherDO> list = new ArrayList<>();
+            List<Map<String, CityWeatherDO>> cityMaps = SaverCityWeather.parser(filePath);
+            for (Map<String, CityWeatherDO> cityMap : cityMaps) {
+                for (Map.Entry<String, CityWeatherDO> entry : cityMap.entrySet()) {
+                    list.add(entry.getValue());
+                }
             }
+            saveService.savePgSql(daoService, list);
+            list.clear();
         }
-        saveService.savePgSql(daoService, list);
-        list.clear();
+        else if(filePath.indexOf("comArea")>=0){
+            //地域历史天气
+            HttpVO httpvo=ParserJsonToHttpVO.parserXHRJson(filePath);
+            String decodedUrl = URLDecoder.decode(httpvo.getUrl(), "UTF-8");
+            String cityId = decodedUrl.substring(decodedUrl.lastIndexOf("/") + 1);
+            cityId=cityId.replace(".html","").replace(" ","");
+            List<CityWeatherHistoryDO> dailyData = ParserDatashareclubHistoryWeather.parseCityWeatherHistoryDO( httpvo.getResponse().getBody(),cityId);
+            CityWeatherHistoryDao dao = new CityWeatherHistoryDao();
+            saveService.savePgSql(dao, dailyData);
+        }
+        else if(filePath.indexOf("comWeather")>=0){
+            //
+
+        }
+
     }
 
     //将巨量云图关键词保存到pgsql

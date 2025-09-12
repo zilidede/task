@@ -566,9 +566,11 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
         elements = tab.eles(By.xpath(xpath));
         elements.get(2).click().click();
         Thread.sleep(1000);
-        xpath = "//*[@data-log-value=\"行业搜索词\"]";
-        tab.ele(By.xpath(xpath)).click().click();
-        Thread.sleep(1000);
+        if(index==0) {
+            xpath = "//*[@data-log-value=\"行业搜索词\"]";
+            tab.ele(By.xpath(xpath)).click().click();
+            Thread.sleep(1000);
+        }
         //
         //*[@id="garfish_app_for_search_strategy_bddtkivs"]/div/div[2]/div/div/div[1]/div[2]/div[2]/div[2]/span/span/label
         String date = getDate();
@@ -658,34 +660,45 @@ public class CrawSeleniumOceanEngineKeyWords implements ExecutorTaskService {
                 ex.printStackTrace();
             }
             dao.findOcSearchKeywordsDetail(keywordDetailMaps);
-            xpath= "//*[@class=\"search-strategy-input search-strategy-input-size-md\"]";
-            List<ChromiumElement> elements1=getTab().eles(By.xpath(xpath)); //输入搜索词
-            Thread.sleep(1000);
-            ChromiumElement element=elements1.get(5);
-            element.input( keyword);
-            Thread.sleep(2000);
-            xpath= "//*[@class=\"search-strategy-list-item-inner-wrapper search-strategy-cascader-item-inner-wrapper\"]";;
-            elements1=getTab().eles(By.xpath(xpath)); //选择搜索框
-            String temp=elements1.get(0).text();
-            if (!temp.equals(keyword)) {
-                LoggerUtils.logger.error(String.format("搜索词：%s-%s:在搜索框无法找到：下载失败", keyword, keyword));
-                continue;
+            // 爬取单个相关词搜索图谱
+            try {
+                crawSingleRelKeywords( keyword);
             }
-            elements1.get(0).click().click();
-            downloadIndustry(keyword,1);
-            //下载相关性图谱详情
-            downloadKeyWordDetails(1);
-            for (ChromiumElement element1 : elements1){
-                String s=element1.text();
-                // System.out.println(s);
+            catch (Exception ex) {
+                ex.printStackTrace();
+                LoggerUtils.logger.warn(String.format("爬取搜索词：%s:相关词图谱在记录时发生错误：", keyword));
             }
-            Thread.sleep(2000);
-            //重新打开搜索框；
-            xpath="//*[@class=\"search-strategy-cascader search-strategy-cascader-select search-strategy-can-input-grouped\"]" ;
-            elements=getTab().eles(By.xpath(xpath)); //打开搜索词输入框
-            elements.get(1).click().click();
-
 
         }
+    }
+    public void crawSingleRelKeywords(String keyword) throws Exception {
+
+        String xpath= "//*[@class=\"search-strategy-input search-strategy-input-size-md\"]";
+        List<ChromiumElement> elements1=getTab().eles(By.xpath(xpath)); //输入搜索词
+        Thread.sleep(1000);
+        ChromiumElement element=elements1.get(5);
+        element.input( keyword);
+        Thread.sleep(2000);
+        xpath= "//*[@class=\"search-strategy-list-item-inner-wrapper search-strategy-cascader-item-inner-wrapper\"]";;
+        elements1=getTab().eles(By.xpath(xpath)); //选择搜索框
+        String temp=elements1.get(0).text();
+        if (!temp.equals(keyword)) {
+            LoggerUtils.logger.error(String.format("搜索词：%s-%s:在搜索框无法找到：下载失败", keyword, keyword));
+            return;
+        }
+        elements1.get(0).click().click(); //选择第一个
+        downloadIndustry(keyword,1);
+        //下载相关性图谱详情
+        downloadKeyWordDetails(1);
+        for (ChromiumElement element1 : elements1){
+            String s=element1.text();
+            // System.out.println(s);
+        }
+        Thread.sleep(2000);
+        //重新打开搜索框；
+        xpath="//*[@class=\"search-strategy-cascader search-strategy-cascader-select search-strategy-can-input-grouped\"]" ;
+        List<ChromiumElement> elements=getTab().eles(By.xpath(xpath)); //打开搜索词输入框
+        elements.get(1).click().click();
+        //回到第一页；
     }
 }

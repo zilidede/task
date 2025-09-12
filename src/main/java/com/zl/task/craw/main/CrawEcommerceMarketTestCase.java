@@ -1,9 +1,11 @@
 package com.zl.task.craw.main;
 
 import com.ll.drissonPage.page.ChromiumTab;
+import com.zl.task.craw.SaveXHR;
 import com.zl.task.craw.keyword.CrawSeleniumOceanEngineKeyWords;
 import com.zl.task.craw.market.CrawSeleniumDouYinCategoryList;
 import com.zl.task.craw.weather.CrawCityWeather;
+import com.zl.task.craw.weather.CrawDatashareclubWeather;
 import com.zl.task.save.Saver;
 import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
 import com.zl.task.vo.task.taskResource.TaskVO;
@@ -11,8 +13,7 @@ import com.zl.utils.io.FileIoUtils;
 import com.zl.utils.log.LoggerUtils;
 
 import java.time.LocalTime;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -27,11 +28,11 @@ public class CrawEcommerceMarketTestCase {
         ParameterizedSearchKeywordsThread keywordsThread = new ParameterizedSearchKeywordsThread(DefaultTaskResourceCrawTabList.getTabList().get(i++));
         ParameterizedWeatherThread weatherThread = new ParameterizedWeatherThread(DefaultTaskResourceCrawTabList.getTabList().get(i++));
         ParameterizedMarketThread marketThread = new ParameterizedMarketThread(DefaultTaskResourceCrawTabList.getTabList().get(i++));
-        keywordsThread.start(); //每日执行一次 巨量云图搜索词爬取；-csv下载
+       // keywordsThread.start(); //每日执行一次 巨量云图搜索词爬取；-csv下载
         Thread.sleep(1000 * 2);
         weatherThread.start(); //2小时一次天气
         Thread.sleep(1000 * 2);
-        marketThread.start();
+     //   marketThread.start();
     }
     static class ParameterizedMarketThread extends Thread {
         private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(0);
@@ -116,6 +117,7 @@ public class CrawEcommerceMarketTestCase {
     static class ParameterizedWeatherThread extends Thread {
         private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(0);
         ChromiumTab tab;
+        int countTag = 2;  //爬取任务标志
 
         public ParameterizedWeatherThread(ChromiumTab tab) {
             this.tab = tab;
@@ -134,28 +136,64 @@ public class CrawEcommerceMarketTestCase {
                     LoggerUtils.logger.error(now+"小时天气任务");
                     throw new RuntimeException(e);
                 }
-            }, 0, 120 * 54, TimeUnit.SECONDS); //  立即执行小时任务 每个50分钟检查
+            }, 0, 180 * 60, TimeUnit.SECONDS); //  立即执行小时任务 每个50分钟检查
         }
 
         public void doWork() throws Exception {
-            // datashareclub
-            LoggerUtils.logger.debug("初始化CrawDatashareclubWeather对象");
-            //中国气象局天气
-            LoggerUtils.logger.debug("初始化CrawCityWeather对象");
             CrawCityWeather crawler;
+            CrawDatashareclubWeather crawDatashareclubWeather;
             try {
                 crawler = new CrawCityWeather();
                 crawler.setTab(tab);
+                crawDatashareclubWeather  = new CrawDatashareclubWeather(tab);
+
             }
             catch (Exception e){
                 LoggerUtils.logger.error("初始化CrawCityWeather对象失败");
                 throw new RuntimeException(e);
             }
             LoggerUtils.logger.debug("开始爬取天气小时榜");
-            crawler.run(new TaskVO(1, "爬取天气小时榜"));
-            LoggerUtils.logger.debug("爬取天气小时榜结束");
-        }
+            LoggerUtils.logger.debug("开始爬取城市天气数据");
+            List<String> strings = crawler.getCitys();
+            List<String> cityUrls = new ArrayList<>();
+            for (String city : strings) {
+                cityUrls.add("https://weather.cma.cn/web/weather/" + city + ".html");
+            }
+            LoggerUtils.logger.info("开始爬取的城市天气数据总数：" + cityUrls.size());
 
+            int max = 250;
+            int i=0;
+            for (String cityUrl : cityUrls) {
+                LoggerUtils.logger.debug("开始爬取城市天气数据： 历史标记" + countTag);
+                crawler.setTab(tab);
+                //爬取中国气象局城市天气
+                try {
+                    crawler.getTab().get(cityUrl);
+                    Thread.sleep(1000 * 2);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    LoggerUtils.logger.warn("爬取城市天气失败：" + cityUrl);
+                }
+                if(i++>max){
+                    if(countTag>35)
+                        return;
+                    // 爬取历史天气
+                    crawDatashareclubWeather.setTab(tab);
+                    crawDatashareclubWeather.getTab().get("https://datashareclub.com/area/%E5%8C%97%E4%BA%AC/%E5%8C%97%E4%BA%AC.html");
+                    crawHistoryWeather(crawDatashareclubWeather, countTag++);
+                    //dowork
+                    i=0;
+                }
+                SaveXHR.saveXhr( crawler.getTab(),  crawler.getXhrSaveDir(),  crawler.getXhrList());
+            }
+            LoggerUtils.logger.info("爬取的城市天气小时级数据已完成");
+        }
+        public  void crawHistoryWeather( CrawDatashareclubWeather crawDatashareclubWeather,int count) throws Exception {
+            LoggerUtils.logger.debug("开始爬取城市历史天气数据");
+            Map<String,String> map = crawDatashareclubWeather.crawCityWeathers(count);
+            LoggerUtils.logger.debug("开始爬取城市历史天气数据已完成:"+count);
+        }
 
     }
     static class ParameterizedSearchKeywordsThread extends Thread {
@@ -197,9 +235,11 @@ public class CrawEcommerceMarketTestCase {
             if (currentMinute > 58) {
                 currentHour = currentHour + 1;
             }
+
             //currentHour=15;
             long delay = calculateDelayUntilNextExecution(currentHour, currentMinute + 2); // 设定每日任务在每天的9点执行
             scheduler.scheduleAtFixedRate(() -> {
+                LoggerUtils.logger.info("开始执行云图搜索词任务");
                 //云图搜索词
                 CrawSeleniumOceanEngineKeyWords crawler = null;
                 try {
@@ -207,14 +247,9 @@ public class CrawEcommerceMarketTestCase {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-
                 String rName = "";
                 int i = 1;
-                try {
-                    Saver.save();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+
                 try {
                     doWork();
                 } catch (Exception e) {
@@ -239,6 +274,7 @@ public class CrawEcommerceMarketTestCase {
                 throw new RuntimeException("初始化爬虫失败", e);
             }
             CrawSearchKeyword.crawYunTuSearchKeyword(crawler,categoryFilePath);
+
         }
 
 

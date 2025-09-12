@@ -36,9 +36,9 @@ public class CrawCategoryMarket {
         ParameterizedVideoThread videoList = new ParameterizedVideoThread(DefaultTaskResourceCrawTabList.getTabList().get(i++));
         hourLiveList.start(); //每小时执行一次
         Thread.sleep(1000 * 2);
-        goodsList.start(); //一天一次
+       // goodsList.start(); //一天一次
         Thread.sleep(1000 * 2);
-        videoList.start(); //一天一次；
+       // videoList.start(); //一天一次；
        // minLive.start();//一分钟一次；
         Thread.sleep(1000 * 2);
     }
@@ -169,7 +169,12 @@ public class CrawCategoryMarket {
                 for (String string : strings) {
                     TaskVO taskVO = new TaskVO(1, "抖店罗盘小时榜");
                     for (int i = 0; i < 24; i++) {
-
+                        LocalTime now = LocalTime.now();
+                        while (now.getHour() - i < 1) {
+                            Thread.sleep(1000 * 60 * 10);
+                            LoggerUtils.logger.info("当前时间：" + now.getHour() + "小时，未到爬取时间，休眠10分钟，稍后重试");
+                            now = LocalTime.now();
+                        }
                         String taskDes = String.format("小时榜&%s:00&%s", i, string);
                         taskVO.setTaskDesc(taskDes);
                         try {

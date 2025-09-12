@@ -1,4 +1,4 @@
-package com.zl.task.category;
+package com.zl.task.craw.category;
 
 import com.zl.task.craw.keyword.CrawSeleniumOceanEngineKeyWords;
 import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;

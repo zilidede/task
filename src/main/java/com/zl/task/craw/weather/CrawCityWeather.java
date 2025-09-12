@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 //爬取国内城市天气数据
+//https://weather.cma.cn/web/weather/
 public class CrawCityWeather extends CrawBaseDouYinList {
     private final CityWeatherDao daoService;
 

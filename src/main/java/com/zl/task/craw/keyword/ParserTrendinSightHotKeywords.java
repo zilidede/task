@@ -61,7 +61,14 @@ public class ParserTrendinSightHotKeywords  {
        object = null;
         Map<String,TrendinsightKeywordsDO> map=new HashMap<String,TrendinsightKeywordsDO>();
         object =parser.parse(reqBody).getAsJsonObject();
-        rootKeyword=object.get("hot_list").getAsJsonArray().get(0).getAsJsonObject().get("keyword").getAsString();
+        try {
+            rootKeyword=object.get("hot_list").getAsJsonArray().get(0).getAsJsonObject().get("keyword").getAsString();
+
+        }
+        catch (Exception ex){
+            rootKeyword="";
+            return;
+        }
         //综合指数
         jsonArray = object.get("hot_list").getAsJsonArray().get(0).getAsJsonObject().get("hot_list").getAsJsonArray();
         for(int i=0;i<jsonArray.size();i++){

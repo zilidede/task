@@ -5,7 +5,7 @@ import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
 import com.zl.task.vo.task.taskResource.TaskVO;
 import com.zl.utils.io.FileIoUtils;
 import com.zl.utils.log.LoggerUtils;
-
+// 爬取抖音直播数据
 public class CrawLiveTestCase {
     public static void main(String[] args) throws Exception {
         crawLiveHourCategoryListFromCompass();

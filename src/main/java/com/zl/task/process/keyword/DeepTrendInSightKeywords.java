@@ -63,7 +63,7 @@ public class DeepTrendInSightKeywords {
             TaskResource<List<String>> taskResource=new ListResource();
             taskResource.load(uniqueList);
             TaskVO<List<String>> task=new TaskVO<>(1,"抖音网页版爬取",taskResource);
-           // crawlerDouYinWeb.run(task);
+            crawlerDouYinWeb.run(task);
             // 爬取巨量云图单个搜索词;
             CrawSeleniumOceanEngineKeyWords crawlerSingleOceanEngineKeyword = new CrawSeleniumOceanEngineKeyWords();
             crawlerSingleOceanEngineKeyword.setTab(DefaultTaskResourceCrawTabList.getTabList().get(1));
@@ -73,10 +73,8 @@ public class DeepTrendInSightKeywords {
             crawlerSingleOceanEngineKeyword.crawSingleKeywords(uniqueList);
             // 遍历结束后批量添加新键（避免并发修改）
             for (String newKey : toAddKeys) {
-               // unCrawKeywordsMaps.putIfAbsent(newKey, 0); // 避免重复添加
+                unCrawKeywordsMaps.putIfAbsent(newKey, 0); // 避免重复添加
             }
-
-
             i++;
         }
         Saver.save();

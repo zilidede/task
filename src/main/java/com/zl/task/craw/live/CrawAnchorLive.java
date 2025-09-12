@@ -24,7 +24,6 @@ public class CrawAnchorLive extends CrawBaseXHR {
         // 添加显示等待
         ChromiumElement element= getTab().ele(By.xpath(xpath));
         element.click().click();
-
         SaveXHR.saveXhr(getTab(), getXhrSaveDir(), getXhrList());
 
 

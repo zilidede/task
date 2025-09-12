@@ -144,37 +144,51 @@ public class FileRecordDao implements DaoService<FileRecordDO> {
         return list;
     }
 
-    /**
-     * 批量更新文件状态
-     *
-     * @param updates 文件更新信息列表
-     * @throws SQLException 如果发生数据库错误
-     */
-    public void batchUpdateFileStatus(List<FileRecordDO> updates) throws SQLException {
-        String sql = "UPDATE file_record SET file_status = ? WHERE file_md5 = ?";
-        try (Connection conn = ConnectionPool.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-            // 开启事务（如果尚未自动提交）
+    // 批量更新文件状态（存在则更新，不存在则插入）- PostgreSQL版本
+    public void batchUpsertFileStatus(List<FileRecordDO> updates) throws SQLException {
+        // 使用PostgreSQL的ON CONFLICT语法实现upsert
+        String upsertSql = "INSERT INTO file_record " +
+                "(file_name, file_local_path, file_status, file_last_update, file_md5) " +
+                "VALUES (?, ?, ?, ?, ?) " +
+                "ON CONFLICT (file_md5) DO UPDATE SET " +  // 假设file_md5是唯一键
+                "file_status = EXCLUDED.file_status, " +   // 使用EXCLUDED引用待插入的行
+                "file_last_update = EXCLUDED.file_last_update";
+
+        try (Connection conn = ConnectionPool.getConnection();
+             PreparedStatement ps = conn.prepareStatement(upsertSql)) {
+
+            // 开启事务
             boolean autoCommit = conn.getAutoCommit();
             if (autoCommit) {
                 conn.setAutoCommit(false);
             }
 
-            for (FileRecordDO update : updates) {
-                ps.setInt(1, update.getFileStatus());  // 设置 file_status
-                ps.setString(2, update.getFileMd5());  // 设置 file_md5
+            try {
+                for (FileRecordDO update : updates) {
+                    ps.setString(1, update.getFileName());
+                    ps.setString(2, update.getFileLocalPath());
+                    ps.setInt(3, update.getFileStatus());
+                    // PostgreSQL对OffsetDateTime有良好支持
+                    ps.setObject(4, update.getFileLastUpdate());
+                    ps.setString(5, update.getFileMd5());
 
-                ps.addBatch();  // 添加到批处理
+                    ps.addBatch();  // 添加到批处理
+                }
+
+                // 执行批量操作
+                ps.executeBatch();
+                // 提交事务
+                conn.commit();
+            } catch (SQLException e) {
+                // 发生异常时回滚事务
+                conn.rollback();
+                throw e;
+            } finally {
+                // 恢复自动提交设置
+                conn.setAutoCommit(autoCommit);
             }
-
-            ps.executeBatch();  // 执行批量更新
-            conn.commit();      // 提交事务
-
-
-    } catch(SQLException e) {
-
-        throw e;
+        }
     }
-}
 
 
 }

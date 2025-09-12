@@ -29,7 +29,11 @@ public class CrawSearchKeyword {
         String rName = "";
         while (!"quit".equals(rName)) {
             try {
-                Saver.syn();
+                try {
+                    Saver.save();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
                 rName = crawAll(crawler, rName,categoryFilePath);
 
             } catch (Exception e) {
