@@ -1,0 +1,216 @@
+-- ======================== 商品数据库表结构 ========================
+
+-- 表: product_spu (商品SPU表)
+-- 功能: 存储商品的标准产品单位(SPU)信息，一个SPU对应多个SKU
+CREATE TABLE product_spu (
+    spu_id VARCHAR(255) PRIMARY KEY,  -- SPU唯一标识符(字符串类型)，主键
+    title VARCHAR(255),               -- 商品标题
+    desc_html TEXT,                   -- 商品描述(HTML格式)
+    spec_dimensions TEXT,             -- 规格维度定义(JSON格式)
+    image_gallery TEXT,               -- 商品图片库(JSON格式，存储多个图片URL)
+    style_attr TEXT,                  -- 款式属性
+    material_attr TEXT,               -- 材质属性
+    create_time TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,  -- 创建时间
+    status INT,                       -- SPU状态: 0-下架, 1-上架
+    update_time TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,  -- 最后更新时间
+    local_data_img VARCHAR(255)       -- 本地图片路径
+);
+
+COMMENT ON TABLE product_spu IS '商品SPU表，存储商品的标准产品单位信息';
+COMMENT ON COLUMN product_spu.spu_id IS 'SPU唯一标识符(字符串类型)，主键';
+COMMENT ON COLUMN product_spu.title IS '商品标题';
+COMMENT ON COLUMN product_spu.desc_html IS '商品描述(HTML格式)';
+COMMENT ON COLUMN product_spu.spec_dimensions IS '规格维度定义(JSON格式)';
+COMMENT ON COLUMN product_spu.image_gallery IS '商品图片库(JSON格式，存储多个图片URL)';
+COMMENT ON COLUMN product_spu.style_attr IS '款式属性';
+COMMENT ON COLUMN product_spu.material_attr IS '材质属性';
+COMMENT ON COLUMN product_spu.create_time IS '创建时间';
+COMMENT ON COLUMN product_spu.status IS 'SPU状态: 0-下架, 1-上架';
+COMMENT ON COLUMN product_spu.update_time IS '最后更新时间';
+COMMENT ON COLUMN product_spu.local_data_img IS '本地图片路径';
+
+-- 表: product_platform (平台商品表)
+-- 功能: 存储商品在不同电商平台的映射信息
+CREATE TABLE product_platform (
+    platform_product_id BIGINT PRIMARY KEY,  -- 平台商品ID，主键
+    spu_id VARCHAR(255) NOT NULL REFERENCES product_spu(spu_id),  -- 关联的SPU ID，外键
+    platform_name VARCHAR(255) NOT NULL,     -- 平台名称(如: douyin, taobao等)
+    custom_title VARCHAR(255),               -- 平台自定义标题
+    platform_cat_id VARCHAR(255),            -- 平台分类ID
+    platform_price NUMERIC(10,2),            -- 平台建议售价
+    status INT,                              -- 状态: 0-禁用, 1-启用
+    create_time TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,  -- 创建时间
+    update_time TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP   -- 最后更新时间
+);
+
+COMMENT ON TABLE product_platform IS '平台商品表，存储商品在不同电商平台的映射信息';
+COMMENT ON COLUMN product_platform.platform_product_id IS '平台商品ID，主键';
+COMMENT ON COLUMN product_platform.spu_id IS '关联的SPU ID，外键';
+COMMENT ON COLUMN product_platform.platform_name IS '平台名称(如: douyin, taobao等)';
+COMMENT ON COLUMN product_platform.custom_title IS '平台自定义标题';
+COMMENT ON COLUMN product_platform.platform_cat_id IS '平台分类ID';
+COMMENT ON COLUMN product_platform.platform_price IS '平台建议售价';
+COMMENT ON COLUMN product_platform.status IS '状态: 0-禁用, 1-启用';
+COMMENT ON COLUMN product_platform.create_time IS '创建时间';
+COMMENT ON COLUMN product_platform.update_time IS '最后更新时间';
+
+-- 表: product_sku (商品SKU表)
+-- 功能: 存储商品的库存单位(SKU)信息，一个SPU对应多个SKU
+CREATE TABLE product_sku (
+    sku_id VARCHAR(255) PRIMARY KEY,         -- SKU唯一标识符(字符串类型)，主键
+    spec_values TEXT,                        -- 规格值组合(JSON格式)
+    cost_price NUMERIC(10,2),                -- 成本价格
+    stock_physical INT,                      -- 物理库存数量
+    stock_available INT,                     -- 可用库存数量
+    barcode VARCHAR(255),                    -- 条形码
+    sku_image_path TEXT,                     -- SKU图片路径
+    create_time TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,  -- 创建时间
+    update_time TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,  -- 最后更新时间
+    status INT,                              -- SKU状态: 0-禁用, 1-启用
+    supplier_name VARCHAR(255)               -- 供应商名称
+);
+
+COMMENT ON TABLE product_sku IS '商品SKU表，存储商品的库存单位信息';
+COMMENT ON COLUMN product_sku.sku_id IS 'SKU唯一标识符(字符串类型)，主键';
+COMMENT ON COLUMN product_sku.spec_values IS '规格值组合(JSON格式)';
+COMMENT ON COLUMN product_sku.cost_price IS '成本价格';
+COMMENT ON COLUMN product_sku.stock_physical IS '物理库存数量';
+COMMENT ON COLUMN product_sku.stock_available IS '可用库存数量';
+COMMENT ON COLUMN product_sku.barcode IS '条形码';
+COMMENT ON COLUMN product_sku.sku_image_path IS 'SKU图片路径';
+COMMENT ON COLUMN product_sku.create_time IS '创建时间';
+COMMENT ON COLUMN product_sku.update_time IS '最后更新时间';
+COMMENT ON COLUMN product_sku.status IS 'SKU状态: 0-禁用, 1-启用';
+COMMENT ON COLUMN product_sku.supplier_name IS '供应商名称';
+
+-- 表: platform_sku_map (平台SKU映射表)
+-- 功能: 存储SKU在不同平台的映射关系和平台特定信息
+CREATE TABLE platform_sku_map (
+    sku_id VARCHAR(255) NOT NULL REFERENCES product_sku(sku_id),  -- 关联的SKU ID，外键，联合主键
+    platform_name VARCHAR(255) NOT NULL,      -- 平台名称，联合主键
+    platform_sku_code VARCHAR(255),           -- 平台SKU编码
+    platform_sale_price NUMERIC(10,2),        -- 平台特定销售价格
+    platform_status INT DEFAULT 1,            -- 平台特定状态: 0-禁用, 1-启用
+    platform_stock_override INT,              -- 平台特定库存覆盖(如为空则使用SKU库存)
+    platform_specific_data TEXT,              -- 平台特定数据(JSON格式)
+    create_time TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,  -- 创建时间
+    update_time TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,  -- 最后更新时间
+    PRIMARY KEY (sku_id, platform_name)
+);
+
+COMMENT ON TABLE platform_sku_map IS '平台SKU映射表，存储SKU在不同平台的映射关系和平台特定信息';
+COMMENT ON COLUMN platform_sku_map.sku_id IS '关联的SKU ID，外键，联合主键';
+COMMENT ON COLUMN platform_sku_map.platform_name IS '平台名称，联合主键';
+COMMENT ON COLUMN platform_sku_map.platform_sku_code IS '平台SKU编码';
+COMMENT ON COLUMN platform_sku_map.platform_sale_price IS '平台特定销售价格';
+COMMENT ON COLUMN platform_sku_map.platform_status IS '平台特定状态: 0-禁用, 1-启用';
+COMMENT ON COLUMN platform_sku_map.platform_stock_override IS '平台特定库存覆盖(如为空则使用SKU库存)';
+COMMENT ON COLUMN platform_sku_map.platform_specific_data IS '平台特定数据(JSON格式)';
+COMMENT ON COLUMN platform_sku_map.create_time IS '创建时间';
+COMMENT ON COLUMN platform_sku_map.update_time IS '最后更新时间';
+
+-- ======================== 索引优化 ========================
+
+-- 为常用查询字段添加索引
+CREATE INDEX idx_product_spu_status ON product_spu(status);           -- 商品SPU状态索引
+CREATE INDEX idx_product_spu_update_time ON product_spu(update_time); -- 商品SPU更新时间索引
+
+CREATE INDEX idx_product_platform_spu_id ON product_platform(spu_id);        -- 平台商品SPU ID索引
+CREATE INDEX idx_product_platform_name ON product_platform(platform_name);   -- 平台名称索引
+CREATE INDEX idx_product_platform_status ON product_platform(status);        -- 平台商品状态索引
+
+CREATE INDEX idx_product_sku_status ON product_sku(status);                    -- SKU状态索引
+CREATE INDEX idx_product_sku_stock ON product_sku(stock_available);            -- SKU可用库存索引
+CREATE INDEX idx_product_sku_supplier ON product_sku(supplier_name);           -- SKU供应商索引
+
+CREATE INDEX idx_platform_sku_map_sku_id ON platform_sku_map(sku_id);           -- 平台SKU映射SKU ID索引
+CREATE INDEX idx_platform_sku_map_platform ON platform_sku_map(platform_name);  -- 平台SKU映射平台名称索引
+CREATE INDEX idx_platform_sku_map_code ON platform_sku_map(platform_sku_code);  -- 平台SKU映射编码索引
+CREATE INDEX idx_platform_sku_map_status ON platform_sku_map(platform_status);  -- 平台SKU映射状态索引
+
+-- ======================== 更新时间触发器 ========================
+
+-- 创建更新时间的触发器函数
+CREATE OR REPLACE FUNCTION update_modified_time()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.update_time = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- 为所有表添加更新时间触发器
+CREATE TRIGGER trigger_product_spu_update_time
+    BEFORE UPDATE ON product_spu
+    FOR EACH ROW EXECUTE FUNCTION update_modified_time();
+
+CREATE TRIGGER trigger_product_platform_update_time
+    BEFORE UPDATE ON product_platform
+    FOR EACH ROW EXECUTE FUNCTION update_modified_time();
+
+CREATE TRIGGER trigger_product_sku_update_time
+    BEFORE UPDATE ON product_sku
+    FOR EACH ROW EXECUTE FUNCTION update_modified_time();
+
+CREATE TRIGGER trigger_platform_sku_map_update_time
+    BEFORE UPDATE ON platform_sku_map
+    FOR EACH ROW EXECUTE FUNCTION update_modified_time();
+
+-- ======================== 视图 ========================
+
+-- 创建视图，方便查询SKU及其在所有平台上的信息
+CREATE OR REPLACE VIEW v_sku_platform_details AS
+SELECT
+    ps.sku_id,
+    ps.spec_values,
+    ps.cost_price,
+    ps.stock_physical,
+    ps.stock_available,
+    ps.barcode,
+    ps.sku_image_path,
+    ps.status as sku_status,
+    ps.supplier_name,
+    psm.platform_name,
+    psm.platform_sku_code,
+    psm.platform_sale_price,
+    psm.platform_status,
+    psm.platform_stock_override,
+    psm.platform_specific_data,
+    psm.create_time as mapping_create_time,
+    psm.update_time as mapping_update_time
+FROM product_sku ps
+LEFT JOIN platform_sku_map psm ON ps.sku_id = psm.sku_id;
+
+COMMENT ON VIEW v_sku_platform_details IS 'SKU及其在所有平台上的详细信息视图';
+
+-- ======================== 函数 ========================
+
+-- 创建函数，用于获取SKU在特定平台上的可用库存
+CREATE OR REPLACE FUNCTION get_platform_available_stock(
+    p_sku_id VARCHAR,
+    p_platform_name VARCHAR
+) RETURNS INT AS $$
+DECLARE
+    v_override_stock INT;
+    v_sku_stock INT;
+BEGIN
+    -- 获取平台特定库存覆盖
+    SELECT platform_stock_override INTO v_override_stock
+    FROM platform_sku_map
+    WHERE sku_id = p_sku_id AND platform_name = p_platform_name;
+
+    -- 获取SKU基础库存
+    SELECT stock_available INTO v_sku_stock
+    FROM product_sku
+    WHERE sku_id = p_sku_id;
+
+    -- 如果有平台特定库存覆盖，则使用覆盖值，否则使用SKU基础库存
+    IF v_override_stock IS NOT NULL THEN
+        RETURN v_override_stock;
+    ELSE
+        RETURN v_sku_stock;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+COMMENT ON FUNCTION get_platform_available_stock IS '获取SKU在特定平台上的可用库存';
