@@ -6,7 +6,7 @@ import com.zl.task.vo.task.taskResource.TaskResource;
 import com.zl.task.vo.task.SynTaskVO;
 import com.zl.task.vo.task.taskResource.TaskVO;
 import com.zl.utils.io.DiskIoUtils;
-import com.zl.utils.jdbc.generator.convert.FieldConvert;
+import com.util.jdbc.generator.convert.FieldConvert;
 import com.zl.utils.other.Ini4jUtils;
 
 import java.text.SimpleDateFormat;

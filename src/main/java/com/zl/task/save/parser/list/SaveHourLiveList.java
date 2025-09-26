@@ -10,7 +10,7 @@ import com.zl.task.save.base.SaveXHRImpl;
 import com.zl.task.save.parser.ParserJsonToHttpVO;
 import com.zl.task.vo.http.HttpVO;
 import com.zl.utils.io.DiskIoUtils;
-import com.zl.utils.jdbc.generator.jdbc.DefaultDatabaseConnect;
+import com.util.jdbc.generator.jdbc.DefaultDatabaseConnect;
 import com.zl.utils.log.LoggerUtils;
 import com.zl.utils.time.SimpleDateFormatUtils;
 import com.zl.utils.time.TimeUtils;

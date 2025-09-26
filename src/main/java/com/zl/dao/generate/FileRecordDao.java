@@ -3,7 +3,7 @@ package com.zl.dao.generate;
 import com.zl.config.Config;
 import com.zl.dao.DaoService;
 import com.zl.dao.ErrorMsg;
-import com.zl.utils.jdbc.hikariCP.ConnectionPool;
+import com.util.jdbc.hikariCP.ConnectionPool;
 
 import java.sql.*;
 import java.time.OffsetDateTime;

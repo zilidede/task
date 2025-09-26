@@ -4,7 +4,6 @@ package com.zl.task.process.keyword;
 import com.zl.dao.generate.OceanenSearchKeywordsDetailDao;
 import com.zl.dao.generate.OceanengineSearchKeywordsDO;
 import com.zl.dao.generate.OceanengineSearchKeywordsDao;
-import com.zl.utils.jdbc.generator.jdbc.DefaultDatabaseConnect;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

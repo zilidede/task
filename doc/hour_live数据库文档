@@ -1,0 +1,136 @@
+-- ================================
+-- 作者信息维度表
+-- ================================
+CREATE TABLE IF NOT EXISTS author_info (
+    author_id          TEXT PRIMARY KEY,
+    nick_name          TEXT,
+    fans_cnt           BIGINT,
+    cover_url          TEXT,
+    qr_code            TEXT,
+    short_id           TEXT,
+    account_type       SMALLINT,
+    updated_at         TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()
+);
+
+COMMENT ON TABLE author_info IS '作者基本信息维度表';
+COMMENT ON COLUMN author_info.author_id IS '作者唯一ID（如抖音 author_id）';
+COMMENT ON COLUMN author_info.nick_name IS '作者昵称';
+COMMENT ON COLUMN author_info.fans_cnt IS '粉丝数量';
+COMMENT ON COLUMN author_info.cover_url IS '作者头像封面URL';
+COMMENT ON COLUMN author_info.qr_code IS '作者二维码URL';
+COMMENT ON COLUMN author_info.short_id IS '作者短ID（抖音号）';
+COMMENT ON COLUMN author_info.account_type IS '账号类型（0=普通账号）';
+COMMENT ON COLUMN author_info.updated_at IS '最后更新时间';
+
+
+-- ================================
+-- 每小时直播表现事实表
+-- ================================
+CREATE TABLE IF NOT EXISTS live_performance_hourly (
+    id                          BIGSERIAL PRIMARY KEY,
+    author_id                   TEXT NOT NULL,
+    hour_key                    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    live_room_id                TEXT,
+    live_title                  TEXT,
+    live_status                 SMALLINT,
+    live_start_ts               BIGINT,
+    live_end_ts                 BIGINT,
+    live_duration               INTEGER,
+    pay_amt_lower               NUMERIC(15,2),
+    pay_amt_upper               NUMERIC(15,2),
+    watch_cnt_lower             INTEGER,
+    watch_cnt_upper             INTEGER,
+    product_click_cnt_lower     INTEGER,
+    product_click_cnt_upper     INTEGER,
+    click_pay_rate_lower        NUMERIC(5,4),
+    click_pay_rate_upper        NUMERIC(5,4),
+    rank_value                  INTEGER,
+    last_rank_change            INTEGER,
+    is_self                     SMALLINT,
+    is_viewable                 SMALLINT,
+    top_channel                 TEXT,
+    shop_id                     BIGINT,
+    created_at                  TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()
+);
+
+-- 创建索引以支持高效查询
+CREATE INDEX IF NOT EXISTS idx_live_perf_author_hour ON live_performance_hourly (author_id, hour_key);
+CREATE INDEX IF NOT EXISTS idx_live_perf_room_id ON live_performance_hourly (live_room_id);
+CREATE INDEX IF NOT EXISTS idx_live_perf_shop_id ON live_performance_hourly (shop_id);
+
+COMMENT ON TABLE live_performance_hourly IS '每小时直播表现事实表（含核心指标范围值）';
+COMMENT ON COLUMN live_performance_hourly.id IS '自增主键';
+COMMENT ON COLUMN live_performance_hourly.author_id IS '关联 author_info.author_id';
+COMMENT ON COLUMN live_performance_hourly.hour_key IS '时间粒度（精确到小时，如 2025-09-25 18:00:00）';
+COMMENT ON COLUMN live_performance_hourly.live_room_id IS '直播间唯一ID';
+COMMENT ON COLUMN live_performance_hourly.live_title IS '直播间标题';
+COMMENT ON COLUMN live_performance_hourly.live_status IS '直播状态（4=已结束）';
+COMMENT ON COLUMN live_performance_hourly.live_start_ts IS '直播开始时间戳（秒）';
+COMMENT ON COLUMN live_performance_hourly.live_end_ts IS '直播结束时间戳（秒）';
+COMMENT ON COLUMN live_performance_hourly.live_duration IS '直播总时长（秒）';
+COMMENT ON COLUMN live_performance_hourly.pay_amt_lower IS '直播用户支付金额下限（单位：元）';
+COMMENT ON COLUMN live_performance_hourly.pay_amt_upper IS '直播用户支付金额上限（单位：元）';
+COMMENT ON COLUMN live_performance_hourly.watch_cnt_lower IS '直播间观看人次下限';
+COMMENT ON COLUMN live_performance_hourly.watch_cnt_upper IS '直播间观看人次上限';
+COMMENT ON COLUMN live_performance_hourly.product_click_cnt_lower IS '商品点击次数下限';
+COMMENT ON COLUMN live_performance_hourly.product_click_cnt_upper IS '商品点击次数上限';
+COMMENT ON COLUMN live_performance_hourly.click_pay_rate_lower IS '点击成交转化率下限（0.0000 ~ 1.0000）';
+COMMENT ON COLUMN live_performance_hourly.click_pay_rate_upper IS '点击成交转化率上限';
+COMMENT ON COLUMN live_performance_hourly.rank_value IS '当前排名（数值越小排名越高）';
+COMMENT ON COLUMN live_performance_hourly.last_rank_change IS '上期排名变化（0=无变化）';
+COMMENT ON COLUMN live_performance_hourly.is_self IS '是否自营（0=否，1=是）';
+COMMENT ON COLUMN live_performance_hourly.is_viewable IS '是否可见（1=可见，0=不可见）';
+COMMENT ON COLUMN live_performance_hourly.top_channel IS '顶部流量渠道（如“直播推荐”）';
+COMMENT ON COLUMN live_performance_hourly.shop_id IS '关联店铺ID';
+COMMENT ON COLUMN live_performance_hourly.created_at IS '记录创建时间';
+
+
+-- ================================
+-- 引流短视频关联表
+-- ================================
+CREATE TABLE IF NOT EXISTS drainage_videos (
+    id                      BIGSERIAL PRIMARY KEY,
+    live_performance_id     BIGINT NOT NULL REFERENCES live_performance_hourly(id) ON DELETE CASCADE,
+    video_id                TEXT NOT NULL,
+    video_title             TEXT,
+    video_cover             TEXT,
+    publish_time            BIGINT,
+    video_status            SMALLINT,
+    play_url                TEXT
+);
+
+-- 创建索引
+CREATE INDEX IF NOT EXISTS idx_drainage_live_perf_id ON drainage_videos (live_performance_id);
+CREATE INDEX IF NOT EXISTS idx_drainage_video_id ON drainage_videos (video_id);
+
+COMMENT ON TABLE drainage_videos IS '直播关联的引流短视频列表';
+COMMENT ON COLUMN drainage_videos.id IS '自增主键';
+COMMENT ON COLUMN drainage_videos.live_performance_id IS '关联 live_performance_hourly.id，直播记录删除时自动级联删除视频';
+COMMENT ON COLUMN drainage_videos.video_id IS '短视频唯一ID';
+COMMENT ON COLUMN drainage_videos.video_title IS '短视频标题';
+COMMENT ON COLUMN drainage_videos.video_cover IS '短视频封面图URL';
+COMMENT ON COLUMN drainage_videos.publish_time IS '短视频发布时间戳（秒）';
+COMMENT ON COLUMN drainage_videos.video_status IS '视频状态（2=正常）';
+COMMENT ON COLUMN drainage_videos.play_url IS '视频播放地址（当前可能为空）';
+
+
+-- ================================
+-- （可选）短视频基础统计表
+-- ================================
+CREATE TABLE IF NOT EXISTS video_stats (
+    video_id        TEXT PRIMARY KEY,
+    author_id       TEXT,
+    title           TEXT,
+    cover_url       TEXT,
+    publish_time    BIGINT,
+    status          SMALLINT,
+    created_at      TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()
+);
+
+COMMENT ON TABLE video_stats IS '短视频基础信息表（用于独立分析）';
+COMMENT ON COLUMN video_stats.video_id IS '短视频唯一ID';
+COMMENT ON COLUMN video_stats.author_id IS '作者ID';
+COMMENT ON COLUMN video_stats.title IS '视频标题';
+COMMENT ON COLUMN video_stats.cover_url IS '封面图URL';
+COMMENT ON COLUMN video_stats.publish_time IS '发布时间戳（秒）';
+COMMENT ON COLUMN video_stats.status IS '视频状态';

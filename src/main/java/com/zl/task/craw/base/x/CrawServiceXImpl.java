@@ -8,7 +8,7 @@ import com.zl.task.process.keyword.CypherData;
 import com.zl.task.vo.task.taskResource.TaskVO;
 import com.zl.utils.io.DiskIoUtils;
 import com.zl.utils.io.FileIoUtils;
-import com.zl.utils.jdbc.generator.convert.FieldConvert;
+import com.util.jdbc.generator.convert.FieldConvert;
 import com.zl.utils.log.LoggerUtils;
 
 import java.text.SimpleDateFormat;

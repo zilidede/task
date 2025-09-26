@@ -2,16 +2,14 @@ package com.zl.task.craw.main;
 
 import com.ll.drissonPage.page.ChromiumTab;
 import com.zl.task.craw.goods.CrawCompassGoods;
-import com.zl.task.craw.list.CrawSeleniumDouYinList;
 import com.zl.task.craw.live.CrawAnchorLive;
-import com.zl.task.craw.live.CrawCompassLive;
+import com.zl.task.craw.list.CrawDouYinShopCompassHourLive1;
 import com.zl.task.craw.video.CrawCompassVideo;
 import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
 import com.zl.task.vo.task.taskResource.TaskVO;
 import com.zl.utils.io.FileIoUtils;
 import com.zl.utils.log.LoggerUtils;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -152,7 +150,7 @@ public class CrawCategoryMarket {
                     LoggerUtils.logger.info("每日24小时榜任务执行：" + new Date());
                     List<Integer> integerLists = new ArrayList<>();
                     // dowork
-                    CrawCompassLive crawler= new CrawCompassLive();
+                    CrawDouYinShopCompassHourLive1 crawler= new CrawDouYinShopCompassHourLive1();
                     doWork(crawler);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -160,7 +158,7 @@ public class CrawCategoryMarket {
 
             }, delay, TimeUnit.DAYS.toMillis(1), TimeUnit.MILLISECONDS);
         }
-        public void doWork(CrawCompassLive crawler) throws Exception {
+        public void doWork(CrawDouYinShopCompassHourLive1 crawler) throws Exception {
             String filePath = "./data/task/抖店罗盘小时榜.txt";
             //爬取24小时所有时间点的抖店罗盘小时榜
             LoggerUtils.logger.info("爬取抖店罗盘小时榜任务开始：" + filePath);

@@ -3,8 +3,9 @@ import com.zl.config.Config;
 import com.zl.dao.DaoService;
 import com.zl.dao.ErrorMsg;
 import java.util.List;
-import com.zl.utils.jdbc.hikariCP.ConnectionPool;
-import java.sql.*;import com.zl.dao.generate.TrendinsightKeywordsDO;
+import com.util.jdbc.hikariCP.ConnectionPool;
+import java.sql.*;
+
 /**
  * @Description:
  * @Param:

@@ -3,7 +3,7 @@ package com.zl.task.craw.base;
 import com.ll.drissonPage.page.ChromiumTab;
 import com.ll.drissonPage.units.listener.DataPacket;
 import com.zl.utils.io.FileIoUtils;
-import com.zl.utils.jdbc.generator.convert.FieldConvert;
+import com.util.jdbc.generator.convert.FieldConvert;
 import com.zl.utils.log.LoggerUtils;
 import com.zl.utils.other.Ini4jUtils;
 

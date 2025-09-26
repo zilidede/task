@@ -5,7 +5,7 @@ import com.zl.dao.generate.LocalTaskDO;
 import com.zl.dao.generate.LocalTaskDao;
 import com.zl.task.impl.SaveServiceImpl;
 import com.zl.task.vo.task.taskResource.TaskVO;
-import com.zl.utils.jdbc.generator.jdbc.DefaultDatabaseConnect;
+import com.util.jdbc.generator.jdbc.DefaultDatabaseConnect;
 import com.zl.utils.log.LoggerUtils;
 
 import java.sql.SQLException;

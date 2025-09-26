@@ -72,20 +72,13 @@ public class CrawBaseDouYinList implements ExecutorTaskService<String> {
     }
 
     public void setListonXhr() throws InterruptedException {
-        //设置监听xhr
-        /* 举例说明
-        List<String> list = new ArrayList<>();
-        list.add("board_list");
-        list.add("video_rank/hot_video_rank_v2_luopan");
-        tab.listen().start(list); //监听商品榜单xhr
-        Thread.sleep(4000);
-         */
         tab.listen().start(xhrList);
     }
 
     public void save() {
-        //导入到数据库
-        SaveXHR.saveXhr(tab, xhrSaveDir, xhrList);
+        //
+        SaveXHR.saveXhr(tab, xhrSaveDir, xhrList); // 写入磁盘
+        //解析后写入数据库
     }
 
     public void select(TaskVO task) throws InterruptedException {

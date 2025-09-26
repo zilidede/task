@@ -5,7 +5,7 @@ import com.zl.dao.generate.HourLiveRankDO;
 import com.zl.dao.generate.HourLiveRankDao;
 import com.zl.task.craw.main.CrawSearchKeyWordTestCase;
 import com.zl.task.craw.account.CrawHuiTunAccount;
-import com.zl.task.craw.base.x.DefaultCrawSeleniumDouYinList;
+import com.ecommerce.craw.dy.shop.compass.DefaultCrawSeleniumDouYinShopCompassHourLive;
 import com.zl.task.craw.keyword.CrawSeleniumDouHotSearchKeyWords;
 import com.zl.task.craw.keyword.CrawSeleniumOceanEngineKeyWords;
 import com.zl.task.craw.list.CrawSeleniumDouYinList;
@@ -19,7 +19,7 @@ import com.zl.task.save.parser.list.SaveHourLiveList;
 import com.zl.task.vo.task.taskResource.TaskVO;
 import com.zl.utils.io.DiskIoUtils;
 import com.zl.utils.io.FileIoUtils;
-import com.zl.utils.jdbc.generator.jdbc.DefaultDatabaseConnect;
+import com.util.jdbc.generator.jdbc.DefaultDatabaseConnect;
 import com.zl.utils.log.LoggerUtils;
 
 import java.io.IOException;
@@ -361,9 +361,9 @@ public class TaskExecutor {
                 taskVO.setTaskDesc(string);
 
                 try {
-                    DefaultCrawSeleniumDouYinList.setTab(tab);
-                    DefaultCrawSeleniumDouYinList.setHour(hour);
-                    DefaultCrawSeleniumDouYinList.getInstance().run(taskVO);
+                    DefaultCrawSeleniumDouYinShopCompassHourLive.setTab(tab);
+                    DefaultCrawSeleniumDouYinShopCompassHourLive.setHour(hour);
+                    DefaultCrawSeleniumDouYinShopCompassHourLive.getInstance().run(taskVO);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -458,8 +458,8 @@ public class TaskExecutor {
                     TaskVO taskVO = new TaskVO(1, "抖店罗盘小时榜");
                     taskVO.setTaskDesc(string);
                     try {
-                        DefaultCrawSeleniumDouYinList.setTab(tab);
-                        DefaultCrawSeleniumDouYinList.getInstance().run(taskVO);
+                        DefaultCrawSeleniumDouYinShopCompassHourLive.setTab(tab);
+                        DefaultCrawSeleniumDouYinShopCompassHourLive.getInstance().run(taskVO);
                         //同步
                         /*
                         LocalDate currentDate = LocalDate.now();

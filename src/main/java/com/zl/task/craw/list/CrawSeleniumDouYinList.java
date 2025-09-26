@@ -5,7 +5,7 @@ import com.ll.drissonPage.base.By;
 import com.ll.drissonPage.element.ChromiumElement;
 import com.ll.drissonPage.page.ChromiumTab;
 import com.ll.drissonPage.units.listener.DataPacket;
-import com.zl.task.craw.base.x.DefaultCrawSeleniumDouYinList;
+import com.ecommerce.craw.dy.shop.compass.DefaultCrawSeleniumDouYinShopCompassHourLive;
 import com.zl.task.impl.ExecutorTaskService;
 import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
 import com.zl.task.vo.task.taskResource.TaskResource;
@@ -65,9 +65,9 @@ public class CrawSeleniumDouYinList implements ExecutorTaskService {
         for (String string : strings) {
             TaskVO taskVO = new TaskVO(1, "抖店罗盘日榜");
             taskVO.setTaskDesc(string);
-            DefaultCrawSeleniumDouYinList.setTab(DefaultTaskResourceCrawTabList.getTabList().get(0));
+            DefaultCrawSeleniumDouYinShopCompassHourLive.setTab(DefaultTaskResourceCrawTabList.getTabList().get(0));
             try {
-                DefaultCrawSeleniumDouYinList.getInstance().run(taskVO);
+                DefaultCrawSeleniumDouYinShopCompassHourLive.getInstance().run(taskVO);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

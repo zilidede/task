@@ -66,6 +66,7 @@ public class ImportProductCode {
             spuDO.setImageGallery(json);
             spuDOS.add(spuDO);
         }
+        /*
         //抖音平台sku
         String platformSkuPath = path+"抖音&真维斯官方旗舰店&商品表.xlsx";
         List<Map<String, String>> platformSkuData = ExcelReader.readExcel(platformSkuPath);
@@ -145,7 +146,7 @@ public class ImportProductCode {
         }
         //更新sku和平台sku映射
 
-
+        */
 
 
     }

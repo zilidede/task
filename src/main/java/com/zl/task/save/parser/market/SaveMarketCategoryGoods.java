@@ -9,7 +9,7 @@ import com.zl.task.impl.SaveServiceImpl;
 import com.zl.task.save.parser.ParserJsonToHttpVO;
 import com.zl.task.vo.http.HttpVO;
 import com.zl.utils.io.DiskIoUtils;
-import com.zl.utils.jdbc.generator.jdbc.DefaultDatabaseConnect;
+import com.util.jdbc.generator.jdbc.DefaultDatabaseConnect;
 import com.zl.utils.unicode.UnicodeToChinese;
 
 import java.io.UnsupportedEncodingException;

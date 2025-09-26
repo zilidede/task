@@ -5,8 +5,7 @@ import com.zl.dao.ErrorMsg;
 import java.sql.*;
 import java.util.List;
 
-import com.zl.dao.generate.ContentDO;
-import com.zl.utils.jdbc.hikariCP.ConnectionPool;
+import com.util.jdbc.hikariCP.ConnectionPool;
 
 /**
  * @Description:

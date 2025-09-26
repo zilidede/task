@@ -1,6 +1,6 @@
 package com.zl.dao.generate;
 
-import com.zl.utils.jdbc.generator.jdbc.DefaultDatabaseConnect;
+import com.util.jdbc.generator.jdbc.DefaultDatabaseConnect;
 import org.junit.Test;
 
 import java.sql.SQLException;

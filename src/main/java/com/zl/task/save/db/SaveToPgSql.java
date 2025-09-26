@@ -14,7 +14,6 @@ import com.zl.utils.csv.CsvUtils;
 import com.zl.utils.io.DiskIoUtils;
 import com.zl.utils.io.FileHashGeneratorUtils;
 import com.zl.utils.io.FileIoUtils;
-import com.zl.utils.jdbc.generator.jdbc.DefaultDatabaseConnect;
 import com.zl.utils.log.LoggerUtils;
 import com.zl.utils.other.Ini4jUtils;
 

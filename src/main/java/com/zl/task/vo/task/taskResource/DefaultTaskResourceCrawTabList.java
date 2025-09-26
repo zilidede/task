@@ -10,7 +10,7 @@ import java.util.List;
 //默认的任务资源类
 public class DefaultTaskResourceCrawTabList {
     private static List<ChromiumTab> tabList; //chromiumTab列表 默认为3个
-    private static int tabCount = 4;  //chromiumTab列表数量;
+    private static int tabCount = 1;  //chromiumTab列表数量;
     private static Integer  port=9223;
 
     public static void setPort(Integer port) {

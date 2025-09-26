@@ -1,6 +1,5 @@
 package com.zl.task.craw.goods;
 
-import com.zl.task.craw.live.CrawCompassLive;
 import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
 import com.zl.task.vo.task.taskResource.TaskVO;
 import org.junit.Before;

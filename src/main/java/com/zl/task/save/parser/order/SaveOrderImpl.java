@@ -5,7 +5,7 @@ import com.zl.dao.generate.EcommerceOrderDO;
 import com.zl.dao.generate.EcommerceOrderDao;
 import com.zl.task.impl.SaveServiceImpl;
 import com.zl.utils.csv.BatchCSVReader;
-import com.zl.utils.jdbc.generator.jdbc.DefaultDatabaseConnect;
+import com.util.jdbc.generator.jdbc.DefaultDatabaseConnect;
 
 import java.sql.SQLException;
 import java.text.ParseException;

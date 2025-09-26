@@ -3,7 +3,7 @@ package com.zl.utils.xhr;
 
 import com.zl.utils.io.DiskIoUtils;
 import com.zl.utils.io.FileIoUtils;
-import com.zl.utils.jdbc.generator.convert.FieldConvert;
+import com.util.jdbc.generator.convert.FieldConvert;
 import com.zl.utils.other.Ini4jUtils;
 
 import java.util.Map;
@@ -20,9 +20,9 @@ public class GeneratorXHR {
     public static void main(String[] args) throws Exception {
 
         Ini4jUtils.loadIni("./data/task/xhr.ini");
-        Ini4jUtils.setSectionValue("compassBrand");
-        Map<String, String> map = Ini4jUtils.getWini().get("compassBrand");
-        String dir = "d:\\data\\task\\爬虫\\compassBrand\\";
+        Ini4jUtils.setSectionValue("douYinShopApi");
+        Map<String, String> map = Ini4jUtils.getWini().get("douYinShopApi");
+        String dir = "d:\\data\\task\\爬虫\\douYinShopApi\\";
         FileIoUtils.clearTxtFile("./data/task/fiddler.java");
         for (Map.Entry<String, String> entry : map.entrySet()) {
             String s1 = map.get(entry.getKey());

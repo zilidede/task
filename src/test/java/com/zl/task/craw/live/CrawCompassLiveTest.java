@@ -1,5 +1,6 @@
 package com.zl.task.craw.live;
 
+import com.zl.task.craw.list.CrawDouYinShopCompassHourLive1;
 import com.zl.task.vo.task.taskResource.DefaultTaskResourceCrawTabList;
 import com.zl.task.vo.task.taskResource.TaskVO;
 import org.junit.Before;
@@ -7,10 +8,10 @@ import org.junit.Test;
 
 
 public  class CrawCompassLiveTest {
-    CrawCompassLive crawler;
+    CrawDouYinShopCompassHourLive1 crawler;
     @Before
     public void setUp() throws Exception {
-        crawler = new CrawCompassLive();
+        crawler = new CrawDouYinShopCompassHourLive1();
         crawler.setTab(DefaultTaskResourceCrawTabList.getTabList().get(1));
         crawler.openEnterUrl("https://compass.jinritemai.com/shop/chance/live-rank?from_page=%2Fshop%2Flive-list");
     }

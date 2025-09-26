@@ -7,14 +7,12 @@ import com.google.gson.JsonParser;
 import com.zl.dao.generate.*;
 import com.zl.task.vo.http.HttpVO;
 import com.zl.task.vo.other.GenericListContainerVO;
-import com.zl.utils.jdbc.generator.jdbc.DefaultDatabaseConnect;
 import com.zl.utils.time.SimpleDateFormatUtils;
 import com.zl.utils.uuid.UUIDGeneratorUtils;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 //解析巨量算数关键字json
 public class ParserTrendInSightKeywords {
